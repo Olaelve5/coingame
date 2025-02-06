@@ -5,12 +5,12 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import PlayerLobby from "@/components/player/PlayerLobby";
 import PlayerGame from "@/components/player/PlayerGame";
-import { Game } from "@/models/Game";
+import { useGameStore } from "@/store/gameStore";
 
 export default function GamePage() {
   const params = useParams(); // Get URL parameters
   const [playerName, setPlayerName] = useState("");
-  const [gameState, setGameState] = useState<Game | null>(null);
+  const { game } = useGameStore();
 
   useEffect(() => {
     // Retrieve player name from session storage
@@ -25,15 +25,11 @@ export default function GamePage() {
     return <div className="text-center p-8">Loading...</div>;
   }
 
-  if (gameState?.status === "playing") {
+  if (game?.status === "playing") {
     return <PlayerGame />;
   }
 
   return (
-    <PlayerLobby
-      gameCode={params.gameCode as string}
-      playerName={playerName}
-      setGameState={setGameState}
-    />
+    <PlayerLobby gameCode={params.gameCode as string} playerName={playerName} />
   );
 }

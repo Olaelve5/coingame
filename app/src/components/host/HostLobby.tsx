@@ -4,65 +4,35 @@ import { useEffect, useState } from "react";
 import { socket } from "@/utils/socket";
 import { Game } from "@/models/Game";
 import { useRouter } from "next/navigation";
+import { useGameStore } from "@/store/gameStore";
 import getPlayerId from "@/utils/getPlayerId";
 
 export default function HostLobby({
   gameCode,
-  setGameState,
-  gameState,
 }: {
   gameCode: string;
-  setGameState: (game: Game | ((prevGame: Game | null) => Game | null)) => void;
-  gameState: Game | null;
 }) {
   const router = useRouter();
-
-  const handleStartGame = () => {
-    socket.emit("startGame", gameCode, (response: any) => {
-      if (response.error) {
-        alert(response.error);
-      } else {
-        console.log("Game started");
-      }
-    });
-  };
+  const { game, joinAsHost, startGame, cleanup } = useGameStore();
 
   useEffect(() => {
-    // Connect socket and join game
-    socket.connect();
-
-    const hostId = getPlayerId();
-
-    socket.emit("joinRoomAsHost", gameCode, hostId, (game: Game | null) => {
-      if (!game) {
-        // Handle error - redirect back
+    const initGame = async () => {
+      const success = await joinAsHost(gameCode);
+      if (!success) {
         router.push("/");
-        return;
       }
-      setGameState(game);
-    });
-
-    // Listen for game updates
-    socket.on("gameUpdate", (game: Game) => {
-      console.log("Game updated");
-      setGameState(game);
-    });
-
-    // Listen for game updates
-    socket.on("playersUpdate", (players: Game["players"]) => {
-      console.log("Players updated:", players);
-      setGameState((prevState: Game | null): Game | null => {
-        if (!prevState) return null; // Ensure we don't return an invalid state
-        return { ...prevState, players }; // TypeScript now knows it's a valid Game object
-      });
-    });
-
-    // Cleanup
-    return () => {
-      socket.off("gameUpdate");
-      socket.off("playersUpdate");
     };
-  }, [gameCode]);
+
+    initGame();
+    return () => cleanup();
+  }, [gameCode, joinAsHost, router, cleanup]);
+
+  const handleStartGame = async () => {
+    const success = await startGame(gameCode);
+    if (!success) {
+      alert("Failed to start game");
+    }
+  };
 
   return (
     <div className="text-center">
@@ -70,7 +40,7 @@ export default function HostLobby({
       <p>Players:</p>
       <div className="p-6 rounded-lg shadow-lg">
         <ul className="space-y-2">
-          {gameState?.players?.map((player) => (
+          {game?.players?.map((player) => (
             <li key={player.id} className="text-lg">
               {player.name} {player.id === getPlayerId() && "(You)"}
               <br />
