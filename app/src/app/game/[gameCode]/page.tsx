@@ -2,8 +2,9 @@
 "use client"; // Required for client-side hooks
 
 import { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "next/navigation";
-import PlayerRoom from "@/components/PlayerRoom";
+import { useParams } from "next/navigation";
+import PlayerLobby from "@/components/player/PlayerLobby";
+import PlayerGame from "@/components/player/PlayerGame";
 import { Game } from "@/models/Game";
 
 export default function GamePage() {
@@ -25,15 +26,11 @@ export default function GamePage() {
   }
 
   if (gameState?.status === "playing") {
-    return (
-      <div className="text-center p-8">
-        <h1 className="text-3xl font-bold">Game in progress</h1>
-      </div>
-    );
+    return <PlayerGame />;
   }
 
   return (
-    <PlayerRoom
+    <PlayerLobby
       gameCode={params.gameCode as string}
       playerName={playerName}
       setGameState={setGameState}

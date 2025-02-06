@@ -6,7 +6,7 @@ import { Game } from "@/models/Game";
 import { useRouter } from "next/navigation";
 import getPlayerId from "@/utils/getPlayerId";
 
-export default function GameRoom({
+export default function HostLobby({
   gameCode,
   setGameState,
   gameState,

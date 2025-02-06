@@ -1,6 +1,6 @@
 // app/page.tsx
-import CreateGameButton from "@/components/CreateGameButton";
-import JoinGameForm from "@/components/JoinGameForm";
+import CreateGameButton from "@/components/host/CreateGameButton";
+import JoinGameForm from "@/components/player/JoinGameForm";
 
 export default function Home() {
   return (
