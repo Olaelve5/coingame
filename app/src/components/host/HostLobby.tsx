@@ -7,11 +7,7 @@ import { useRouter } from "next/navigation";
 import { useGameStore } from "@/store/gameStore";
 import getPlayerId from "@/utils/getPlayerId";
 
-export default function HostLobby({
-  gameCode,
-}: {
-  gameCode: string;
-}) {
+export default function HostLobby({ gameCode }: { gameCode: string }) {
   const router = useRouter();
   const { game, joinAsHost, startGame, cleanup } = useGameStore();
 

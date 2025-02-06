@@ -16,7 +16,6 @@ interface GameStore {
 
 export const useGameStore = create<GameStore>((set, get) => ({
   game: null,
-
   setGame: (game) => set({ game }),
 
   updatePlayers: (players) =>
@@ -34,6 +33,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         if (game) {
           set({ game });
           resolve(true);
+          console.log(game);
         } else {
           resolve(false);
         }
@@ -97,6 +97,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   disconnect: () => {
+    if (!socket.connected) return;
     socket.disconnect();
   },
 }));
