@@ -22,10 +22,6 @@ export default function GamePage() {
     if (!name) window.location.href = "/";
   }, []);
 
-  useEffect(() => {
-    console.log("Game state updated:", gameState);
-  }, [gameState]);
-
   if (!playerName) {
     return <div className="text-center p-8">Loading...</div>;
   }
