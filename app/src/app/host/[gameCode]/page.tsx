@@ -27,7 +27,7 @@ export default function GamePage() {
   }
 
   if (game?.status === "playing") {
-    return <HostGame />;
+    return <HostGame gameCode={params.gameCode as string} />;
   }
 
   return <HostLobby gameCode={params.gameCode as string} />;

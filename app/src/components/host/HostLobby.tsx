@@ -1,8 +1,6 @@
 // components/GameRoom.tsx
 "use client";
 import { useEffect, useState } from "react";
-import { socket } from "@/utils/socket";
-import { Game } from "@/models/Game";
 import { useRouter } from "next/navigation";
 import { useGameStore } from "@/store/gameStore";
 import getPlayerId from "@/utils/getPlayerId";

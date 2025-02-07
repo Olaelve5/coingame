@@ -1,7 +1,23 @@
 import { useGameStore } from "@/store/gameStore";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
-const HostGame = () => {
-  const { game } = useGameStore();
+const HostGame = ({ gameCode }: { gameCode: string }) => {
+  const { game, joinAsHost, cleanup } = useGameStore();
+  const router = useRouter();
+
+  useEffect(() => {
+    const initGame = async () => {
+      const success = await joinAsHost(gameCode);
+      if (!success) {
+        router.push("/");
+      }
+    };
+
+    initGame();
+    return () => cleanup();
+  }, [gameCode, joinAsHost, router, cleanup]);
+
   return (
     <div>
       <h1>Game is playing</h1>
@@ -11,6 +27,8 @@ const HostGame = () => {
         {game?.players?.map((player) => (
           <li key={player.id}>
             {player.name} - Coins: {player.coins}
+            <br />
+            {player.connected ? "Connected" : "Disconnected"}
           </li>
         ))}
       </ul>

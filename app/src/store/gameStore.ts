@@ -44,7 +44,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
         if (game) {
           set({ game });
           resolve(true);
-          console.log(game);
         } else {
           resolve(false);
         }

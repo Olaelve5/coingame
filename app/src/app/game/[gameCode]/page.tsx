@@ -26,7 +26,12 @@ export default function GamePage() {
   }
 
   if (game?.status === "playing") {
-    return <PlayerGame />;
+    return (
+      <PlayerGame
+        gameCode={params.gameCode as string}
+        playerName={playerName}
+      />
+    );
   }
 
   return (
