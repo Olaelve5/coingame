@@ -7,6 +7,7 @@ interface GameStore {
   game: Game | null;
   setGame: (game: Game | null) => void;
   updatePlayers: (players: Game["players"]) => void;
+  prepareForNewGame: () => void;
   joinAsHost: (gameCode: string) => Promise<boolean>;
   joinAsPlayer: (gameCode: string, playerName: string) => Promise<boolean>;
   startGame: (gameCode: string) => Promise<boolean>;
@@ -23,6 +24,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
       if (!state.game) return state;
       return { game: { ...state.game, players } };
     }),
+
+  prepareForNewGame: () => {
+    // Clean up existing listeners and connection
+    socket.off("gameUpdate");
+    socket.off("playersUpdate");
+    if (socket.connected) {
+      socket.disconnect();
+    }
+    set({ game: null });
+  },
 
   joinAsHost: async (gameCode) => {
     return new Promise((resolve) => {

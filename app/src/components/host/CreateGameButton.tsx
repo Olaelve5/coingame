@@ -2,9 +2,11 @@
 "use client";
 import { useRouter } from "next/navigation";
 import getPlayerId from "@/utils/getPlayerId";
+import { useGameStore } from "@/store/gameStore";
 
 export default function CreateGameButton() {
   const router = useRouter();
+  const { prepareForNewGame } = useGameStore();
 
   const onCreateGame = async () => {
     try {
@@ -12,6 +14,9 @@ export default function CreateGameButton() {
       const gameCode = Math.random().toString(36).substring(2, 7).toUpperCase();
 
       const hostId = getPlayerId();
+
+      // Prepare for new game (clean up existing listeners and connection)
+      prepareForNewGame();
 
       // 2. Create game via POST
       const response = await fetch(

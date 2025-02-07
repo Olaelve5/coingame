@@ -2,12 +2,14 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useGameStore } from "@/store/gameStore";
 
 export default function JoinGameForm() {
   const router = useRouter();
   const [gameCode, setGameCode] = useState("");
   const [playerName, setPlayerName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { prepareForNewGame } = useGameStore();
 
   const handleJoinGame = async () => {
     if (!gameCode.trim() || !playerName.trim()) {
@@ -17,6 +19,9 @@ export default function JoinGameForm() {
 
     try {
       setIsLoading(true);
+
+      // Prepare for new game (clean up existing listeners and connection)
+      prepareForNewGame();
       
       // 1. Verify game exists
       const gameResponse = await fetch(
