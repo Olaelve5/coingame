@@ -5,7 +5,7 @@ import { Server } from "socket.io";
 import cors from "cors";
 import { connectDB } from "./db/connect.ts";
 import { Game } from "./models/Game.ts";
-import { socketHandler } from "./socket.js";
+import { socketHandler } from "./socket/socket.js";
 
 const app = express();
 const httpServer = createServer(app);

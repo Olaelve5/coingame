@@ -11,8 +11,10 @@ interface GameStore {
   joinAsHost: (gameCode: string) => Promise<boolean>;
   joinAsPlayer: (gameCode: string, playerName: string) => Promise<boolean>;
   startGame: (gameCode: string) => Promise<boolean>;
+  getPlayerDetails: (playerId: string) => Game["players"][0] | null;
   cleanup: () => void;
   disconnect: () => void;
+  playCoins: (coins: number) => Promise<boolean>;
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
@@ -101,6 +103,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
   },
 
+  getPlayerDetails: (playerId: string) => {
+    const game = get().game;
+    if (!game || !game.players) return null;
+    return game.players.find((player) => player.id === playerId) || null;
+  },
+
   cleanup: () => {
     socket.off("gameUpdate");
     socket.off("playersUpdate");
@@ -109,5 +117,33 @@ export const useGameStore = create<GameStore>((set, get) => ({
   disconnect: () => {
     if (!socket.connected) return;
     socket.disconnect();
+  },
+
+  playCoins: async (coins: number) => {
+    return new Promise((resolve) => {
+      const game = get().game;
+      const playerId = getPlayerId();
+
+      if (!game) {
+        resolve(false);
+        return;
+      }
+
+      socket.emit(
+        "playCoins",
+        game.gameCode,
+        playerId,
+        coins,
+        (response: any) => {
+          if (response?.error) {
+            resolve(false);
+            console.error(response.error);
+          } else {
+            resolve(true);
+            console.log("Played coins successfully");
+          }
+        }
+      );
+    });
   },
 }));

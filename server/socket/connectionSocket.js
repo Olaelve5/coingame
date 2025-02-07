@@ -1,6 +1,6 @@
-import { Game } from "./models/Game.ts";
+import { Game } from "../models/Game.ts";
 
-const socketHandler = (io) => {
+const connectionSocketHandler = (io) => {
   // Socket.io logic
   io.on("connection", (socket) => {
     console.log("User connected:", socket.id);
@@ -92,33 +92,6 @@ const socketHandler = (io) => {
       }
     });
 
-    // Handle change game status
-    socket.on("startGame", async (gameCode, callback) => {
-      try {
-        console.log(`Starting game: ${gameCode}`);
-        const game = await Game.findOneAndUpdate(
-          { gameCode },
-          { $set: { status: "playing" } },
-          { new: true }
-        );
-
-        if (!game) {
-          console.error(`Game with code ${gameCode} not found`);
-          if (callback) callback({ error: "Game not found" });
-          return;
-        }
-
-        // Emit the updated game state to all players in the room
-        socket.emit("gameUpdate", game);
-        socket.to(gameCode).emit("gameUpdate", game);
-
-        // Optionally, call the callback to confirm the status change
-        if (callback) callback({ success: true, game });
-      } catch (error) {
-        console.error("Error changing game status:", error);
-      }
-    });
-
     // handle disconnect of a player
     socket.on("disconnect", async () => {
       console.log("User disconnected:", socket.id);
@@ -142,4 +115,4 @@ const socketHandler = (io) => {
   });
 };
 
-export { socketHandler };
+export { connectionSocketHandler };
