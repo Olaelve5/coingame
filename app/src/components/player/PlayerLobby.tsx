@@ -12,7 +12,6 @@ export default function PlayerLobby({
   playerName: string;
 }) {
   const router = useRouter();
-
   const { joinAsPlayer, cleanup, disconnect } = useGameStore();
 
   useEffect(() => {

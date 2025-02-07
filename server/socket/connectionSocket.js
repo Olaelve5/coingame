@@ -18,6 +18,16 @@ const connectionSocketHandler = (io) => {
         const playerExists = game.players?.some((p) => p.id === playerId);
 
         if (!playerExists) {
+          // Change this later
+          if (game.players.length >= 30) {
+            return socket.emit("error", "Game is full");
+          }
+
+          if (game.status !== "waiting") {
+            console.log("Game has already started");
+            return socket.emit("error", "Game has already started");
+          }
+
           // If player doesn't exist, add them to the game
           game = await Game.findOneAndUpdate(
             { gameCode, "players.id": { $ne: playerId } },
