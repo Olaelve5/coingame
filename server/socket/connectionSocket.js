@@ -39,6 +39,8 @@ const connectionSocketHandler = (io) => {
                   coins: 100,
                   connected: true,
                   socketId: socket.id,
+                  eliminated: false,
+                  playedInRound: false,
                 },
               },
             },

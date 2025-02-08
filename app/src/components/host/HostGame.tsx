@@ -26,7 +26,7 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
       <ul>
         {game?.players?.map((player) => (
           <li key={player.id}>
-            {player.name} - Coins: {player.coins}
+            {player.name} - Played: {player.playedInRound ? "✅" : ""}
             <br />
             {player.connected ? "Connected" : "Disconnected"}
           </li>

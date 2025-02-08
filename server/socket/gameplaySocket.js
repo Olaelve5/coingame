@@ -33,10 +33,6 @@ const gameplaySocketHandler = (io) => {
     // Handle play coins
     socket.on("playCoins", async (gameCode, playerId, coins) => {
       try {
-        console.log(
-          `Player ${playerId} playing ${coins} coins in game ${gameCode}`
-        );
-
         // First, find the game and validate player has enough coins
         const currentGame = await Game.findOne({ gameCode });
 
@@ -52,10 +48,17 @@ const gameplaySocketHandler = (io) => {
           return;
         }
 
-        if (player.coins < coins) {
-          socket.emit("error", "Insufficient coins");
+        if (player.coins < coins || player.playedInRound) {
+          console.log(
+            `Player ${playerId} has insufficient coins or already played`
+          );
+          socket.emit("error", "Insufficient coins or already played");
           return;
         }
+
+        console.log(
+          `Player ${playerId} playing ${coins} coins in game ${gameCode}`
+        );
 
         // Update the player's coins in the database
         const updatedGame = await Game.findOneAndUpdate(
@@ -66,6 +69,9 @@ const gameplaySocketHandler = (io) => {
           {
             $inc: {
               "players.$.coins": -coins,
+            },
+            $set: {
+              "players.$.playedInRound": true,
             },
           },
           {
