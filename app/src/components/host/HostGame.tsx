@@ -51,11 +51,18 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
       )}
 
       {game?.winner && game.status === "finished" && (
-        <p>
-          <br />
-          Game finished! Winner: {game.winner.name} with {game.winner.coins}{" "}
-          coins left
-        </p>
+        <>
+          <p>
+            <br />
+            Game finished! Winner: {game.winner.name} with {game.winner.coins}{" "}
+            coins left
+          </p>
+          <button
+            className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={() => router.push("/")}>
+            Go back to home
+          </button>
+        </>
       )}
     </div>
   );

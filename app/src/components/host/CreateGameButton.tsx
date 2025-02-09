@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import getPlayerId from "@/utils/getPlayerId";
 import { useGameStore } from "@/store/gameStore";
+import { IconPlus } from "@tabler/icons-react";
 
 export default function CreateGameButton() {
   const router = useRouter();
@@ -49,8 +50,13 @@ export default function CreateGameButton() {
   return (
     <button
       onClick={onCreateGame}
-      className="text-2xl font-bold text-white bg-blue-500 rounded-lg px-8 py-4 hover:bg-blue-600 transition-colors">
-      Create Game
+      className="group relative inline-flex h-[calc(48px+8px)] items-center justify-center rounded-full bg-gradient-to-r from-[#f27121] via-[#e94057] to-[#8a2387] py-1 pl-6 pr-14 font-bold text-2xl">
+      <span className="z-10 pr-2">Host game</span>
+      <div className="absolute right-1 inline-flex h-12 w-12 items-center justify-end rounded-full bg-neutral-800 transition-[width] group-hover:w-[calc(100%-8px)]">
+        <div className="flex items-center justify-center h-12 w-12 rounded-full">
+          <IconPlus size={24} />
+        </div>
+      </div>
     </button>
   );
 }
