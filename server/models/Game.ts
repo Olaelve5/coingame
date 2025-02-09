@@ -11,10 +11,23 @@ const GameSchema = new mongoose.Schema({
       socketId: String,
       eliminated: Boolean,
       playedInRound: Boolean,
+      roundHistory: [
+        {
+          round: Number,
+          coinsPlayed: Number,
+        },
+      ],
     },
   ],
   hostId: { type: String, required: true },
   round: { type: Number, default: 1 },
+  roundStatus: { type: String, default: "paused" }, // paused, active
+  lastRoundResults: {
+    playersEliminated: [String],
+    totalCoinsPlayed: Number,
+    round: Number,
+    minCoinsPlayed: Number,
+  },
   status: { type: String, default: "waiting" }, // waiting, playing, finished
 });
 

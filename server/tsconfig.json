@@ -9,5 +9,5 @@
       "resolveJsonModule": true,
       "outDir": "./dist"
     },
-    "include": ["./**/*.ts"]
+    "include": ["./**/*.ts", "utils/gameUtils.js"]
   }
