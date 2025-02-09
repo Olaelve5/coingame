@@ -23,6 +23,16 @@ interface LastRoundResults {
   minCoinsPlayed: number;
 }
 
+interface Winner {
+  id: string;
+  name: string;
+  coins: number;
+  roundHistory: {
+    round: number;
+    coinsPlayed: number;
+  }[];
+}
+
 export interface Game {
   _id: string;
   gameCode: string;
@@ -32,4 +42,5 @@ export interface Game {
   roundStatus: "completed" | "active";
   lastRoundResults: LastRoundResults;
   status: "waiting" | "playing" | "finished";
+  winner?: Winner; // Optional since it's only present when game is finished
 }

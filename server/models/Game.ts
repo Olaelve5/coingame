@@ -34,6 +34,17 @@ const GameSchema = new mongoose.Schema({
     minCoinsPlayed: Number,
   },
   status: { type: String, default: "waiting" }, // waiting, playing, finished
+  winner: {
+    id: String,
+    name: String,
+    coins: Number,
+    roundHistory: [
+      {
+        round: Number,
+        coinsPlayed: Number,
+      },
+    ],
+  },
 });
 
 export const Game = mongoose.models.Game || mongoose.model("Game", GameSchema);

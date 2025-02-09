@@ -1,177 +1,118 @@
-import { Game } from "../models/Game.ts";
 import { calculateRoundResults } from "../utils/gameUtils.js";
+import { Game } from "../models/Game.ts";
+
+const validatePlayCoins = async (gameCode, playerId, coins) => {
+  const currentGame = await Game.findOne({ gameCode });
+  if (!currentGame) {
+    throw new Error("Game not found");
+  }
+
+  const player = currentGame.players.find((p) => p.id === playerId);
+  if (!player || player.eliminated) {
+    throw new Error("Player not found in game or is eliminated");
+  }
+
+  if (player.coins < coins || player.playedInRound) {
+    throw new Error("Insufficient coins or already played");
+  }
+
+  return currentGame;
+};
+
+const updatePlayerCoins = async (gameCode, playerId, coins, currentRound) => {
+  return Game.findOneAndUpdate(
+    {
+      gameCode,
+      "players.id": playerId,
+    },
+    {
+      $inc: { "players.$.coins": -coins },
+      $set: { "players.$.playedInRound": true },
+      $push: {
+        "players.$.roundHistory": {
+          round: currentRound,
+          coinsPlayed: coins,
+        },
+      },
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+};
+
+const handleRoundEnd = async (gameCode, updatedGame) => {
+  const roundResults = calculateRoundResults(updatedGame);
+  const playersEliminated = roundResults.playersEliminated;
+
+  // Count and find active players after elimination
+  const remainingPlayers = updatedGame.players.filter(
+    (p) =>
+      !p.eliminated &&
+      !playersEliminated.find((eliminated) => eliminated.id === p.id)
+  );
+
+  const isGameOver = remainingPlayers.length === 1;
+  const winner = isGameOver ? remainingPlayers[0] : null;
+
+  return Game.findOneAndUpdate(
+    { gameCode },
+    {
+      $set: {
+        roundStatus: "completed",
+        lastRoundResults: roundResults,
+        "players.$[elem].eliminated": true,
+        ...(isGameOver && {
+          status: "finished",
+          winner: {
+            id: winner.id,
+            name: winner.name,
+            coins: winner.coins,
+            roundHistory: winner.roundHistory,
+          },
+        }),
+      },
+    },
+    {
+      new: true,
+      arrayFilters: [
+        { "elem.id": { $in: playersEliminated.map((p) => p.id) } },
+      ],
+    }
+  );
+};
 
 const gameplaySocketHandler = (io) => {
-  // Handle change game status
   io.on("connection", (socket) => {
-    // Start game handler --------------------------------------------------------------------------------------------->
-    socket.on("startGame", async (gameCode, callback) => {
-      try {
-        console.log(`Starting game: ${gameCode}`);
-        const game = await Game.findOneAndUpdate(
-          { gameCode },
-          {
-            $set: {
-              status: "playing",
-              roundStatus: "active",
-              round: 1,
-              "players.$[].playedInRound": false, // Reset all players' played status
-            },
-          },
-          { new: true }
-        );
-
-        if (!game) {
-          console.error(`Game with code ${gameCode} not found`);
-          if (callback) callback({ error: "Game not found" });
-          return;
-        }
-
-        // Emit the game start and round start events
-        io.to(gameCode).emit("gameUpdate", game);
-
-        io.to(gameCode).emit("roundStarted", {
-          roundNumber: game.round,
-        });
-
-        if (callback) callback({ success: true, game });
-      } catch (error) {
-        console.error("Error changing game status:", error);
-        if (callback) callback({ error: "Failed to start game" });
-      }
-    });
-
-    // Handle play coins --------------------------------------------------------------------------------------------->
     socket.on("playCoins", async (gameCode, playerId, coins) => {
       try {
-        // First, find the game and validate player has enough coins
-        const currentGame = await Game.findOne({ gameCode });
+        const currentGame = await validatePlayCoins(gameCode, playerId, coins);
 
-        if (!currentGame) {
-          socket.emit("error", "Game not found");
-          return;
-        }
-
-        const player = currentGame.players.find((p) => p.id === playerId);
-
-        if (!player) {
-          socket.emit("error", "Player not found in game");
-          return;
-        }
-
-        if (player.coins < coins || player.playedInRound) {
-          console.log(
-            `Player ${playerId} has insufficient coins or already played`
-          );
-          socket.emit("error", "Insufficient coins or already played");
-          return;
-        }
-
-        console.log(
-          `Player ${playerId} playing ${coins} coins in game ${gameCode}`
-        );
-
-        // Update the player's coins in the database
-        const updatedGame = await Game.findOneAndUpdate(
-          {
-            gameCode,
-            "players.id": playerId, // Ensure we're targeting the correct player
-          },
-          {
-            $inc: { "players.$.coins": -coins },
-            $set: { "players.$.playedInRound": true },
-            $push: {
-              "players.$.roundHistory": {
-                round: currentGame.round,
-                coinsPlayed: coins,
-              },
-            },
-          },
-          {
-            new: true,
-            runValidators: true,
-          }
+        const updatedGame = await updatePlayerCoins(
+          gameCode,
+          playerId,
+          coins,
+          currentGame.round
         );
 
         if (!updatedGame) {
-          console.error(`Failed to update coins for player ${playerId}`);
-          socket.emit("error", "Failed to play coins");
-          return;
+          throw new Error("Failed to update coins");
         }
 
-        // Check if all players have played
-        const allPlayed = updatedGame.players.every((p) => p.playedInRound);
+        const allPlayed = updatedGame.players
+          .filter((p) => !p.eliminated)
+          .every((p) => p.playedInRound);
 
         if (allPlayed) {
-          // Calculate round results and update game
-          const roundResults = calculateRoundResults(updatedGame);
-          const playersEliminated = roundResults.playersEliminated;
-          const gameWithResults = await Game.findOneAndUpdate(
-            { gameCode },
-            {
-              $set: {
-                roundStatus: "completed",
-                lastRoundResults: roundResults,
-                // Set eliminated: true for all eliminated players
-                "players.$[elem].eliminated": true,
-              },
-            },
-            {
-              new: true,
-              arrayFilters: [
-                { "elem.id": { $in: playersEliminated.map((p) => p.id) } },
-              ],
-            }
-          );
-
-          // Emit round end event with results
-          io.to(gameCode).emit("roundEnded", {
-            roundNumber: gameWithResults.currentRound,
-            results: roundResults,
-          });
+          const gameWithResults = await handleRoundEnd(gameCode, updatedGame);
           io.to(gameCode).emit("gameUpdate", gameWithResults);
         } else {
-          // Emit the updated game state to all players in the room
           io.to(gameCode).emit("gameUpdate", updatedGame);
-          socket.emit("gameUpdate", updatedGame);
         }
       } catch (error) {
         console.error("Error playing coins:", error);
-        socket.emit("error", "Failed to play coins");
-      }
-    });
-
-    // Handle start next round --------------------------------------------------------------------------------------------->
-    socket.on("startNextRound", async (gameCode, callback) => {
-      try {
-        const currentGame = await Game.findOne({ gameCode });
-
-        if (!currentGame || currentGame.roundStatus !== "completed") {
-          if (callback) callback({ error: "Cannot start next round" });
-          return;
-        }
-
-        const updatedGame = await Game.findOneAndUpdate(
-          { gameCode },
-          {
-            $inc: { round: 1 }, // Changed from currentRound to round
-            $set: {
-              roundStatus: "active",
-              "players.$[].playedInRound": false,
-            },
-          },
-          { new: true }
-        );
-
-        io.to(gameCode).emit("roundStarted", {
-          roundNumber: updatedGame.round,
-        });
-        io.to(gameCode).emit("gameUpdate", updatedGame);
-
-        if (callback) callback({ success: true, game: updatedGame });
-      } catch (error) {
-        console.error("Error starting next round:", error);
-        if (callback) callback({ error: "Failed to start next round" });
+        socket.emit("error", error.message);
       }
     });
   });

@@ -33,7 +33,7 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
           </li>
         ))}
       </ul>
-      {game?.roundStatus === "completed" && (
+      {game?.roundStatus === "completed" && game?.status === "playing" && (
         <>
           <p>Round {game.round} is completed</p>
           <p>Results:</p>
@@ -46,8 +46,16 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
           <p>Total coins played: {game.lastRoundResults.totalCoinsPlayed}</p>
           <p>Minimum coins played: {game.lastRoundResults.minCoinsPlayed}</p>
           <br />
-          <StartNewRoundButton/>
+          <StartNewRoundButton />
         </>
+      )}
+
+      {game?.winner && game.status === "finished" && (
+        <p>
+          <br />
+          Game finished! Winner: {game.winner.name} with {game.winner.coins}{" "}
+          coins left
+        </p>
       )}
     </div>
   );

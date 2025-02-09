@@ -26,7 +26,7 @@ export default function GamePage() {
     return <div className="text-center p-8">Loading...</div>;
   }
 
-  if (game?.status === "playing") {
+  if (game?.status !== "waiting") {
     return <HostGame gameCode={params.gameCode as string} />;
   }
 
