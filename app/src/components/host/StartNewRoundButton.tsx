@@ -1,11 +1,15 @@
-interface StartNewRoundButtonProps {
-  onClick: () => void;
-}
+import { useGameStore } from "@/store/gameStore";
 
-const StartNewRoundButton = ({ onClick }: StartNewRoundButtonProps) => {
+const StartNewRoundButton = () => {
+  const { startRound } = useGameStore();
+
+  const handleStartRound = () => {
+    startRound();
+  };
+
   return (
     <button
-      onClick={onClick}
+      onClick={handleStartRound}
       className="mt-4 px-6 py-3 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition-colors duration-200">
       Start Next Round
     </button>

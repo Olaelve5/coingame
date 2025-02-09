@@ -29,7 +29,7 @@ const gameplaySocketHandler = (io) => {
 
         // Emit the game start and round start events
         io.to(gameCode).emit("gameUpdate", game);
-        
+
         io.to(gameCode).emit("roundStarted", {
           roundNumber: game.round,
         });
@@ -105,15 +105,23 @@ const gameplaySocketHandler = (io) => {
         if (allPlayed) {
           // Calculate round results and update game
           const roundResults = calculateRoundResults(updatedGame);
+          const playersEliminated = roundResults.playersEliminated;
           const gameWithResults = await Game.findOneAndUpdate(
             { gameCode },
             {
               $set: {
                 roundStatus: "completed",
                 lastRoundResults: roundResults,
+                // Set eliminated: true for all eliminated players
+                "players.$[elem].eliminated": true,
               },
             },
-            { new: true }
+            {
+              new: true,
+              arrayFilters: [
+                { "elem.id": { $in: playersEliminated.map((p) => p.id) } },
+              ],
+            }
           );
 
           // Emit round end event with results
@@ -134,7 +142,7 @@ const gameplaySocketHandler = (io) => {
     });
 
     // Handle start next round --------------------------------------------------------------------------------------------->
-    io.on("startNextRound", async (gameCode, callback) => {
+    socket.on("startNextRound", async (gameCode, callback) => {
       try {
         const currentGame = await Game.findOne({ gameCode });
 
@@ -146,17 +154,17 @@ const gameplaySocketHandler = (io) => {
         const updatedGame = await Game.findOneAndUpdate(
           { gameCode },
           {
-            $inc: { currentRound: 1 },
+            $inc: { round: 1 }, // Changed from currentRound to round
             $set: {
               roundStatus: "active",
-              "players.$[].playedInRound": false, // Reset all players' played status
+              "players.$[].playedInRound": false,
             },
           },
           { new: true }
         );
 
         io.to(gameCode).emit("roundStarted", {
-          roundNumber: updatedGame.currentRound,
+          roundNumber: updatedGame.round,
         });
         io.to(gameCode).emit("gameUpdate", updatedGame);
 

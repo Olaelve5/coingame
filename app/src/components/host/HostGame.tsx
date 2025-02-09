@@ -7,10 +7,6 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
   const { game, joinAsHost, cleanup } = useGameStore();
   const router = useRouter();
 
-  const handleStartNewRound = async () => {
-    console.log("Starting round");
-  };
-
   useEffect(() => {
     const initGame = async () => {
       const success = await joinAsHost(gameCode);
@@ -50,7 +46,7 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
           <p>Total coins played: {game.lastRoundResults.totalCoinsPlayed}</p>
           <p>Minimum coins played: {game.lastRoundResults.minCoinsPlayed}</p>
           <br />
-          <StartNewRoundButton onClick={handleStartNewRound} />
+          <StartNewRoundButton/>
         </>
       )}
     </div>

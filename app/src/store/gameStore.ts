@@ -11,6 +11,7 @@ interface GameStore {
   joinAsHost: (gameCode: string) => Promise<boolean>;
   joinAsPlayer: (gameCode: string, playerName: string) => Promise<boolean>;
   startGame: (gameCode: string) => Promise<boolean>;
+  startRound: () => Promise<boolean>;
   getPlayerDetails: (playerId: string) => Game["players"][0] | null;
   cleanup: () => void;
   disconnect: () => void;
@@ -100,6 +101,40 @@ export const useGameStore = create<GameStore>((set, get) => ({
           resolve(true);
         }
       });
+    });
+  },
+
+  startRound: async () => {
+    const game = get().game;
+
+    if (!game) {
+      console.error("No active game found");
+      return false;
+    }
+
+    if (game.roundStatus !== "completed") {
+      console.error("Cannot start next round - current round not completed");
+      return false;
+    }
+
+    return new Promise((resolve) => {
+      socket.emit(
+        "startNextRound",
+        game.gameCode,
+        (response: { error?: string; success?: boolean; game?: Game }) => {
+          if (response.error) {
+            console.error("Failed to start next round:", response.error);
+            resolve(false);
+          } else if (response.success && response.game) {
+            // Update local game state with the new game data
+            set({ game: response.game });
+            resolve(true);
+          } else {
+            console.error("Invalid response from server");
+            resolve(false);
+          }
+        }
+      );
     });
   },
 
