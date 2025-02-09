@@ -57,7 +57,7 @@ export default function JoinGameForm() {
   };
 
   return (
-    <div className="flex flex-col gap-14 w-full max-w-md">
+    <div className="flex flex-col gap-14 w-full max-w-xs min-w-[300px]">
       <div className="flex flex-col gap-6 w-full max-w-md">
         <input
           type="text"
