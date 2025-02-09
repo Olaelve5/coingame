@@ -1,8 +1,7 @@
 "use client";
 
-import { IconUserPlus, IconDotsVertical } from "@tabler/icons-react";
+import { IconUserPlus } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 const JoinGameButton = () => {
   const router = useRouter();
@@ -12,10 +11,10 @@ const JoinGameButton = () => {
   };
 
   return (
-    <div className="relative flex flex-col w-full">
+    <div className="relative flex flex-col w-full gap-5 items-center">
       <button
         onClick={handleClick}
-        className="relative group border-none bg-transparent p-0 outline-none cursor-pointer font-mono font-bold text-base">
+        className="relative group w-full border-none bg-transparent p-0 outline-none cursor-pointer font-mono font-bold text-base">
         <span className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-25 rounded-lg transform translate-y-0.5 transition duration-[600ms] ease-[cubic-bezier(0.3,0.7,0.4,1)] group-hover:translate-y-1 group-hover:duration-[250ms] group-active:translate-y-px"></span>
 
         <span className="absolute top-0 left-0 w-full h-full rounded-lg bg-gradient-to-l from-[hsl(217,33%,16%)] via-[hsl(0, 69.80%, 49.40%)] to-[hsl(217,33%,16%)]"></span>
