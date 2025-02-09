@@ -60,10 +60,7 @@ export default function CreateGameButton() {
         text-white rounded-lg transform -translate-y-1 bg-gradient-to-r from-orange-500 via-red-500 to-rose-500 gap-3 transition duration-[600ms] ease-[cubic-bezier(0.3,0.7,0.4,1)] 
         group-hover:-translate-y-1.5 group-hover:duration-[250ms] group-active:-translate-y-0.5 brightness-100 group-hover:brightness-110">
         <span className="select-none">Host game</span>
-        <IconDeviceGamepad2
-          size={26}
-          className="ml-2 -mr-1 transition duration-250 group-hover:translate-x-1"
-        />
+        <IconDeviceGamepad2 size={26} />
       </div>
     </button>
   );
