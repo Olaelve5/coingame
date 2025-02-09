@@ -21,9 +21,14 @@ const GameSchema = new mongoose.Schema({
   ],
   hostId: { type: String, required: true },
   round: { type: Number, default: 1 },
-  roundStatus: { type: String, default: "paused" }, // paused, active
+  roundStatus: { type: String, default: "completed" }, // completed, active
   lastRoundResults: {
-    playersEliminated: [String],
+    playersEliminated: [
+      {
+        id: String,
+        name: String,
+      },
+    ],
     totalCoinsPlayed: Number,
     round: Number,
     minCoinsPlayed: Number,

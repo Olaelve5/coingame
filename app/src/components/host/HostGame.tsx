@@ -1,10 +1,15 @@
 import { useGameStore } from "@/store/gameStore";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import StartNewRoundButton from "./StartNewRoundButton";
 
 const HostGame = ({ gameCode }: { gameCode: string }) => {
   const { game, joinAsHost, cleanup } = useGameStore();
   const router = useRouter();
+
+  const handleStartNewRound = async () => {
+    console.log("Starting round");
+  };
 
   useEffect(() => {
     const initGame = async () => {
@@ -32,6 +37,22 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
           </li>
         ))}
       </ul>
+      {game?.roundStatus === "completed" && (
+        <>
+          <p>Round {game.round} is completed</p>
+          <p>Results:</p>
+          <p>
+            Players eliminated:{" "}
+            {game.lastRoundResults.playersEliminated
+              .map((player) => player.name)
+              .join(", ")}
+          </p>
+          <p>Total coins played: {game.lastRoundResults.totalCoinsPlayed}</p>
+          <p>Minimum coins played: {game.lastRoundResults.minCoinsPlayed}</p>
+          <br />
+          <StartNewRoundButton onClick={handleStartNewRound} />
+        </>
+      )}
     </div>
   );
 };

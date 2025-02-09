@@ -25,13 +25,16 @@ const calculateRoundResults = (game) => {
       const roundPlay = player.roundHistory.find((h) => h.round === game.round);
       return roundPlay && roundPlay.coinsPlayed === minCoinsPlayed;
     })
-    .map((player) => player.id);
+    .map((player) => ({
+      id: player.id,
+      name: player.name,
+    }));
 
   return {
     totalCoinsPlayed,
     playersEliminated,
     round: game.round,
-    minCoinsPlayed, 
+    minCoinsPlayed,
   };
 };
 
