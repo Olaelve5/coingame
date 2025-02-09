@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import getPlayerId from "@/utils/getPlayerId";
 import { useGameStore } from "@/store/gameStore";
-import { IconPlus } from "@tabler/icons-react";
+import { IconPlus, IconDeviceGamepad2 } from "@tabler/icons-react";
 
 export default function CreateGameButton() {
   const router = useRouter();
@@ -50,12 +50,20 @@ export default function CreateGameButton() {
   return (
     <button
       onClick={onCreateGame}
-      className="group relative inline-flex h-[calc(48px+8px)] items-center justify-center rounded-full bg-gradient-to-r from-[#f27121] via-[#e94057] to-[#8a2387] py-1 pl-6 pr-14 font-bold text-2xl">
-      <span className="z-10 pr-2">Host game</span>
-      <div className="absolute right-1 inline-flex h-12 w-12 items-center justify-end rounded-full bg-neutral-800 transition-[width] group-hover:w-[calc(100%-8px)]">
-        <div className="flex items-center justify-center h-12 w-12 rounded-full">
-          <IconPlus size={24} />
-        </div>
+      className="relative group border-none bg-transparent p-0 outline-none cursor-pointer font-mono font-bold text-base">
+      <span className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-25 rounded-lg transform translate-y-0.5 transition duration-[600ms] ease-[cubic-bezier(0.3,0.7,0.4,1)] group-hover:translate-y-1 group-hover:duration-[250ms] group-active:translate-y-px"></span>
+
+      <span className="absolute top-0 left-0 w-full h-full rounded-lg bg-gradient-to-l from-[hsl(217,33%,16%)] via-[hsl(0, 69.80%, 49.40%)] to-[hsl(217,33%,16%)]"></span>
+
+      <div
+        className="relative flex items-center justify-between py-3 px-6 text-lg 
+        text-white rounded-lg transform -translate-y-1 bg-gradient-to-r from-orange-500 via-red-500 to-rose-500 gap-3 transition duration-[600ms] ease-[cubic-bezier(0.3,0.7,0.4,1)] 
+        group-hover:-translate-y-1.5 group-hover:duration-[250ms] group-active:-translate-y-0.5 brightness-100 group-hover:brightness-110">
+        <span className="select-none">Host game</span>
+        <IconDeviceGamepad2
+          size={26}
+          className="ml-2 -mr-1 transition duration-250 group-hover:translate-x-1"
+        />
       </div>
     </button>
   );
