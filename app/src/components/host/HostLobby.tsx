@@ -1,6 +1,6 @@
 // components/GameRoom.tsx
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useGameStore } from "@/store/gameStore";
 import getPlayerId from "@/utils/getPlayerId";
@@ -28,9 +28,12 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
     }
   };
 
+  // Split the game code into two parts, half each
+  const gameCodeString = gameCode.slice(0, 3) + " - " + gameCode.slice(3);
+
   return (
     <div className="text-center">
-      <h1 className="text-3xl font-bold mb-4">Game Lobby: {gameCode}</h1>
+      <h1 className="text-3xl bungee-font font-bold mb-4">Game Code: {gameCodeString}</h1>
       <p>Players:</p>
       <div className="p-6 rounded-lg shadow-lg">
         <ul className="space-y-2">

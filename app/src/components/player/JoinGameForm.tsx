@@ -3,7 +3,7 @@
 import { useState, KeyboardEvent, useEffect, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useGameStore } from "@/store/gameStore";
-import { IconArrowRight } from "@tabler/icons-react";
+import { IconArrowRight, IconDotsVertical } from "@tabler/icons-react";
 
 export default function JoinGameForm() {
   const router = useRouter();
@@ -15,9 +15,8 @@ export default function JoinGameForm() {
   const [errorMessage, setErrorMessage] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
-
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && playerName.trim()) {
+    if (e.key === "Enter" && playerName.trim()) {
       handleJoinGame();
     }
   };
@@ -71,9 +70,12 @@ export default function JoinGameForm() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-40 w-full max-w-xs min-w-[300px]">
-      <div className="flex flex-col gap-6 w-full items-center">
-        <h1 className="text-2xl font-bold">What’s your name?</h1>
+    <div className="flex flex-col gap-10 w-full max-w-xs min-w-[300px] items-center">
+      <div className="flex flex-col gap-3 w-full items-center">
+        <h1 className="text-4xl font-bold bungee-font whitespace-nowrap mb-10">
+          You're in!
+        </h1>
+        <h1 className="text-xl font-bold">What should we call you?</h1>
         <input
           ref={inputRef}
           type="text"
@@ -93,6 +95,7 @@ export default function JoinGameForm() {
           <p className="text-red-500 font-bold text-center">{errorMessage}</p>
         )}
       </div>
+      <IconDotsVertical size={20} className="opacity-100" />
       <button
         onClick={handleJoinGame}
         className="relative group border-none bg-transparent p-0 outline-none cursor-pointer font-mono font-bold text-base disabled:opacity-50 disabled:pointer-events-none w-full">
