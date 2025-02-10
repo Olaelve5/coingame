@@ -3,12 +3,13 @@
 import { IconUserPlus } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import PinInput from "./PinInput";
-import { use, useEffect, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 
 const JoinGameButton = () => {
   const router = useRouter();
   const [showPinInput, setShowPinInput] = useState(false);
   const [gameCode, setGameCode] = useState("");
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -17,7 +18,6 @@ const JoinGameButton = () => {
   };
 
   const handleJoinGame = async () => {
-    //router.push(`/join`);
 
     if (gameCode.length < 6) {
       alert("Please enter a valid game code");
@@ -59,6 +59,10 @@ const JoinGameButton = () => {
 
   useEffect(() => {
     setErrorMessage("");
+
+    if(gameCode.length === 6) {
+      buttonRef.current?.focus();
+    }
   }, [gameCode]);
 
   return (
@@ -72,6 +76,7 @@ const JoinGameButton = () => {
         <PinInput showPinInput={showPinInput} onChange={setGameCode} />
       </div>
       <button
+        ref={buttonRef}
         onClick={showPinInput ? handleJoinGame : handleShowPinInput}
         disabled={showPinInput && gameCode.length < 6}
         className={`relative group w-full border-none bg-transparent p-0 outline-none cursor-pointer font-mono font-bold text-base

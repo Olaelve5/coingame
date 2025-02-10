@@ -1,6 +1,6 @@
 // components/JoinGameForm.tsx
 "use client";
-import { useState } from "react";
+import { useState, KeyboardEvent, useEffect, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useGameStore } from "@/store/gameStore";
 import { IconArrowRight } from "@tabler/icons-react";
@@ -13,14 +13,20 @@ export default function JoinGameForm() {
   const [isLoading, setIsLoading] = useState(false);
   const { prepareForNewGame } = useGameStore();
   const [errorMessage, setErrorMessage] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && playerName.trim()) {
+      handleJoinGame();
+    }
+  };
 
   const handleJoinGame = async () => {
     if (!gameCode.trim() || !playerName.trim()) {
-      alert("Please enter both game code and your name");
+      alert("Something went wrong! Please try again.");
       return;
     }
-
-    console.log("Joining game", gameCode, playerName);
 
     try {
       setIsLoading(true);
@@ -59,14 +65,21 @@ export default function JoinGameForm() {
     }
   };
 
+  // Focus on input when component mounts
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
   return (
     <div className="flex flex-col gap-40 w-full max-w-xs min-w-[300px]">
       <div className="flex flex-col gap-6 w-full items-center">
         <h1 className="text-2xl font-bold">What’s your name?</h1>
         <input
+          ref={inputRef}
           type="text"
           placeholder="Nickname"
           value={playerName}
+          onKeyDown={handleKeyDown}
           onChange={(e) => setPlayerName(e.target.value)}
           className="bg-slate-700 w-full py-3 px-6 outline-none text-md
           font-bold text-white rounded-lg transition-colors duration-100 border-solid focus:outline-none
@@ -77,7 +90,7 @@ export default function JoinGameForm() {
         />
 
         {errorMessage && (
-          <p className="text-red-500 text-center">{errorMessage}</p>
+          <p className="text-red-500 font-bold text-center">{errorMessage}</p>
         )}
       </div>
       <button
