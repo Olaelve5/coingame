@@ -1,12 +1,13 @@
-import { useState, useRef, KeyboardEvent } from "react";
+import { useState, useRef, KeyboardEvent, useEffect } from "react";
 import { IconCrop169Filled } from "@tabler/icons-react";
 
 interface PinInputProps {
+  showPinInput?: boolean;
   length?: number;
   onChange?: (value: string) => void;
 }
 
-const PinInput = ({ length = 6, onChange }: PinInputProps) => {
+const PinInput = ({ showPinInput, length = 6, onChange }: PinInputProps) => {
   const [pins, setPins] = useState<string[]>(Array(length).fill(""));
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -33,8 +34,15 @@ const PinInput = ({ length = 6, onChange }: PinInputProps) => {
     }
   };
 
+  useEffect(() => {
+    if (showPinInput) {
+      // Focus the first input when showPinInput becomes true
+      inputRefs.current[0]?.focus();
+    }
+  }, [showPinInput]);
+
   const inputClass = `
-    block size-[40px] 
+    block size-[38px] 
     text-center 
     bg-slate-700 
     text-white
@@ -56,7 +64,7 @@ const PinInput = ({ length = 6, onChange }: PinInputProps) => {
 
   return (
     <div className="py-2 px-3 flex flex-col items-center gap-5">
-      <h1 className="text-xl font-bold">Game Code</h1>
+      <h1 className="text-xl font-bold">Enter game code</h1>
       <div className="flex items-center justify-center gap-x-5">
         {/* First half of inputs */}
         <div className="flex gap-x-5">
