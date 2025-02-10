@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useGameStore } from "@/store/gameStore";
 import { IconUserPlus } from "@tabler/icons-react";
+import PinInput from "@/components/player/PinInput";
 
 export default function JoinGameForm() {
   const router = useRouter();
@@ -18,6 +19,8 @@ export default function JoinGameForm() {
       alert("Please enter both game code and your name");
       return;
     }
+
+    console.log("Joining game", gameCode, playerName);
 
     try {
       setIsLoading(true);
@@ -58,43 +61,45 @@ export default function JoinGameForm() {
 
   return (
     <div className="flex flex-col gap-14 w-full max-w-xs min-w-[300px]">
-      <div className="flex flex-col gap-6 w-full max-w-md">
-        <input
-          type="text"
-          placeholder="Game Code"
-          value={gameCode}
-          onChange={(e) => setGameCode(e.target.value.toUpperCase())}
-          className="bg-[#222630] py-3 px-6 outline-none text-white rounded-lg border-2 transition-colors duration-100 border-solid focus:border-[#596A95] border-[#2B3040]"
-          maxLength={5}
-        />
-        <input
-          type="text"
-          placeholder="Your Name"
-          value={playerName}
-          onChange={(e) => setPlayerName(e.target.value)}
-          className="bg-[#222630] py-3 px-6 outline-none text-white rounded-lg border-2 transition-colors duration-100 border-solid focus:border-[#596A95] border-[#2B3040]"
-        />
-      </div>
-      <button
-        onClick={handleJoinGame}
-        disabled={isLoading}
-        className="relative group border-none bg-transparent p-0 outline-none cursor-pointer font-mono font-bold text-base">
-        <span className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-25 rounded-lg transform translate-y-0.5 transition duration-[600ms] ease-[cubic-bezier(0.3,0.7,0.4,1)] group-hover:translate-y-1 group-hover:duration-[250ms] group-active:translate-y-px"></span>
+      <div className="flex flex-col gap-20 w-full max-w-md items-center">
+        <PinInput onChange={setGameCode} />
 
-        <span className="absolute top-0 left-0 w-full h-full rounded-lg bg-gradient-to-l from-[hsl(217,33%,16%)] via-[hsl(0, 69.80%, 49.40%)] to-[hsl(217,33%,16%)]"></span>
+        <div className="flex flex-col gap-3 w-full items-center">
+          <h1 className="text-xl font-bold">Nickname</h1>
+          <input
+            type="text"
+            placeholder="Nickname"
+            value={playerName}
+            onChange={(e) => setPlayerName(e.target.value)}
+            className="bg-slate-700 w-full py-3 px-6 outline-none text-md
+          font-bold text-white rounded-lg transition-colors duration-100 border-solid focus:outline-none
+          focus:ring-2
+          focus:ring-blue-500
+          disabled:opacity-50 
+          disabled:pointer-events-none"
+          />
 
-        <div
-          className="relative flex items-center justify-between py-3 px-6 text-lg 
+          <button
+            onClick={handleJoinGame}
+            disabled={isLoading || gameCode.length < 6 || !playerName.trim()}
+            className="relative group border-none bg-transparent p-0 outline-none cursor-pointer font-mono font-bold text-base disabled:opacity-50 disabled:pointer-events-none w-full">
+            <span className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-25 rounded-lg transform translate-y-0.5 transition duration-[600ms] ease-[cubic-bezier(0.3,0.7,0.4,1)] group-hover:translate-y-1 group-hover:duration-[250ms] group-active:translate-y-px"></span>
+            <span className="absolute top-0 left-0 w-full h-full rounded-lg bg-gradient-to-l from-[hsl(217,33%,16%)] via-[hsl(0, 69.80%, 49.40%)] to-[hsl(217,33%,16%)]"></span>
+
+            <div
+              className="relative flex items-center justify-between py-3 px-6 text-lg 
           text-white rounded-lg transform -translate-y-1 bg-gradient-to-r from-cyan-500 via-sky-500 to-blue-500 gap-3 transition duration-[600ms] ease-[cubic-bezier(0.3,0.7,0.4,1)] 
           group-hover:-translate-y-1.5 group-hover:duration-[250ms] group-active:-translate-y-0.5 brightness-100 group-hover:brightness-110">
-          <span className="select-none">Join game</span>
-          <IconUserPlus size={26} />
-        </div>
-      </button>
+              <span className="select-none">Join game</span>
+              <IconUserPlus size={26} />
+            </div>
+          </button>
 
-      {errorMessage && (
-        <p className="text-red-500 text-center">{errorMessage}</p>
-      )}
+          {errorMessage && (
+            <p className="text-red-500 text-center">{errorMessage}</p>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

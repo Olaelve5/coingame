@@ -12,7 +12,7 @@ export default function CreateGameButton() {
   const onCreateGame = async () => {
     try {
       // 1. Generate game code
-      const gameCode = Math.random().toString(36).substring(2, 7).toUpperCase();
+      const gameCode = Math.random().toString(36).substring(2, 8).toUpperCase();
 
       const hostId = getPlayerId();
 
