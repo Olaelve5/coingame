@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useGameStore } from "@/store/gameStore";
+import QRCode from "./QRCode";
 import getPlayerId from "@/utils/getPlayerId";
 
 export default function HostLobby({ gameCode }: { gameCode: string }) {
@@ -34,6 +35,7 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
   return (
     <div className="text-center">
       <h1 className="text-3xl bungee-font font-bold mb-4">Game Code: {gameCodeString}</h1>
+      <QRCode gameCode={gameCode} />
       <p>Players:</p>
       <div className="p-6 rounded-lg shadow-lg">
         <ul className="space-y-2">
