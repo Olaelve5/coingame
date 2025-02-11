@@ -18,7 +18,7 @@ function QRCode({ gameCode }: QRCodeProps) {
           errorCorrectionLevel: "M",
           margin: 3,
           scale: 4,
-          width: 200,
+          width: 150,
           color: {
             dark: "#0f172a",
             light: "FFFFFF",

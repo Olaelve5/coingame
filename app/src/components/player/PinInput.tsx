@@ -49,6 +49,7 @@ const PinInput = ({ showPinInput, length = 6, onChange }: PinInputProps) => {
     rounded-md 
     text-sm
     font-bold
+    bungee-font
     uppercase 
     placeholder:text-gray-400
     focus:outline-none

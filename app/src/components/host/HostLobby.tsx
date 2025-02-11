@@ -33,28 +33,40 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
   const gameCodeString = gameCode.slice(0, 3) + " - " + gameCode.slice(3);
 
   return (
-    <div className="text-center">
-      <h1 className="text-3xl bungee-font font-bold mb-4">Game Code: {gameCodeString}</h1>
-      <QRCode gameCode={gameCode} />
-      <p>Players:</p>
-      <div className="p-6 rounded-lg shadow-lg">
-        <ul className="space-y-2">
-          {game?.players?.map((player) => (
-            <li key={player.id} className="text-lg">
-              {player.name} {player.id === getPlayerId() && "(You)"}
-              <br />
-              Coins: {player.coins}
-              <br />
-              {player.connected ? "Connected" : "Disconnected"}
-            </li>
-          ))}
+    <div className="text-center items-center bg-sky-500 space-y-4 w-full overflow-x-hidden h-dvh">
+      <div className="flex flex-col items-center space-x-4 bg-red-500 pb-10 pt-4">
+        <h1 className="text-3xl bungee-font font-bold mb-10">Cashfall</h1>
+        <div className="flex justify-around items-center w-full">
+          <h1 className="text-6xl bungee-font font-bold mb-4">
+            {gameCodeString}
+          </h1>
+          <QRCode gameCode={gameCode} />
+        </div>
+        <button className="text-xl font-bold">Start Game</button>
+      </div>
+
+      <div className="flex justify-around items-center w-full">
+        <div className="flex items-center justify-center space-x-2 mb-6 mt-2">
+          <h2 className="text-4xl font-bold bungee-font">
+            {game?.players.filter((player) => player.connected).length}
+          </h2>
+          <p className="text-xl font-bold">players joined</p>
+        </div>
+      </div>
+
+      <div className="w-full max-w-4xl mx-auto px-4">
+        <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center">
+          {game?.players
+            ?.filter((player) => player.connected)
+            ?.map((player) => (
+              <li
+                key={player.id}
+                className="bg-slate-800 rounded-lg p-4 text-xl font-bold w-48 text-center">
+                {player.name}
+              </li>
+            ))}
         </ul>
       </div>
-      <button
-        onClick={handleStartGame}
-        className="mt-4 text-2xl font-bold text-white bg-blue-500 rounded-lg px-8 py-4 hover:bg-blue-600 transition-colors">
-        Start Game
-      </button>
     </div>
   );
 }
