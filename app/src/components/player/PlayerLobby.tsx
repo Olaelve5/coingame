@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useGameStore } from "@/store/gameStore";
+import {socket} from "@/utils/socket";
 
 export default function PlayerLobby({
   gameCode,

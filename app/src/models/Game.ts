@@ -33,11 +33,16 @@ interface Winner {
   }[];
 }
 
+interface Host {
+  id: string;
+  socketId: string;
+}
+
 export interface Game {
   _id: string;
   gameCode: string;
   players: Player[];
-  hostId: string;
+  host: Host;
   round: number;
   roundStatus: "completed" | "active";
   lastRoundResults: LastRoundResults;

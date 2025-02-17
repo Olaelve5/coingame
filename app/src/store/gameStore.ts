@@ -15,6 +15,9 @@ interface GameStore {
   getPlayerDetails: (playerId: string) => Game["players"][0] | null;
   cleanup: () => void;
   disconnect: () => void;
+  kickPlayer: (
+    playerIdToKick: string
+  ) => Promise<{ success: boolean; message: string }>;
   playCoins: (coins: number) => Promise<boolean>;
 }
 
@@ -89,6 +92,19 @@ export const useGameStore = create<GameStore>((set, get) => ({
       socket.on("gameUpdate", (game: Game) => {
         set({ game });
       });
+      
+      socket.on("kicked", (message: string) => {
+        set({ game: null });
+        socket.disconnect();
+
+        // Clear session storage
+        sessionStorage.removeItem("playerName");
+        sessionStorage.removeItem("playerId");
+        sessionStorage.removeItem("hostId");
+
+        alert("You have been kicked from the game");
+        window.location.href = "/";  // Navigate to home page
+      });
     });
   },
 
@@ -147,11 +163,41 @@ export const useGameStore = create<GameStore>((set, get) => ({
   cleanup: () => {
     socket.off("gameUpdate");
     socket.off("playersUpdate");
+    socket.off("kicked");
   },
 
   disconnect: () => {
     if (!socket.connected) return;
     socket.disconnect();
+  },
+
+  kickPlayer: async (playerIdToKick: string) => {
+    return new Promise((resolve) => {
+      const game = get().game;
+
+      if (!game) {
+        resolve({
+          success: false,
+          message: "No active game found",
+        });
+        return;
+      }
+
+      socket.emit(
+        "kickPlayer",
+        game.gameCode,
+        playerIdToKick,
+        (response: { success: boolean; message: string }) => {
+          if (response.success) {
+            // No need to update game state here as we'll receive a playersUpdate event
+            resolve(response);
+          } else {
+            console.error("Failed to kick player:", response.message);
+            resolve(response);
+          }
+        }
+      );
+    });
   },
 
   playCoins: async (coins: number) => {

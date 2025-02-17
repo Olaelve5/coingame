@@ -28,7 +28,7 @@ export default function CreateGameButton() {
           body: JSON.stringify({
             gameCode,
             players: [], // Start with empty players array
-            hostId,
+            host: { id: hostId, socketId: "pending" },
           }),
         }
       );

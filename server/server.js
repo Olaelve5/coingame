@@ -13,7 +13,7 @@ const httpServer = createServer(app);
 // CORS Configuration
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "http://192.168.10.123:3000"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -23,7 +23,7 @@ app.options("*", cors()); // Handle preflight requests
 // Socket.io Configuration
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "http://192.168.10.123:3000"],
     methods: ["GET", "POST"],
   },
 });
@@ -54,6 +54,7 @@ app.post("/games", async (req, res) => {
     const savedGame = await newGame.save();
     res.status(201).json(savedGame);
   } catch (error) {
+    console.error(error);
     res.status(400).json({ error: error.message });
   }
 });

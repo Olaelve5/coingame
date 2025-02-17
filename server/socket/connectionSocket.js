@@ -5,6 +5,7 @@ const connectionSocketHandler = (io) => {
   io.on("connection", (socket) => {
     console.log("User connected:", socket.id);
 
+    // Handle player joining the game ------------------------------------------------------------------------
     socket.on("joinGame", async (gameCode, playerName, playerId) => {
       try {
         // First, try to find the game
@@ -83,7 +84,7 @@ const connectionSocketHandler = (io) => {
       }
     });
 
-    // Handle host joining the game
+    // Handle host joining the game ------------------------------------------------------------------------
     socket.on("joinRoomAsHost", async (gameCode, hostId, callback) => {
       try {
         console.log(`Host joining room ${gameCode}`);
@@ -92,36 +93,125 @@ const connectionSocketHandler = (io) => {
         // Fetch the game from the database
         const game = await Game.findOne({ gameCode });
 
-        if (!game || game.hostId !== hostId) {
+        if (!game || game.host.id !== hostId) {
           return callback(null); // Return null to indicate an error
         }
 
+        // Update the host's socket ID
+        const updatedGame = await Game.findOneAndUpdate(
+          { gameCode },
+          {
+            $set: {
+              "host.socketId": socket.id,
+            },
+          },
+          { new: true }
+        );
+
         // Return the game state to the frontend
-        callback(game);
+        callback(updatedGame);
       } catch (error) {
         console.error("Error fetching game state for host:", error);
         callback(null); // Return null if an error occurs
       }
     });
 
-    // handle disconnect of a player
+    // handle disconnect of a player ------------------------------------------------------------------------
     socket.on("disconnect", async () => {
       console.log("User disconnected:", socket.id);
-      // Update the player's connected status in the game
       try {
-        const game = await Game.findOneAndUpdate(
-          { "players.socketId": socket.id },
-          { $set: { "players.$.connected": false } },
+        // Find the game the player *might* be in.
+        const game = await Game.findOne({ "players.socketId": socket.id });
+
+        if (game) {
+          // Find the player within the game.
+          const player = game.players.find((p) => p.socketId === socket.id);
+
+          if (player) {
+            // Check if player was actually found
+            // Update connected status AND remove socketId
+            await Game.updateOne(
+              { "players.socketId": socket.id },
+              {
+                $set: {
+                  "players.$.connected": false,
+                  "players.$.socketId": null, // Clear the socketId
+                },
+              }
+            );
+            // Get the updated game state
+            const updatedGame = await Game.findOne({ "players.id": player.id });
+
+            // Notify other players (use io.to for room-wide broadcast).
+            io.to(game.gameCode).emit("playersUpdate", updatedGame.players);
+            console.log(
+              `User with socket ID ${socket.id} disconnected from game ${game.gameCode}.`
+            );
+          } else {
+            console.log(
+              `User with socket ID ${socket.id} disconnected, but was not found in any game.`
+            );
+          }
+        }
+      } catch (error) {
+        console.error("Error handling disconnect:", error);
+      }
+    });
+
+    // Handle player kicked from the game ------------------------------------------------------------------------
+    socket.on("kickPlayer", async (gameCode, playerIdToKick, callback) => {
+      try {
+        // Find the game and validate using host.socketId instead of players.socketId
+        const game = await Game.findOne({
+          gameCode,
+          "host.socketId": socket.id,
+        });
+
+        if (!game) {
+          return callback({
+            success: false,
+            message: "Game not found or you are not authorized.",
+          });
+        }
+
+        // Check if the player to kick exists
+        const playerToKick = game.players.find((p) => p.id === playerIdToKick);
+        if (!playerToKick) {
+          return callback({
+            success: false,
+            message: "Player to kick not found in this game.",
+          });
+        }
+
+        // Update game with player removed
+        const updatedGame = await Game.findOneAndUpdate(
+          { gameCode },
+          { $pull: { players: { id: playerIdToKick } } },
           { new: true }
         );
 
-        if (game) {
-          console.log(`User with socket ID ${socket.id} disconnected.`);
-          socket.emit("gameUpdate", game);
-          socket.to(game.gameCode).emit("playersUpdate", game.players);
+        // Handle socket disconnect for kicked player
+        if (playerToKick.socketId) {
+          const kickedSocket = io.sockets.sockets.get(playerToKick.socketId);
+          if (kickedSocket) {
+            kickedSocket.emit("kicked", "You have been kicked from the game.");
+            kickedSocket.disconnect(true);
+          }
         }
+
+        // Notify remaining players
+        io.to(gameCode).emit("playersUpdate", updatedGame.players);
+
+        return callback({
+          success: true,
+          message: "Player kicked successfully.",
+        });
       } catch (error) {
-        console.error("Error updating player status on disconnect:", error);
+        console.error("Error kicking player:", error);
+        return callback({
+          success: false,
+          message: "An error occurred while kicking the player.",
+        });
       }
     });
   });
