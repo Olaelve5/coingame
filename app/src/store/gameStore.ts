@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { socket } from "@/utils/socket";
+import { getSocket } from "@/utils/socket";
 import { Game } from "@/models/Game";
 import getPlayerId from "@/utils/getPlayerId";
 
@@ -33,16 +33,25 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   prepareForNewGame: () => {
     // Clean up existing listeners and connection
+    const socket = getSocket();
     socket.off("gameUpdate");
     socket.off("playersUpdate");
     if (socket.connected) {
       socket.disconnect();
     }
     set({ game: null });
+    sessionStorage.removeItem("kickedFromGame");
   },
 
   joinAsHost: async (gameCode) => {
     return new Promise((resolve) => {
+      const socket = getSocket();
+      if (sessionStorage.getItem("kickedFromGame")) {
+        console.log("Player was previously kicked. Preventing rejoin.");
+        resolve(false); // Prevent rejoining
+        return;
+      }
+
       socket.connect();
       const hostId = getPlayerId();
 
@@ -68,6 +77,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   joinAsPlayer: async (gameCode, playerName) => {
     return new Promise((resolve) => {
+      const socket = getSocket();
       socket.connect();
       const playerId = getPlayerId();
 
@@ -92,8 +102,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
       socket.on("gameUpdate", (game: Game) => {
         set({ game });
       });
-      
+
       socket.on("kicked", (message: string) => {
+        sessionStorage.setItem("kickedFromGame", "true");
         set({ game: null });
         socket.disconnect();
 
@@ -102,14 +113,18 @@ export const useGameStore = create<GameStore>((set, get) => ({
         sessionStorage.removeItem("playerId");
         sessionStorage.removeItem("hostId");
 
-        alert("You have been kicked from the game");
-        window.location.href = "/";  // Navigate to home page
+        // Navigate first, then show alert
+        window.location.href = "/";
+        setTimeout(() => {
+          alert("You have been kicked from the game");
+        }, 100);
       });
     });
   },
 
   startGame: async (gameCode) => {
     return new Promise((resolve) => {
+      const socket = getSocket();
       socket.emit("startGame", gameCode, (response: any) => {
         if (response.error) {
           resolve(false);
@@ -134,6 +149,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     return new Promise((resolve) => {
+      const socket = getSocket();
       socket.emit(
         "startNextRound",
         game.gameCode,
@@ -161,18 +177,21 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   cleanup: () => {
+    const socket = getSocket();
     socket.off("gameUpdate");
     socket.off("playersUpdate");
     socket.off("kicked");
   },
 
   disconnect: () => {
+    const socket = getSocket();
     if (!socket.connected) return;
     socket.disconnect();
   },
 
   kickPlayer: async (playerIdToKick: string) => {
     return new Promise((resolve) => {
+      const socket = getSocket();
       const game = get().game;
 
       if (!game) {
@@ -202,6 +221,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   playCoins: async (coins: number) => {
     return new Promise((resolve) => {
+      const socket = getSocket();
       const game = get().game;
       const playerId = getPlayerId();
 

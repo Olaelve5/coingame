@@ -53,6 +53,7 @@ const connectionSocketHandler = (io) => {
             { gameCode, "players.id": playerId },
             {
               $set: {
+                "players.$.name": playerName,
                 "players.$.socketId": socket.id,
                 "players.$.connected": true,
               },
@@ -144,6 +145,7 @@ const connectionSocketHandler = (io) => {
 
             // Notify other players (use io.to for room-wide broadcast).
             io.to(game.gameCode).emit("playersUpdate", updatedGame.players);
+
             console.log(
               `User with socket ID ${socket.id} disconnected from game ${game.gameCode}.`
             );
@@ -201,6 +203,7 @@ const connectionSocketHandler = (io) => {
 
         // Notify remaining players
         io.to(gameCode).emit("playersUpdate", updatedGame.players);
+        console.log(`Player ${playerIdToKick} was kicked from ${gameCode}`);
 
         return callback({
           success: true,
