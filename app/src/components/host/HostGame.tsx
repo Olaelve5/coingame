@@ -1,10 +1,10 @@
-import { useGameStore } from "@/store/gameStore";
+import { useConnectionStore } from "@/store/connectionStore";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import StartNewRoundButton from "./StartNewRoundButton";
 
 const HostGame = ({ gameCode }: { gameCode: string }) => {
-  const { game, joinAsHost, cleanup } = useGameStore();
+  const { game, joinAsHost, cleanup } = useConnectionStore();
   const router = useRouter();
 
   useEffect(() => {

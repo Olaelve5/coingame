@@ -5,13 +5,13 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import PlayerLobby from "@/components/player/PlayerLobby";
 import PlayerGame from "@/components/player/PlayerGame";
-import { useGameStore } from "@/store/gameStore";
+import { useConnectionStore } from "@/store/connectionStore";
 import { useRouter } from "next/navigation";
 
 export default function GamePage() {
   const params = useParams(); // Get URL parameters
   const [playerName, setPlayerName] = useState("");
-  const { game } = useGameStore();
+  const { game } = useConnectionStore();
   const router = useRouter();
 
   useEffect(() => {

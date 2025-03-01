@@ -3,15 +3,13 @@ import { getSocket } from "@/utils/socket";
 import { Game } from "@/models/Game";
 import getPlayerId from "@/utils/getPlayerId";
 
-interface GameStore {
+interface ConnectionStore {
   game: Game | null;
   setGame: (game: Game | null) => void;
   updatePlayers: (players: Game["players"]) => void;
   prepareForNewGame: () => void;
   joinAsHost: (gameCode: string) => Promise<boolean>;
   joinAsPlayer: (gameCode: string, playerName: string) => Promise<boolean>;
-  startGame: (gameCode: string) => Promise<boolean>;
-  startRound: () => Promise<boolean>;
   getPlayerDetails: (playerId: string) => Game["players"][0] | null;
   cleanup: () => void;
   disconnect: () => void;
@@ -19,10 +17,9 @@ interface GameStore {
   kickPlayer: (
     playerIdToKick: string
   ) => Promise<{ success: boolean; message: string }>;
-  playCoins: (coins: number) => Promise<boolean>;
 }
 
-export const useGameStore = create<GameStore>((set, get) => ({
+export const useConnectionStore = create<ConnectionStore>((set, get) => ({
   game: null,
   setGame: (game) => set({ game }),
   isKicked: false,
@@ -79,11 +76,43 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
   },
 
+  // Inside your useGameStore.ts file, modify the joinAsPlayer function:
+
   joinAsPlayer: async (gameCode, playerName) => {
     return new Promise((resolve) => {
       const socket = getSocket();
+
+      // First check if player was previously kicked
+      if (get().isKicked) {
+        console.log("Player was previously kicked. Preventing rejoin.");
+        resolve(false);
+        return;
+      }
+
       socket.connect();
       const playerId = getPlayerId();
+
+      // Set up kick listener before attempting to join
+      socket.on("kicked", (message: string) => {
+        console.log("Player kicked:", message);
+
+        // Set kicked state first
+        set({ game: null, isKicked: true });
+
+        // Disconnect socket
+        socket.disconnect();
+
+        // Clear session storage
+        sessionStorage.removeItem("playerName");
+        sessionStorage.removeItem("playerId");
+        sessionStorage.removeItem("hostId");
+
+        // Navigate first, then show alert
+        window.location.href = "/";
+        setTimeout(() => {
+          alert("You have been kicked from the game");
+        }, 100);
+      });
 
       socket.emit(
         "joinGame",
@@ -104,72 +133,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
       // Set up listener
       socket.on("gameUpdate", (game: Game) => {
-        set({ game });
-      });
-
-      socket.on("kicked", (message: string) => {
-        set({ game: null, isKicked: true });
-        socket.disconnect();
-
-        // Clear session storage
-        sessionStorage.removeItem("playerName");
-        sessionStorage.removeItem("playerId");
-        sessionStorage.removeItem("hostId");
-
-        // Navigate first, then show alert
-        window.location.href = "/";
-        setTimeout(() => {
-          alert("You have been kicked from the game");
-        }, 100);
-      });
-    });
-  },
-
-  startGame: async (gameCode) => {
-    return new Promise((resolve) => {
-      const socket = getSocket();
-      socket.emit("startGame", gameCode, (response: any) => {
-        if (response.error) {
-          resolve(false);
-        } else {
-          resolve(true);
+        // Only update if not kicked
+        if (!get().isKicked) {
+          set({ game });
         }
       });
-    });
-  },
-
-  startRound: async () => {
-    const game = get().game;
-
-    if (!game) {
-      console.error("No active game found");
-      return false;
-    }
-
-    if (game.roundStatus !== "completed") {
-      console.error("Cannot start next round - current round not completed");
-      return false;
-    }
-
-    return new Promise((resolve) => {
-      const socket = getSocket();
-      socket.emit(
-        "startNextRound",
-        game.gameCode,
-        (response: { error?: string; success?: boolean; game?: Game }) => {
-          if (response.error) {
-            console.error("Failed to start next round:", response.error);
-            resolve(false);
-          } else if (response.success && response.game) {
-            // Update local game state with the new game data
-            set({ game: response.game });
-            resolve(true);
-          } else {
-            console.error("Invalid response from server");
-            resolve(false);
-          }
-        }
-      );
     });
   },
 
@@ -191,7 +159,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   disconnect: () => {
     const socket = getSocket();
-    if (!socket.connected) return;
+    if (!socket.connected) {
+      console.error("Socket is already disconnected");
+      return;
+    }
     socket.disconnect();
   },
 
@@ -219,35 +190,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
           } else {
             console.error("Failed to kick player:", response.message);
             resolve(response);
-          }
-        }
-      );
-    });
-  },
-
-  playCoins: async (coins: number) => {
-    return new Promise((resolve) => {
-      const socket = getSocket();
-      const game = get().game;
-      const playerId = getPlayerId();
-
-      if (!game) {
-        resolve(false);
-        return;
-      }
-
-      socket.emit(
-        "playCoins",
-        game.gameCode,
-        playerId,
-        coins,
-        (response: any) => {
-          if (response?.error) {
-            resolve(false);
-            console.error(response.error);
-          } else {
-            resolve(true);
-            console.log("Played coins successfully");
           }
         }
       );

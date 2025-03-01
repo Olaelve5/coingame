@@ -2,13 +2,15 @@
 "use client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useGameStore } from "@/store/gameStore";
+import { useConnectionStore } from "@/store/connectionStore";
+import { useGameplayStore } from "@/store/gameplayStore";
 import StartNewRoundButton from "./StartNewRoundButton";
 import QRCode from "./QRCode";
 
 export default function HostLobby({ gameCode }: { gameCode: string }) {
   const router = useRouter();
-  const { game, joinAsHost, startGame, cleanup, kickPlayer } = useGameStore();
+  const { game, joinAsHost, cleanup, kickPlayer } = useConnectionStore();
+  const { startGame } = useGameplayStore();
 
   useEffect(() => {
     const initGame = async () => {
@@ -31,11 +33,11 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
 
   const handleClickPlayer = (player: any) => {
     // Disconnect player
-    // const playerKicked = kickPlayer(player.id);
+    const playerKicked = kickPlayer(player.id);
 
-    // if (!playerKicked) {
-    //   alert("Failed to disconnect player");
-    // }
+    if (!playerKicked) {
+      alert("Failed to disconnect player");
+    }
   };
 
   // Split the game code into two parts, half each

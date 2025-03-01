@@ -2,12 +2,12 @@
 "use client";
 import { useRouter } from "next/navigation";
 import getPlayerId from "@/utils/getPlayerId";
-import { useGameStore } from "@/store/gameStore";
+import { useConnectionStore } from "@/store/connectionStore";
 import { IconPlus, IconDeviceGamepad2 } from "@tabler/icons-react";
 
 export default function CreateGameButton() {
   const router = useRouter();
-  const { prepareForNewGame } = useGameStore();
+  const { prepareForNewGame } = useConnectionStore();
 
   const onCreateGame = async () => {
     try {

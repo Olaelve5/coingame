@@ -2,7 +2,7 @@
 "use client";
 import { useState, KeyboardEvent, useEffect, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { useGameStore } from "@/store/gameStore";
+import { useConnectionStore } from "@/store/connectionStore";
 import { IconArrowRight, IconDotsVertical } from "@tabler/icons-react";
 
 export default function JoinGameForm() {
@@ -11,7 +11,7 @@ export default function JoinGameForm() {
   const gameCode = params.gameCode as string;
   const [playerName, setPlayerName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { prepareForNewGame } = useGameStore();
+  const { prepareForNewGame } = useConnectionStore();
   const [errorMessage, setErrorMessage] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
