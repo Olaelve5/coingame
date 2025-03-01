@@ -15,6 +15,7 @@ interface GameStore {
   getPlayerDetails: (playerId: string) => Game["players"][0] | null;
   cleanup: () => void;
   disconnect: () => void;
+  isKicked: boolean;
   kickPlayer: (
     playerIdToKick: string
   ) => Promise<{ success: boolean; message: string }>;
@@ -24,6 +25,7 @@ interface GameStore {
 export const useGameStore = create<GameStore>((set, get) => ({
   game: null,
   setGame: (game) => set({ game }),
+  isKicked: false,
 
   updatePlayers: (players) =>
     set((state) => {
@@ -39,14 +41,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (socket.connected) {
       socket.disconnect();
     }
-    set({ game: null });
-    sessionStorage.removeItem("kickedFromGame");
+    set({ game: null, isKicked: false });
   },
 
   joinAsHost: async (gameCode) => {
     return new Promise((resolve) => {
       const socket = getSocket();
-      if (sessionStorage.getItem("kickedFromGame")) {
+      if (get().isKicked) {
         console.log("Player was previously kicked. Preventing rejoin.");
         resolve(false); // Prevent rejoining
         return;
@@ -66,7 +67,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
       // Set up listeners
       socket.on("gameUpdate", (game: Game) => {
-        set({ game });
+        // Only update game if not kicked
+        if (!get().isKicked) {
+          set({ game });
+        }
       });
 
       socket.on("playersUpdate", (players: Game["players"]) => {
@@ -104,8 +108,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       });
 
       socket.on("kicked", (message: string) => {
-        sessionStorage.setItem("kickedFromGame", "true");
-        set({ game: null });
+        set({ game: null, isKicked: true });
         socket.disconnect();
 
         // Clear session storage
@@ -177,10 +180,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   cleanup: () => {
-    const socket = getSocket();
-    socket.off("gameUpdate");
-    socket.off("playersUpdate");
-    socket.off("kicked");
+    // Only clean up if not kicked
+    if (!get().isKicked) {
+      const socket = getSocket();
+      socket.off("gameUpdate");
+      socket.off("playersUpdate");
+      socket.off("kicked");
+    }
   },
 
   disconnect: () => {

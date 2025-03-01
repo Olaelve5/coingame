@@ -31,11 +31,11 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
 
   const handleClickPlayer = (player: any) => {
     // Disconnect player
-    const playerKicked = kickPlayer(player.id);
+    // const playerKicked = kickPlayer(player.id);
 
-    if (!playerKicked) {
-      alert("Failed to disconnect player");
-    }
+    // if (!playerKicked) {
+    //   alert("Failed to disconnect player");
+    // }
   };
 
   // Split the game code into two parts, half each
@@ -43,7 +43,7 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
 
   return (
     <div className="text-center items-center bg-sky-500 w-full overflow-x-hidden h-dvh">
-      <div className="flex flex-col items-center space-x-4 bg-rose-500 pb-10 pt-4">
+      <div className="flex flex-col items-center space-x-4 bg-red-500 pb-10 pt-4">
         <h1 className="text-3xl bungee-font font-bold mb-10">Cashfall</h1>
         <div className="flex justify-around items-center w-full">
           <div className="flex flex-col items-center space-y-4">

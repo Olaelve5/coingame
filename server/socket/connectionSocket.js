@@ -29,6 +29,15 @@ const connectionSocketHandler = (io) => {
             return socket.emit("error", "Game has already started");
           }
 
+          // Check if a player with the same name exists
+          const playerWithSameName = game.players.find(
+            (p) => p.name === playerName
+          );
+
+          if (playerWithSameName) {
+            return socket.emit("error", "Player with the same name exists");
+          }
+
           // If player doesn't exist, add them to the game
           game = await Game.findOneAndUpdate(
             { gameCode, "players.id": { $ne: playerId } },

@@ -12,9 +12,16 @@ export default function PlayerLobby({
   playerName: string;
 }) {
   const router = useRouter();
-  const { joinAsPlayer, cleanup, disconnect } = useGameStore();
+  const { joinAsPlayer, cleanup, disconnect, isKicked } = useGameStore();
 
   useEffect(() => {
+    // Don't attempt to join if already kicked
+    if (isKicked) {
+      router.push("/");
+      console.log("Player was previously kicked. Preventing rejoin.");
+      return;
+    }
+
     const initGame = async () => {
       const success = await joinAsPlayer(gameCode, playerName);
       if (!success) {
@@ -26,8 +33,11 @@ export default function PlayerLobby({
     initGame();
 
     return () => {
-      cleanup();
-      disconnect();
+      // Only cleanup if not kicked
+      if (!isKicked) {
+        cleanup();
+        disconnect();
+      }
     };
   }, [gameCode, playerName, joinAsPlayer, cleanup, disconnect, router]);
 
