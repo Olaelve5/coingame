@@ -9,7 +9,7 @@ function QRCode({ gameCode }: QRCodeProps) {
   const { Canvas } = useQRCode();
 
   return (
-    <div className="overflow-hidden w-fit rounded-2xl bg-blue-300">
+    <div className="overflow-hidden w-fit rounded-2xl bg-blue-300 mt-6">
       <Canvas
         text={`http://192.168.1.48:3000/join/${gameCode}`}
         options={{
