@@ -1,0 +1,123 @@
+.container {
+  text-align: center;
+  align-items: center;
+  background-color: #0ea5e9; /* bg-sky-500 */
+  width: 100%;
+  overflow-x: hidden;
+  height: 100dvh;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #ef4444; /* bg-red-500 */
+  padding-bottom: 2.5rem; /* pb-10 */
+  padding-top: 1rem; /* pt-4 */
+}
+
+.title {
+  font-size: 1.875rem; /* text-3xl */
+  font-family: "Bungee", sans-serif; /* bungee-font */
+  font-weight: 700; /* font-bold */
+  margin-bottom: 2.5rem; /* mb-10 */
+}
+
+.joinContainer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+}
+
+.joinSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem; /* space-y-4 */
+}
+
+.sectionTitle {
+  font-size: 1.25rem; /* text-xl */
+  font-weight: 700; /* font-bold */
+}
+
+.gameCode {
+  font-size: 3.75rem; /* text-6xl */
+  font-family: "Bungee", sans-serif; /* bungee-font */
+  font-weight: 700; /* font-bold */
+  margin-bottom: 1rem; /* mb-4 */
+}
+
+.playerCountSection {
+  display: flex;
+  gap: 10rem; /* gap-40 */
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  content: center;
+  padding: 0.75rem; /* p-3 */
+}
+
+.playerCount {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem; /* space-x-2 */
+}
+
+.playerCountNumber {
+  font-size: 2.25rem; /* text-4xl */
+  font-weight: 700; /* font-bold */
+  font-family: "Bungee", sans-serif; /* bungee-font */
+}
+
+.playerCountText {
+  font-size: 1.25rem; /* text-xl */
+  font-weight: 700; /* font-bold */
+}
+
+.playerListContainer {
+  width: 100%;
+  max-width: 56rem; /* max-w-4xl */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem; /* px-4 */
+  padding-right: 1rem; /* px-4 */
+}
+
+.playerGrid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr)); /* grid-cols-1 */
+  gap: 1.5rem; /* gap-6 */
+  justify-items: center;
+}
+
+@media (min-width: 640px) {
+  .playerGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* sm:grid-cols-2 */
+  }
+}
+
+@media (min-width: 768px) {
+  .playerGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)); /* md:grid-cols-3 */
+  }
+}
+
+@media (min-width: 1024px) {
+  .playerGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)); /* lg:grid-cols-4 */
+  }
+}
+
+.playerItem {
+  cursor: pointer;
+  background-color: rgba(7, 89, 133, 0.5); /* bg-sky-800/50 */
+  border-radius: 0.5rem; /* rounded-lg */
+  padding: 1rem; /* p-4 */
+  font-size: 1.25rem; /* text-xl */
+  font-weight: 700; /* font-bold */
+  width: 12rem; /* w-48 */
+  text-align: center;
+}
