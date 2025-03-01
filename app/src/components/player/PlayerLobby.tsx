@@ -1,8 +1,7 @@
-// components/GameRoom.tsx
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useGameStore } from "@/store/gameStore";
+import { useConnectionStore } from "@/store/connectionStore";
 
 export default function PlayerLobby({
   gameCode,
@@ -12,10 +11,11 @@ export default function PlayerLobby({
   playerName: string;
 }) {
   const router = useRouter();
-  const { joinAsPlayer, cleanup, disconnect, isKicked } = useGameStore();
+  const { joinAsPlayer, cleanup, disconnect, isKicked } = useConnectionStore();
+  const [hasJoined, setHasJoined] = useState(false);
 
   useEffect(() => {
-    // Don't attempt to join if already kicked
+    // Check if player was kicked before attempting to join
     if (isKicked) {
       router.push("/");
       console.log("Player was previously kicked. Preventing rejoin.");
@@ -24,22 +24,35 @@ export default function PlayerLobby({
 
     const initGame = async () => {
       const success = await joinAsPlayer(gameCode, playerName);
-      if (!success) {
+      if (success) {
+        setHasJoined(true);
+      } else {
         alert("Failed to join game");
         router.push("/");
       }
     };
 
-    initGame();
+    if (!hasJoined) {
+      initGame();
+    }
 
+    // Cleanup function
     return () => {
-      // Only cleanup if not kicked
-      if (!isKicked) {
+      if (hasJoined && !isKicked) {
         cleanup();
         disconnect();
       }
     };
-  }, [gameCode, playerName, joinAsPlayer, cleanup, disconnect, router]);
+  }, [
+    gameCode,
+    playerName,
+    joinAsPlayer,
+    cleanup,
+    disconnect,
+    router,
+    isKicked,
+    hasJoined,
+  ]);
 
   return (
     <div className="text-center">

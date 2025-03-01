@@ -1,7 +1,7 @@
-import { useGameStore } from "@/store/gameStore";
+import { useGameplayStore } from "@/store/gameplayStore";
 
 const StartNewRoundButton = () => {
-  const { startRound } = useGameStore();
+  const { startRound } = useGameplayStore();
 
   const handleStartRound = () => {
     startRound();

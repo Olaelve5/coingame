@@ -1,4 +1,5 @@
-import { useGameStore } from "@/store/gameStore";
+import { useConnectionStore } from "@/store/connectionStore";
+import { useGameplayStore } from "@/store/gameplayStore";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import getPlayerId from "@/utils/getPlayerId";
@@ -11,14 +12,9 @@ const PlayerGame = ({
   playerName: string;
 }) => {
   const [coinsToPlay, setCoinsToPlay] = useState<number>(0);
-  const {
-    game,
-    joinAsPlayer,
-    cleanup,
-    disconnect,
-    getPlayerDetails,
-    playCoins,
-  } = useGameStore();
+  const { game, joinAsPlayer, cleanup, disconnect, getPlayerDetails } =
+    useConnectionStore();
+  const { playCoins } = useGameplayStore();
   const router = useRouter();
   const player = getPlayerDetails(getPlayerId());
 

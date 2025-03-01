@@ -5,12 +5,12 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import HostLobby from "@/components/host/HostLobby";
 import HostGame from "@/components/host/HostGame";
-import { useGameStore } from "@/store/gameStore";
+import { useConnectionStore } from "@/store/connectionStore";
 
 export default function GamePage() {
   const params = useParams(); // Get URL parameters
   const [playerName, setPlayerName] = useState("");
-  const { game } = useGameStore();
+  const { game } = useConnectionStore();
 
   useEffect(() => {
     // Retrieve player name from session storage
