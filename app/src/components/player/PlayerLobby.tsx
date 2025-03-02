@@ -2,6 +2,13 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useConnectionStore } from "@/store/connectionStore";
+import {
+  getIcon,
+  getColor,
+  getNextIcon,
+  getNextColor,
+} from "@/utils/iconUtils";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function PlayerLobby({
   gameCode,
@@ -13,6 +20,20 @@ export default function PlayerLobby({
   const router = useRouter();
   const { joinAsPlayer, cleanup, disconnect, isKicked } = useConnectionStore();
   const [hasJoined, setHasJoined] = useState(false);
+  const [icon, setIcon] = useState("dragon");
+  const [color, setColor] = useState("gold");
+
+  const handleNextIcon = () => {
+    const nextIcon = getNextIcon(icon);
+    console.log("Next icon:", nextIcon);
+    setIcon(nextIcon);
+  };
+
+  const handleNextColor = () => {
+    const nextColor = getNextColor(color);
+    console.log("Next color:", nextColor);
+    setColor(nextColor);
+  };
 
   useEffect(() => {
     // Check if player was kicked before attempting to join
@@ -59,6 +80,16 @@ export default function PlayerLobby({
       <h1 className="text-3xl font-bold mb-4">Game Lobby: {gameCode}</h1>
       <h2>Joined!</h2>
       <p>Waiting for game to start...</p>
+      <div className="flex justify-center items-center mt-4">
+        <FontAwesomeIcon
+          icon={getIcon(icon)}
+          style={{ color: getColor(color) }}
+          size="3x"
+        />
+        <p className="ml-2 text-lg">{playerName}</p>
+      </div>
+      <button onClick={handleNextIcon}>Next Icon</button>
+      <button onClick={handleNextColor}>Next Color</button>
     </div>
   );
 }

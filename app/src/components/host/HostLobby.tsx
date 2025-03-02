@@ -4,14 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useConnectionStore } from "@/store/connectionStore";
 import { useGameplayStore } from "@/store/gameplayStore";
-import {
-  IconDeviceGamepad2,
-  IconAlienFilled,
-  IconClubsFilled,
-  IconDiamondFilled,
-  IconHeartFilled,
-  IconSpadeFilled,
-} from "@tabler/icons-react";
+import { IconDeviceGamepad2 } from "@tabler/icons-react";
 import QRCode from "./QRCode";
 import styles from "./styles/HostLobby.module.css";
 
@@ -37,45 +30,6 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
     if (!success) {
       alert("Failed to start game");
     }
-  };
-
-  // Add this function inside your HostLobby component
-  const getPlayerColor = (playerId: string) => {
-    // Generate a consistent hash from the player ID
-    let hash = 0;
-    for (let i = 0; i < playerId.length; i++) {
-      hash = playerId.charCodeAt(i) + ((hash << 5) - hash);
-    }
-
-    // Convert to HSL color (using hue only)
-    const h = Math.abs(hash % 360);
-
-    // Return vibrant colors with consistent saturation and lightness
-    return `hsl(${h}, 50%, 50%)`;
-  };
-
-  // Add this function below your getPlayerColor function
-  const getPlayerIcon = (playerId: string) => {
-    // List of available icons
-    const icons = [
-      IconAlienFilled,
-      IconClubsFilled,
-      IconDiamondFilled,
-      IconHeartFilled,
-      IconSpadeFilled,
-    ];
-
-    // Generate a consistent index from the player ID
-    let hash = 0;
-    for (let i = 0; i < playerId.length; i++) {
-      hash = playerId.charCodeAt(i) + ((hash << 5) - hash);
-    }
-
-    // Get index based on hash
-    const iconIndex = Math.abs(hash % icons.length);
-
-    // Return the selected icon
-    return icons[iconIndex];
   };
 
   const handleClickPlayer = (player: any) => {
@@ -127,13 +81,11 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
           {game?.players
             ?.filter((player) => player.connected)
             ?.map((player) => {
-              const PlayerIcon = getPlayerIcon(player.id);
               return (
                 <li
                   onClick={() => handleClickPlayer(player)}
                   key={player.id}
                   className={styles.playerItem}>
-                  <PlayerIcon size={30} color={getPlayerColor(player.id)} />
                   {player.name}
                 </li>
               );
