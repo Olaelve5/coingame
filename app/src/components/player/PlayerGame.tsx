@@ -46,7 +46,7 @@ const PlayerGame = ({
   }, [gameCode, joinAsPlayer, router, cleanup, disconnect, playerName]);
 
   if (!player) {
-    return <div>Loading...</div>;
+    return <div>Olaolaola...</div>;
   }
 
   if (player.eliminated) {

@@ -23,11 +23,7 @@ export default function GamePage() {
     if (!name) window.location.href = "/";
   }, []);
 
-  if (!playerName) {
-    return <div className="text-center p-8">Loading...</div>;
-  }
-
-  if (game?.status !== "waiting") {
+  if (game?.status === "playing") {
     return (
       <PlayerGame
         gameCode={params.gameCode as string}

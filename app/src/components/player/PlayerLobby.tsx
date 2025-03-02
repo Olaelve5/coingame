@@ -9,6 +9,7 @@ import {
   getNextColor,
 } from "@/utils/iconUtils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Loader from "@/components/player/Loader";
 
 export default function PlayerLobby({
   gameCode,
@@ -89,7 +90,7 @@ export default function PlayerLobby({
   return (
     <div className="text-center">
       {loading ? (
-        <p>Loading...</p>
+        <Loader />
       ) : (
         <div>
           <h1 className="text-3xl font-bold mb-4">Game Lobby: {gameCode}</h1>
