@@ -11,6 +11,8 @@ const GameSchema = new mongoose.Schema({
       socketId: String,
       eliminated: Boolean,
       playedInRound: Boolean,
+      icon: String,
+      iconColor: String,
       roundHistory: [
         {
           round: Number,

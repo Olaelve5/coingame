@@ -20,18 +20,16 @@ export default function PlayerLobby({
   const router = useRouter();
   const { joinAsPlayer, cleanup, disconnect, isKicked } = useConnectionStore();
   const [hasJoined, setHasJoined] = useState(false);
-  const [icon, setIcon] = useState("dragon");
-  const [color, setColor] = useState("gold");
+  const [icon, setIcon] = useState("");
+  const [color, setColor] = useState("");
 
   const handleNextIcon = () => {
     const nextIcon = getNextIcon(icon);
-    console.log("Next icon:", nextIcon);
     setIcon(nextIcon);
   };
 
   const handleNextColor = () => {
     const nextColor = getNextColor(color);
-    console.log("Next color:", nextColor);
     setColor(nextColor);
   };
 

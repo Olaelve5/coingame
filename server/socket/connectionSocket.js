@@ -1,4 +1,5 @@
 import { Game } from "../models/Game.ts";
+import { getRandomColor, getRandomIcon } from "../utils/iconUtils.js";
 
 const connectionSocketHandler = (io) => {
   // Socket.io logic
@@ -51,6 +52,8 @@ const connectionSocketHandler = (io) => {
                   socketId: socket.id,
                   eliminated: false,
                   playedInRound: false,
+                  icon: getRandomIcon(),
+                  color: getRandomColor(),
                 },
               },
             },
