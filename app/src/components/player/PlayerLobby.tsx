@@ -18,7 +18,8 @@ export default function PlayerLobby({
   playerName: string;
 }) {
   const router = useRouter();
-  const { joinAsPlayer, cleanup, disconnect, isKicked } = useConnectionStore();
+  const { joinAsPlayer, cleanup, disconnect, isKicked, game } =
+    useConnectionStore();
   const [hasJoined, setHasJoined] = useState(false);
   const [icon, setIcon] = useState("");
   const [color, setColor] = useState("");
@@ -44,7 +45,18 @@ export default function PlayerLobby({
     const initGame = async () => {
       const success = await joinAsPlayer(gameCode, playerName);
       if (success) {
+        console.log("Player joined successfully");
         setHasJoined(true);
+        if (game && game.players) {
+          const player = game.players.find(
+            (player) => player.name === playerName
+          );
+          console.log("Player found:", player);
+          if (player) {
+            setIcon(player.icon);
+            setColor(player.color);
+          }
+        }
       } else {
         alert("Failed to join game");
         router.push("/");

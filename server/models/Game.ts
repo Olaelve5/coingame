@@ -12,7 +12,7 @@ const GameSchema = new mongoose.Schema({
       eliminated: Boolean,
       playedInRound: Boolean,
       icon: String,
-      iconColor: String,
+      color: String,
       roundHistory: [
         {
           round: Number,

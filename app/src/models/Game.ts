@@ -6,6 +6,8 @@ interface Player {
   socketId: string;
   eliminated: boolean;
   playedInRound: boolean;
+  icon: string;
+  color: string;
   roundHistory: {
     round: number;
     coinsPlayed: number;

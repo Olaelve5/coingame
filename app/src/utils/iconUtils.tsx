@@ -61,11 +61,21 @@ export const getRandomColorKey = () => {
 };
 
 export const getIcon = (iconName: string) => {
-  return icons[iconName as keyof typeof icons];
+  const icon = icons[iconName as keyof typeof icons];
+  if (!icon) {
+    console.error(`Icon ${iconName} not found`);
+    return icons["otter"]; // default icon
+  }
+  return icon;
 };
 
 export const getColor = (colorName: string) => {
-  return colors[colorName as keyof typeof colors];
+  const color = colors[colorName as keyof typeof colors];
+  if (!color) {
+    console.error(`Color ${colorName} not found`);
+    return colors["cyan"]; // default color
+  }
+  return color;
 };
 
 export const getNextIcon = (iconName: string) => {
