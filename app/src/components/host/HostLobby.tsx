@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useConnectionStore } from "@/store/connectionStore";
 import { useGameplayStore } from "@/store/gameplayStore";
 import { IconDeviceGamepad2 } from "@tabler/icons-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getIcon, getColor } from "@/utils/iconUtils";
 import QRCode from "./QRCode";
 import styles from "./styles/HostLobby.module.css";
 
@@ -86,6 +88,11 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
                   onClick={() => handleClickPlayer(player)}
                   key={player.id}
                   className={styles.playerItem}>
+                  <FontAwesomeIcon
+                    icon={getIcon(player.icon)}
+                    style={{ color: getColor(player.color) }}
+                    size="xl"
+                  />
                   {player.name}
                 </li>
               );

@@ -23,15 +23,14 @@ export default function PlayerLobby({
   const [hasJoined, setHasJoined] = useState(false);
   const [icon, setIcon] = useState("");
   const [color, setColor] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const handleNextIcon = () => {
-    console.log("Current icon:", icon);
     const nextIcon = getNextIcon(icon);
     setIcon(nextIcon);
   };
 
   const handleNextColor = () => {
-    console.log("Current color:", color);
     const nextColor = getNextColor(color);
     setColor(nextColor);
   };
@@ -45,6 +44,7 @@ export default function PlayerLobby({
 
     if (!hasJoined) {
       const initGame = async () => {
+        setLoading(true);
         const success = await joinAsPlayer(gameCode, playerName);
         if (success) {
           setHasJoined(true);
@@ -79,27 +79,32 @@ export default function PlayerLobby({
     if (hasJoined && game?.players) {
       const player = game.players.find((p) => p.name === playerName);
       if (player) {
-        setIcon(player.icon || "");
-        setColor(player.color || "");
+        setIcon(player.icon);
+        setColor(player.color);
+        setLoading(false);
       }
     }
   }, [game, hasJoined, playerName]);
 
   return (
     <div className="text-center">
-      <h1 className="text-3xl font-bold mb-4">Game Lobby: {gameCode}</h1>
-      <h2>Joined!</h2>
-      <p>Waiting for game to start...</p>
-      <div className="flex justify-center items-center mt-4">
-        <FontAwesomeIcon
-          icon={getIcon(icon)}
-          style={{ color: getColor(color) }}
-          size="3x"
-        />
-        <p className="ml-2 text-lg">{playerName}</p>
-      </div>
-      <button onClick={handleNextIcon}>Next Icon</button>
-      <button onClick={handleNextColor}>Next Color</button>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <div>
+          <h1 className="text-3xl font-bold mb-4">Game Lobby: {gameCode}</h1>
+          <div className="flex justify-center items-center mt-4">
+            <FontAwesomeIcon
+              icon={getIcon(icon)}
+              style={{ color: getColor(color) }}
+              size="3x"
+            />
+            <p className="ml-2 text-lg">{playerName}</p>
+          </div>
+          <button onClick={handleNextIcon}>Next Icon</button>
+          <button onClick={handleNextColor}>Next Color</button>
+        </div>
+      )}
     </div>
   );
 }
