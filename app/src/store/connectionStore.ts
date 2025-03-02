@@ -76,11 +76,10 @@ export const useConnectionStore = create<ConnectionStore>((set, get) => ({
     });
   },
 
-  // Inside your useGameStore.ts file, modify the joinAsPlayer function:
-
   joinAsPlayer: async (gameCode, playerName) => {
     return new Promise((resolve) => {
       const socket = getSocket();
+      console.log("Starting join process...");
 
       // First check if player was previously kicked
       if (get().isKicked) {
@@ -89,13 +88,29 @@ export const useConnectionStore = create<ConnectionStore>((set, get) => ({
         return;
       }
 
-      socket.connect();
+      // Clean up any existing listeners first to prevent duplicates
+      socket.off("gameUpdate");
+      socket.off("kicked");
+
+      // Set up a timeout to ensure we don't wait forever
+      const timeout = setTimeout(() => {
+        console.log("Join timeout - resolving with current state");
+        const currentGame = get().game;
+        resolve(!!currentGame); // Resolve based on whether we have a game
+      }, 5000);
+
+      // Connect socket if not already connected
+      if (!socket.connected) {
+        socket.connect();
+      }
+
       const playerId = getPlayerId();
+      console.log("Player ID:", playerId);
 
       // Set up kick listener before attempting to join
       socket.on("kicked", (message: string) => {
         console.log("Player kicked:", message);
-
+        clearTimeout(timeout);
         // Set kicked state first
         set({ game: null, isKicked: true });
 
@@ -114,30 +129,39 @@ export const useConnectionStore = create<ConnectionStore>((set, get) => ({
         }, 100);
       });
 
+      // Set up game update listener
+      socket.on("gameUpdate", (game: Game) => {
+        console.log("Game update received:", game);
+        // Only update if not kicked
+        if (!get().isKicked) {
+          set({ game });
+        }
+      });
+
+      // Emit join event with callback
+      console.log("Emitting joinGame event...");
       socket.emit(
         "joinGame",
         gameCode,
         playerName,
         playerId,
         (response: { error?: string; game?: Game }) => {
+          console.log("Join game callback received:", response);
+          clearTimeout(timeout); // Clear the timeout since we got a response
+
           if (response.error) {
+            console.error("Join error:", response.error);
             resolve(false);
           } else if (response.game) {
+            console.log("Join successful, game:", response.game);
             set({ game: response.game });
             resolve(true);
           } else {
+            console.error("Invalid response format");
             resolve(false);
           }
         }
       );
-
-      // Set up listener
-      socket.on("gameUpdate", (game: Game) => {
-        // Only update if not kicked
-        if (!get().isKicked) {
-          set({ game });
-        }
-      });
     });
   },
 

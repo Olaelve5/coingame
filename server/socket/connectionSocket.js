@@ -7,12 +7,15 @@ const connectionSocketHandler = (io) => {
     console.log("User connected:", socket.id);
 
     // Handle player joining the game ------------------------------------------------------------------------
-    socket.on("joinGame", async (gameCode, playerName, playerId) => {
+    socket.on("joinGame", async (gameCode, playerName, playerId, callback) => {
       try {
         // First, try to find the game
         let game = await Game.findOne({ gameCode });
         if (!game) {
           // Game not found: handle appropriately (maybe emit an error)
+          if (typeof callback === "function") {
+            callback({ error: "Game not found" });
+          }
           return socket.emit("error", "Game not found");
         }
 
@@ -91,9 +94,17 @@ const connectionSocketHandler = (io) => {
 
         // Broadcast to others that a (re)join occurred, if needed
         socket.to(gameCode).emit("playersUpdate", game.players);
+
+        // Call the callback with the updated game
+        if (typeof callback === "function") {
+          callback({ game });
+        }
       } catch (error) {
         console.error("Join game error:", error);
         socket.emit("error", "Failed to join game");
+        if (typeof callback === "function") {
+          callback({ error: "Failed to join game" });
+        }
       }
     });
 

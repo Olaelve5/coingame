@@ -25,49 +25,38 @@ export default function PlayerLobby({
   const [color, setColor] = useState("");
 
   const handleNextIcon = () => {
+    console.log("Current icon:", icon);
     const nextIcon = getNextIcon(icon);
     setIcon(nextIcon);
   };
 
   const handleNextColor = () => {
+    console.log("Current color:", color);
     const nextColor = getNextColor(color);
     setColor(nextColor);
   };
 
   useEffect(() => {
-    // Check if player was kicked before attempting to join
+    // This effect handles only the join logic
     if (isKicked) {
       router.push("/");
-      console.log("Player was previously kicked. Preventing rejoin.");
       return;
     }
 
-    const initGame = async () => {
-      const success = await joinAsPlayer(gameCode, playerName);
-      if (success) {
-        console.log("Player joined successfully");
-        setHasJoined(true);
-        if (game && game.players) {
-          const player = game.players.find(
-            (player) => player.name === playerName
-          );
-          console.log("Player found:", player);
-          if (player) {
-            setIcon(player.icon);
-            setColor(player.color);
-          }
-        }
-      } else {
-        alert("Failed to join game");
-        router.push("/");
-      }
-    };
-
     if (!hasJoined) {
+      const initGame = async () => {
+        const success = await joinAsPlayer(gameCode, playerName);
+        if (success) {
+          setHasJoined(true);
+        } else {
+          alert("Failed to join game");
+          router.push("/");
+        }
+      };
+
       initGame();
     }
 
-    // Cleanup function
     return () => {
       if (hasJoined && !isKicked) {
         cleanup();
@@ -84,6 +73,17 @@ export default function PlayerLobby({
     isKicked,
     hasJoined,
   ]);
+
+  // Add a separate effect to handle player data updates
+  useEffect(() => {
+    if (hasJoined && game?.players) {
+      const player = game.players.find((p) => p.name === playerName);
+      if (player) {
+        setIcon(player.icon || "");
+        setColor(player.color || "");
+      }
+    }
+  }, [game, hasJoined, playerName]);
 
   return (
     <div className="text-center">

@@ -27,7 +27,7 @@ const colors = {
   violet: "#EE82EE",
   turquoise: "#40E0D0",
   neonGreen: "#39FF14",
-  hotPink: "#FF1493",
+  hotPink: "#e8002e",
 };
 
 const icons = {
