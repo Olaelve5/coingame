@@ -93,7 +93,7 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
                     style={{ color: getColor(player.color) }}
                     size="xl"
                   />
-                  {player.name}
+                  <p className={styles.playerName}>{player.name}</p>
                 </li>
               );
             })}

@@ -139,6 +139,15 @@
   gap: 0.5rem;
   display: flex;
   flex-direction: column;
+  transition: all 0.2s ease-in-out;
+}
+
+.playerItem:hover {
+  opacity: 0.6;
+
+  .playerName {
+    text-decoration: line-through;
+  }
 }
 
 .playerCircle {
