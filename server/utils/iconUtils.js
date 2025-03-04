@@ -23,7 +23,6 @@ const colorNames = [
   "coral",
   "orange",
   "gold",
-  "violet",
   "turquoise",
   "neonGreen",
   "hotPink",

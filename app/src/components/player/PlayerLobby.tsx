@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useConnectionStore } from "@/store/connectionStore";
 import { useGameplayStore } from "@/store/gameplayStore";
@@ -27,18 +27,43 @@ export default function PlayerLobby({
   const [icon, setIcon] = useState("");
   const [color, setColor] = useState("");
   const [loading, setLoading] = useState(true);
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Function to debounce icon/color changes
+  const debouncedChangeIcon = (newIcon: string, newColor: string) => {
+    // Clear any existing timer
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
+    // Set a new timer
+    debounceTimerRef.current = setTimeout(() => {
+      console.log("Sending update to server:", newIcon, newColor);
+      changeIcon(newIcon, newColor);
+      debounceTimerRef.current = null;
+    }, 500); // 500ms delay
+  };
 
   const handleNextIcon = () => {
     const nextIcon = getNextIcon(icon);
-    setIcon(nextIcon);
-    changeIcon(nextIcon, color);
+    setIcon(nextIcon); // Update UI immediately
+    debouncedChangeIcon(nextIcon, color); // Debounce server update
   };
 
   const handleNextColor = () => {
     const nextColor = getNextColor(color);
-    setColor(nextColor);
-    changeIcon(icon, nextColor);
+    setColor(nextColor); // Update UI immediately
+    debouncedChangeIcon(icon, nextColor); // Debounce server update
   };
+
+  // Clean up the timer on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (!gameCode || !playerName || playerName.trim() === "") {

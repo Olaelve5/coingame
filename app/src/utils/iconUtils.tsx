@@ -21,13 +21,12 @@ const colors = {
   lime: "#BFFF00",
   yellow: "#FFFF00",
   pink: "#FF69B4",
-  coral: "#FF7F50",
+  coral: "#FF4400",
   orange: "#FFA500",
   gold: "#FFD700",
-  violet: "#EE82EE",
-  turquoise: "#40E0D0",
-  neonGreen: "#39FF14",
-  hotPink: "#e8002e",
+  turquoise: "#00FF80",
+  neonGreen: "#26FF00",
+  hotPink: "#FF0033",
 };
 
 const icons = {
