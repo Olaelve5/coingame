@@ -37,6 +37,10 @@ export default function PlayerLobby({
   };
 
   useEffect(() => {
+    if (!gameCode || !playerName || playerName.trim() === "") {
+      return;
+    }
+
     // This effect handles only the join logic
     if (isKicked) {
       router.push("/");
