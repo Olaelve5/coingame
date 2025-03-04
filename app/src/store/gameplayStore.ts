@@ -8,6 +8,7 @@ interface GameplayStore {
   startGame: (gameCode: string) => Promise<boolean>;
   startRound: () => Promise<boolean>;
   playCoins: (coins: number) => Promise<boolean>;
+  changeIcon: (icon: string, color: string) => Promise<boolean>;
 }
 
 export const useGameplayStore = create<GameplayStore>((set, get) => ({
@@ -75,6 +76,36 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
         game.gameCode,
         playerId,
         coins,
+        (response: any) => {
+          if (response?.error) {
+            resolve(false);
+            console.error(response.error);
+          } else {
+            resolve(true);
+            console.log("Played coins successfully");
+          }
+        }
+      );
+    });
+  },
+
+  changeIcon: async (icon: string, color: string) => {
+    return new Promise((resolve) => {
+      const socket = getSocket();
+      const game = useConnectionStore.getState().game;
+      const playerId = getPlayerId();
+
+      if (!game) {
+        resolve(false);
+        return;
+      }
+
+      socket.emit(
+        "changeIcon",
+        game.gameCode,
+        playerId,
+        icon,
+        color,
         (response: any) => {
           if (response?.error) {
             resolve(false);

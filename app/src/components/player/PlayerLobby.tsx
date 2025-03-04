@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useConnectionStore } from "@/store/connectionStore";
+import { useGameplayStore } from "@/store/gameplayStore";
 import {
   getIcon,
   getColor,
@@ -21,6 +22,7 @@ export default function PlayerLobby({
   const router = useRouter();
   const { joinAsPlayer, cleanup, disconnect, isKicked, game } =
     useConnectionStore();
+  const { changeIcon } = useGameplayStore();
   const [hasJoined, setHasJoined] = useState(false);
   const [icon, setIcon] = useState("");
   const [color, setColor] = useState("");
@@ -29,11 +31,13 @@ export default function PlayerLobby({
   const handleNextIcon = () => {
     const nextIcon = getNextIcon(icon);
     setIcon(nextIcon);
+    changeIcon(nextIcon, color);
   };
 
   const handleNextColor = () => {
     const nextColor = getNextColor(color);
     setColor(nextColor);
+    changeIcon(icon, nextColor);
   };
 
   useEffect(() => {

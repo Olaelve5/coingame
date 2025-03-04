@@ -83,6 +83,41 @@ const handleRoundEnd = async (gameCode, updatedGame) => {
   );
 };
 
+// New function to validate icon changes
+const validateIconChange = async (gameCode, playerId) => {
+  const currentGame = await Game.findOne({ gameCode });
+  if (!currentGame) {
+    throw new Error("Game not found");
+  }
+
+  const player = currentGame.players.find((p) => p.id === playerId);
+  if (!player) {
+    throw new Error("Player not found in game");
+  }
+
+  return currentGame;
+};
+
+// New function to update player icon and color
+const updatePlayerIcon = async (gameCode, playerId, icon, color) => {
+  return Game.findOneAndUpdate(
+    {
+      gameCode,
+      "players.id": playerId,
+    },
+    {
+      $set: {
+        "players.$.icon": icon,
+        "players.$.color": color,
+      },
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+};
+
 const gameplaySocketHandler = (io) => {
   io.on("connection", (socket) => {
     socket.on("playCoins", async (gameCode, playerId, coins) => {
@@ -112,6 +147,29 @@ const gameplaySocketHandler = (io) => {
         }
       } catch (error) {
         console.error("Error playing coins:", error);
+        socket.emit("error", error.message);
+      }
+    });
+
+    // Add new handler for changeIcon event
+    socket.on("changeIcon", async (gameCode, playerId, icon, color) => {
+      try {
+        await validateIconChange(gameCode, playerId);
+
+        const updatedGame = await updatePlayerIcon(
+          gameCode,
+          playerId,
+          icon,
+          color
+        );
+
+        if (!updatedGame) {
+          throw new Error("Failed to update player icon");
+        }
+
+        io.to(gameCode).emit("gameUpdate", updatedGame);
+      } catch (error) {
+        console.error("Error changing icon:", error);
         socket.emit("error", error.message);
       }
     });
