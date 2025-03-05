@@ -86,8 +86,11 @@ export default function IconCustomize({
         })}
       </div>
       <button className={styles.shuffleButton} onClick={handleShuffleColors}>
-        <FontAwesomeIcon icon={faShuffle} className={styles.shuffleIcon} />
-        Shuffle colors
+        <FontAwesomeIcon
+          icon={faShuffle}
+          className={styles.shuffleIcon}
+          size="xl"
+        />
       </button>
     </div>
   );

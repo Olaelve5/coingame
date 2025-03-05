@@ -4,14 +4,22 @@
   width: 100%;
   height: 100dvh;
   flex-direction: column;
-  padding: 2rem;
+  padding: 2rem 2rem 4rem 2rem;
+}
+
+.innerContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  height: 100%;
 }
 
 .heading {
   font-size: 1.75rem;
   font-family: "Bungee", sans-serif;
   font-weight: 700;
-  margin-bottom: 2.5rem;
 }
 
 .playerContainer {
@@ -20,7 +28,6 @@
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 2.5rem;
 }
 
 .playerName {

@@ -84,7 +84,7 @@ export default function PlayerLobby({
       {loading ? (
         <Loader />
       ) : (
-        <div>
+        <div className={styles.innerContainer}>
           <h1 className={styles.heading}>Joined!</h1>
           <div className={styles.playerContainer}>
             <FontAwesomeIcon
