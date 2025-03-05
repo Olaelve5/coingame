@@ -1,0 +1,27 @@
+.container {
+    text-align: center;
+    align-items: center;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.iconGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.75rem;
+  max-width: 600px;
+}
+
+.colorGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.75rem;
+    max-width: 600px;
+  }

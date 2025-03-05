@@ -1,31 +1,31 @@
 const iconNames = [
-  "otter",
-  "dragon",
-  "ghost",
-  "calculator",
-  "rocket",
   "astronaut",
-  "money",
-  "fire",
-  "robot",
+  "dragon",
   "dna",
+  "rocket",
+  "money",
+  "robot",
+  "fire",
   "cube",
+  "biohazard",
+  "knight",
   "volcano",
   "pizza",
 ];
 
 const colorNames = [
-  "cyan",
-  "magenta",
-  "lime",
+  "red",
+  "orangeRed",
   "yellow",
-  "pink",
-  "coral",
-  "orange",
-  "gold",
-  "turquoise",
-  "neonGreen",
-  "hotPink",
+  "chartreuse",
+  "green",
+  "springGreen",
+  "cyan",
+  "azure",
+  "violet",
+  "magenta",
+  "rose",
+  "white",
 ];
 
 export const getRandomIcon = () => {
@@ -35,5 +35,3 @@ export const getRandomIcon = () => {
 export const getRandomColor = () => {
   return colorNames[Math.floor(Math.random() * colorNames.length)];
 };
-
-

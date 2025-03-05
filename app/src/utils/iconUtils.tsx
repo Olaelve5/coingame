@@ -1,12 +1,10 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faOtter,
+  faChessKnight,
   faDragon,
-  faGhost,
-  faCalculator,
+  faBiohazard,
+  faBolt,
   faRocket,
   faUserAstronaut,
-  faSackDollar,
   faFireFlameCurved,
   faRobot,
   faDna,
@@ -15,32 +13,32 @@ import {
   faPizzaSlice,
 } from "@fortawesome/free-solid-svg-icons";
 
-const colors = {
-  cyan: "#00FFFF",
-  magenta: "#FF00FF",
-  lime: "#BFFF00",
-  yellow: "#FFFF00",
-  pink: "#FF69B4",
-  coral: "#FF4400",
-  orange: "#FFA500",
-  gold: "#FFD700",
-  turquoise: "#00FF80",
-  neonGreen: "#26FF00",
-  hotPink: "#FF0033",
+export const colors = {
+  red: "#FF0000",        // hsl(0, 100%, 50%)
+  orangeRed: "#FF6000",  // hsl(30, 100%, 50%)
+  yellow: "#FFFF00",     // hsl(60, 100%, 50%)
+  chartreuse: "#80FF00", // hsl(90, 100%, 50%)
+  green: "#00FF00",      // hsl(120, 100%, 50%)
+  springGreen: "#00FF80", // hsl(150, 100%, 50%)
+  cyan: "#00FFFF",       // hsl(180, 100%, 50%)
+  azure: "#0080FF",      // hsl(210, 100%, 50%)
+  violet: "#8000FF",     // hsl(270, 100%, 50%)
+  magenta: "#FF00FF",    // hsl(300, 100%, 50%)
+  rose: "#FF0080",       // hsl(330, 100%, 50%)
+  white: "#FFFFFF",      // White
 };
 
-const icons = {
-  otter: faOtter,
-  dragon: faDragon,
-  ghost: faGhost,
-  calculator: faCalculator,
-  rocket: faRocket,
+export const icons = {
   astronaut: faUserAstronaut,
-  money: faSackDollar,
-  fire: faFireFlameCurved,
-  robot: faRobot,
+  dragon: faDragon,
   dna: faDna,
+  rocket: faRocket,
+  money: faBolt,
+  robot: faRobot,
+  fire: faFireFlameCurved,
   cube: faCube,
+  biohazard: faBiohazard,
+  knight: faChessKnight,
   volcano: faVolcano,
   pizza: faPizzaSlice,
 };
@@ -63,7 +61,7 @@ export const getIcon = (iconName: string) => {
   const icon = icons[iconName as keyof typeof icons];
   if (!icon) {
     console.error(`Icon ${iconName} not found`);
-    return icons["otter"]; // default icon
+    return icons["astronaut"]; // default icon
   }
   return icon;
 };
