@@ -1,8 +1,9 @@
 import { colors, icons, getIcon, getColor } from "@/utils/iconUtils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "@/components/player/styles/IconCustomize.module.css";
-import { useState } from "react";
 import { useGameplayStore } from "@/store/gameplayStore";
+import { useState, useEffect } from "react";
+import { faShuffle } from "@fortawesome/free-solid-svg-icons";
 
 interface IconCustomizeProps {
   icon: string;
@@ -17,60 +18,77 @@ export default function IconCustomize({
   setIcon,
   setColor,
 }: IconCustomizeProps) {
-  const [showIcons, setShowIcons] = useState(false); // State to control icon visibility
   const { changeIcon } = useGameplayStore();
+  const iconKeys = Object.keys(icons);
+  const colorKeys = Object.keys(colors);
+  const [colorIndex, setColorIndex] = useState(0);
+  const [selectedColorIndex, setSelectedColorIndex] = useState(-1);
 
+  // Find the current color index for the selected icon
+  useEffect(() => {
+    if (icon && color) {
+      const iconIndex = iconKeys.indexOf(icon);
+      const colorIdx = colorKeys.indexOf(color);
+      // Store the difference between colorIndex and this icon's color
+      setSelectedColorIndex(mod(colorIdx - iconIndex, colorKeys.length));
+    }
+  }, [icon, color]);
+
+  // Proper modulo that works with negative numbers
+  const mod = (n: number, m: number) => ((n % m) + m) % m;
+
+  // Assign a color to each icon consistently
+  const getIconColor = (iconName: string) => {
+    const iconIndex = iconKeys.indexOf(iconName);
+
+    // If this is the selected icon and we have stored its color index
+    if (iconName === icon && selectedColorIndex >= 0) {
+      // Use the stored color index for the selected icon
+      return colorKeys[mod(iconIndex + selectedColorIndex, colorKeys.length)];
+    }
+
+    // For all other icons, use the shifting color index
+    return colorKeys[mod(iconIndex + colorIndex, colorKeys.length)];
+  };
   const handleIconClick = (iconName: string) => {
+    const iconColor = getIconColor(iconName);
     setIcon(iconName);
-    changeIcon(iconName, color);
+    setColor(iconColor);
+    changeIcon(iconName, iconColor);
   };
 
-  const handleColorClick = (colorName: string) => {
-    setColor(colorName);
-    changeIcon(icon, colorName);
+  const handleShuffleColors = () => {
+    // Update the color index
+    setColorIndex((prev) => prev - 1);
   };
 
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Customize your icon</h2>
-      <button onClick={() => setShowIcons(!showIcons)}>
-        Toggle icon/color
-      </button>
-      {showIcons ? (
-        <div className={styles.iconGrid}>
-          {Object.keys(icons).map((iconName) => (
+
+      <div className={styles.iconGrid}>
+        {iconKeys.map((iconName) => {
+          const iconColor = getIconColor(iconName);
+          return (
             <div
               key={iconName}
               className={`${styles.iconContainer} ${
-                icon === iconName ? styles.selected : ""
+                icon === iconName ? styles.selectedIconContainer : ""
               }`}
               onClick={() => handleIconClick(iconName)}>
               <FontAwesomeIcon
                 icon={getIcon(iconName)}
-                color={getColor(color)}
-                size="2x"
+                color={getColor(iconColor)}
+                size="xl"
               />
             </div>
-          ))}
-        </div>
-      ) : (
-        <div className={styles.colorGrid}>
-          {Object.keys(colors).map((colorName) => (
-            <div
-              key={colorName}
-              className={`${styles.colorContainer} ${
-                color === colorName ? styles.selected : ""
-              }`}
-              onClick={() => handleColorClick(colorName)}>
-              <FontAwesomeIcon
-                icon={getIcon(icon)}
-                color={getColor(colorName)}
-                size="2x"
-              />
-            </div>
-          ))}
-        </div>
-      )}
+          );
+        })}
+      </div>
+      <button className={styles.shuffleButton} onClick={handleShuffleColors}>
+        <FontAwesomeIcon icon={faShuffle} className={styles.shuffleIcon} />
+        Shuffle colors
+      </button>
     </div>
   );
 }
