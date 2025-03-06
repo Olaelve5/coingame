@@ -25,6 +25,20 @@
     font-family: 'bungee', sans-serif;
 }
 
+.digitContainer {
+    position: relative;
+    width: 1ch; /* Set fixed width based on character width */
+    text-align: center;
+    overflow: hidden;
+}
+
+.digit {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+}
+
 .archContainer {
     width: 20rem;
     height: 1rem;

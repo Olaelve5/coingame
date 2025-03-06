@@ -23,12 +23,19 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
     return () => cleanup();
   }, [gameCode, joinAsHost, router, cleanup]);
 
+  if (!game) return null;
+
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>Round 1</h2>
+      <h2 className={styles.title}>Round {game.round}</h2>
       <Timer />
       <PlayerPercentage />
       <PlayersIconGrid />
+      {game.round > 0 && game.roundStatus === "completed" && (
+        <div className={styles.buttonContainer}>
+          <StartNewRoundButton />
+        </div>
+      )}
     </div>
   );
 };

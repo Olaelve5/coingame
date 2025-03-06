@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getColor, getIcon } from "@/utils/iconUtils";
 import styles from "./styles/PlayersIconGrid.module.css";
 import { useEffect, useRef } from "react";
+import { useConnectionStore } from "@/store/connectionStore";
 
 interface PlayerIconProps {
   player: Player;
@@ -26,7 +27,11 @@ export default function PlayerIcon({
     // Define a sequence of animations
     animate([
       // First, tilt slightly to the left
-      [scope.current, { rotate: currentRotation.current - 15 }, { duration: 0.5 }],
+      [
+        scope.current,
+        { rotate: currentRotation.current - 15 },
+        { duration: 0.5 },
+      ],
 
       // Then perform the full rotation
       [
@@ -42,12 +47,11 @@ export default function PlayerIcon({
   useEffect(() => {
     // Set up interval for random animation
     const interval = setInterval(() => {
-      // 1 in 10 chance (10%)
-      if (Math.random() < 0.9) {
-        // Randomly choose a direction
+      // 1 in 10 chance
+      if (Math.random() < 0.1) {
         animateIcon();
       }
-    }, 2000); // Check every 2 seconds
+    }, 1500); // Check every 1.5 seconds
 
     // Clean up interval when component unmounts
     return () => clearInterval(interval);

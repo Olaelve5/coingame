@@ -1,8 +1,6 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import styles from "../styles/Timer.module.css";
-import TimerArch from "./TimerArch";
-import { start } from "repl";
 
 interface TimerProps {
   initialTime?: number; // Initial time in seconds, default 60
@@ -60,7 +58,6 @@ export default function Timer({ initialTime = 20, onTimeUp }: TimerProps) {
 
   // Format the time as minutes:seconds (M:SS)
   const formatTime = (time: number) => {
-    const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${seconds.toString().padStart(2, "0")}`;
   };
@@ -80,7 +77,6 @@ export default function Timer({ initialTime = 20, onTimeUp }: TimerProps) {
             <AnimatedDigit key={`digit-${index}`} value={digit} />
           ))}
         </div>
-        {/* <TimerArch timeRemaining={timeRemaining} initialTime={initialTime} /> */}
       </div>
     </div>
   );

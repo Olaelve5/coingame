@@ -1,5 +1,6 @@
 import { useConnectionStore } from "@/store/connectionStore";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import styles from "./styles/PlayerPercentage.module.css";
 
 const PlayerPercentage = () => {
@@ -25,11 +26,17 @@ const PlayerPercentage = () => {
   return (
     <div className={styles.container}>
       <div className={styles.barContainer}>
-        <div
+        <motion.div
           className={styles.bar}
-          style={{ height: `${100 - formattedPercentage}%` }}></div>
+          initial={{ height: 0 }}
+          animate={{ height: `${100 - formattedPercentage}%` }}
+          transition={{
+            duration: 0.5,
+            type: "spring",
+            bounce: 0.35,
+          }}></motion.div>
       </div>
-      <div className={styles.text}>Players played</div>
+      <h2 className={styles.text}>{formattedPercentage}% have played</h2>
     </div>
   );
 };
