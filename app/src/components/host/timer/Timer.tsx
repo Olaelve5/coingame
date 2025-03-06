@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import styles from "../styles/Timer.module.css";
 import TimerArch from "./TimerArch";
+import { start } from "repl";
 
 interface TimerProps {
   initialTime?: number; // Initial time in seconds, default 60
@@ -25,7 +26,7 @@ const AnimatedDigit = ({ value }: { value: string }) => {
   );
 };
 
-export default function Timer({ initialTime = 30, onTimeUp }: TimerProps) {
+export default function Timer({ initialTime = 20, onTimeUp }: TimerProps) {
   const [timeRemaining, setTimeRemaining] = useState(initialTime);
   const [isRunning, setIsRunning] = useState(false);
   const [startTime, setStartTime] = useState(0);
@@ -53,11 +54,15 @@ export default function Timer({ initialTime = 30, onTimeUp }: TimerProps) {
     return () => clearInterval(interval);
   }, [isRunning, startTime, initialTime, onTimeUp]);
 
+  useEffect(() => {
+    startTimer();
+  }, []);
+
   // Format the time as minutes:seconds (M:SS)
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+    return `${seconds.toString().padStart(2, "0")}`;
   };
 
   const timeString = formatTime(timeRemaining);
@@ -65,11 +70,6 @@ export default function Timer({ initialTime = 30, onTimeUp }: TimerProps) {
   // Timer controls
   const startTimer = () => {
     setIsRunning(true), setStartTime(Date.now());
-  };
-  const pauseTimer = () => setIsRunning(false);
-  const resetTimer = () => {
-    setIsRunning(false);
-    setTimeRemaining(initialTime);
   };
 
   return (
@@ -80,21 +80,7 @@ export default function Timer({ initialTime = 30, onTimeUp }: TimerProps) {
             <AnimatedDigit key={`digit-${index}`} value={digit} />
           ))}
         </div>
-        <TimerArch timeRemaining={timeRemaining} initialTime={initialTime} />
-      </div>
-      <div className={styles.controls}>
-        {!isRunning ? (
-          <button className={styles.startButton} onClick={startTimer}>
-            Start
-          </button>
-        ) : (
-          <button className={styles.pauseButton} onClick={pauseTimer}>
-            Pause
-          </button>
-        )}
-        <button className={styles.resetButton} onClick={resetTimer}>
-          Reset
-        </button>
+        {/* <TimerArch timeRemaining={timeRemaining} initialTime={initialTime} /> */}
       </div>
     </div>
   );

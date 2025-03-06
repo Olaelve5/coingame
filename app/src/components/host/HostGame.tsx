@@ -24,7 +24,8 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
   }, [gameCode, joinAsHost, router, cleanup]);
 
   return (
-    <div>
+    <div className={styles.container}>
+      <h2 className={styles.title}>Round 1</h2>
       <Timer />
       <PlayerPercentage />
       <PlayersIconGrid />

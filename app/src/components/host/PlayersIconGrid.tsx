@@ -1,8 +1,6 @@
 import styles from "./styles/PlayersIconGrid.module.css";
 import { useConnectionStore } from "@/store/connectionStore";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getIcon, getColor } from "@/utils/iconUtils";
-import { motion } from "framer-motion";
+import PlayerIcon from "./PlayerIcon";
 import { useEffect, useState } from "react";
 import { Player } from "@/models/Game";
 
@@ -32,7 +30,7 @@ export default function PlayersIconGrid() {
     const allPositions: { row: number; col: number }[] = [];
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < columns; col++) {
-        if (row > 1 && row < 11 && col > 5 && col < 13) continue;
+        if (col > 5 && col < 13) continue;
         allPositions.push({ row, col });
       }
     }
@@ -71,21 +69,13 @@ export default function PlayersIconGrid() {
   return (
     <div className={styles.container}>
       {players.map((player, index) => {
-        const icon = getIcon(player.icon);
         return (
-          <motion.div
+          <PlayerIcon
             key={player.id}
-            className={styles.iconContainer}
-            style={getGridPosition(player)}
-            initial={{ scale: 0, rotate: 180 }}
-            animate={{ scale: 1, rotate: 0 }}
-            transition={{ delay: index * 0.1, type: "spring", bounce: 0.5 }}>
-            <FontAwesomeIcon
-              icon={icon}
-              size="2x"
-              color={getColor(player.color)}
-            />
-          </motion.div>
+            player={player}
+            index={index}
+            gridPosition={getGridPosition(player)}
+          />
         );
       })}
     </div>

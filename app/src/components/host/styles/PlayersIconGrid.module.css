@@ -6,10 +6,8 @@
   grid-template-columns: repeat(18, 1fr);
   grid-template-rows: repeat(12, 1fr);
   position: absolute;
-  z-index: -5;
   top: 0;
   left: 0;
-  pointer-events: none; /* Allow clicks to pass through to elements below */
 }
 
 .iconContainer {

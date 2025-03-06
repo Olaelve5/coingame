@@ -1,5 +1,6 @@
 import { useConnectionStore } from "@/store/connectionStore";
 import { useEffect, useState } from "react";
+import styles from "./styles/PlayerPercentage.module.css";
 
 const PlayerPercentage = () => {
   const { game } = useConnectionStore();
@@ -21,7 +22,16 @@ const PlayerPercentage = () => {
 
   const formattedPercentage = Math.round(percentage);
 
-  return <div>{formattedPercentage}% of bets placed</div>;
+  return (
+    <div className={styles.container}>
+      <div className={styles.barContainer}>
+        <div
+          className={styles.bar}
+          style={{ height: `${100 - formattedPercentage}%` }}></div>
+      </div>
+      <div className={styles.text}>Players played</div>
+    </div>
+  );
 };
 
 export default PlayerPercentage;
