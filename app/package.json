@@ -13,6 +13,7 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@preline/pin-input": "^2.5.2",
     "@tabler/icons-react": "^3.30.0",
+    "framer-motion": "^12.4.10",
     "next": "15.1.6",
     "next-qrcode": "^2.5.1",
     "react": "^19.0.0",
