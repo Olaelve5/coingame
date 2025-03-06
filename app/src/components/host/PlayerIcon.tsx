@@ -3,7 +3,7 @@ import { motion, useAnimate } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getColor, getIcon } from "@/utils/iconUtils";
 import styles from "./styles/PlayersIconGrid.module.css";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 interface PlayerIconProps {
   player: Player;
@@ -20,29 +20,32 @@ export default function PlayerIcon({
   gridPosition,
 }: PlayerIconProps) {
   const [scope, animate] = useAnimate();
+  const currentRotation = useRef(0);
 
-  const animateIcon = (direction: number) => {
-    animate(
-      scope.current,
-      {
-        rotate: 360 * direction,
-      },
-      {
-        duration: 1,
-        type: "spring",
-        bounce: 0.5,
-      }
-    );
+  const animateIcon = () => {
+    // Define a sequence of animations
+    animate([
+      // First, tilt slightly to the left
+      [scope.current, { rotate: currentRotation.current - 15 }, { duration: 0.5 }],
+
+      // Then perform the full rotation
+      [
+        scope.current,
+        { rotate: currentRotation.current + 360 },
+        { duration: 1, type: "spring", bounce: 0.5 },
+      ],
+    ]);
+
+    currentRotation.current = currentRotation.current + 360;
   };
 
   useEffect(() => {
     // Set up interval for random animation
     const interval = setInterval(() => {
       // 1 in 10 chance (10%)
-      if (Math.random() < 0.1) {
+      if (Math.random() < 0.9) {
         // Randomly choose a direction
-        const direction = Math.random() < 0.5 ? -1 : 1;
-        animateIcon(direction);
+        animateIcon();
       }
     }, 2000); // Check every 2 seconds
 
