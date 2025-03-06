@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import styles from "./styles/Timer.module.css";
+import styles from "../styles/Timer.module.css";
+import TimerArch from "./TimerArch";
 
 interface TimerProps {
   initialTime?: number; // Initial time in seconds, default 60
@@ -27,35 +28,30 @@ const AnimatedDigit = ({ value }: { value: string }) => {
 export default function Timer({ initialTime = 30, onTimeUp }: TimerProps) {
   const [timeRemaining, setTimeRemaining] = useState(initialTime);
   const [isRunning, setIsRunning] = useState(false);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [startTime, setStartTime] = useState(0);
 
-  // Handle the countdown logic with second precision
+  // Handle the countdown logic with decisecond precision
   useEffect(() => {
-    if (isRunning) {
-      // Update every second
-      intervalRef.current = setInterval(() => {
-        setTimeRemaining((prevTime) => {
-          // Decrement by 1 second each time
-          const newTime = prevTime - 1;
+    let interval: NodeJS.Timeout;
 
-          if (newTime <= 0) {
-            // Time's up!
-            clearInterval(intervalRef.current!);
-            setIsRunning(false);
-            if (onTimeUp) onTimeUp();
-            return 0;
-          }
-          return newTime;
-        });
-      }, 1000); // 1 second interval
+    if (isRunning) {
+      interval = setInterval(() => {
+        const currentTime = Date.now();
+        const elapsedTimeSeconds = (currentTime - startTime) / 1000;
+        const newTimeRemaining = Math.max(initialTime - elapsedTimeSeconds, 0);
+
+        setTimeRemaining(newTimeRemaining);
+
+        if (newTimeRemaining <= 0) {
+          clearInterval(interval);
+          setIsRunning(false);
+          if (onTimeUp) onTimeUp();
+        }
+      }, 100); // Update every 100ms (decisecond)
     }
 
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [isRunning, onTimeUp]);
+    return () => clearInterval(interval);
+  }, [isRunning, startTime, initialTime, onTimeUp]);
 
   // Format the time as minutes:seconds (M:SS)
   const formatTime = (time: number) => {
@@ -67,7 +63,9 @@ export default function Timer({ initialTime = 30, onTimeUp }: TimerProps) {
   const timeString = formatTime(timeRemaining);
 
   // Timer controls
-  const startTimer = () => setIsRunning(true);
+  const startTimer = () => {
+    setIsRunning(true), setStartTime(Date.now());
+  };
   const pauseTimer = () => setIsRunning(false);
   const resetTimer = () => {
     setIsRunning(false);
@@ -82,6 +80,7 @@ export default function Timer({ initialTime = 30, onTimeUp }: TimerProps) {
             <AnimatedDigit key={`digit-${index}`} value={digit} />
           ))}
         </div>
+        <TimerArch timeRemaining={timeRemaining} initialTime={initialTime} />
       </div>
       <div className={styles.controls}>
         {!isRunning ? (

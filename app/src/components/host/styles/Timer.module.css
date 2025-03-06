@@ -6,11 +6,30 @@
     gap: 0.5rem;
 }
 
-.timerText {
-    font-size: 3.5rem;
-    font-weight: 700;
+.timer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .timerText {
     display: flex;
+    font-size: 3.5rem;
+    font-weight: 700;
+}
+
+.archContainer {
+    width: 20rem;
+    height: 1rem;
+    background-color: white;
+    border-radius: 1rem;
+}
+
+.arch {
+    width: 100%;
+    height: 100%;
+    background-color: #4caf50;
+    border-radius: 1rem;
 }
