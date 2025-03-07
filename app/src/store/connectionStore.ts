@@ -209,7 +209,6 @@ export const useConnectionStore = create<ConnectionStore>((set, get) => ({
         playerIdToKick,
         (response: { success: boolean; message: string }) => {
           if (response.success) {
-            // No need to update game state here as we'll receive a playersUpdate event
             resolve(response);
           } else {
             console.error("Failed to kick player:", response.message);

@@ -148,14 +148,14 @@ const connectionSocketHandler = (io) => {
         const game = await Game.findOne({ "players.socketId": socket.id });
 
         if (game) {
-          // Find the player within the game.
+          // Find the player within the game
           const player = game.players.find((p) => p.socketId === socket.id);
+          const gameCode = game.gameCode; // Store the game code
 
           if (player) {
-            // Check if player was actually found
             // Update connected status AND remove socketId
             await Game.updateOne(
-              { "players.socketId": socket.id },
+              { gameCode, "players.socketId": socket.id }, // Use gameCode for more specific query
               {
                 $set: {
                   "players.$.connected": false,
@@ -163,18 +163,21 @@ const connectionSocketHandler = (io) => {
                 },
               }
             );
-            // Get the updated game state
-            const updatedGame = await Game.findOne({ "players.id": player.id });
 
-            // Notify other players (use io.to for room-wide broadcast).
-            io.to(game.gameCode).emit("playersUpdate", updatedGame.players);
+            // Get the FULL updated game state using gameCode
+            const updatedGame = await Game.findOne({ gameCode });
 
-            console.log(
-              `User with socket ID ${socket.id} disconnected from game ${game.gameCode}.`
-            );
+            if (updatedGame) {
+              // Emit the FULL game update, not just players
+              io.to(gameCode).emit("gameUpdate", updatedGame);
+
+              console.log(
+                `User with socket ID ${socket.id} disconnected from game ${gameCode}.`
+              );
+            }
           } else {
             console.log(
-              `User with socket ID ${socket.id} disconnected, but was not found in any game.`
+              `User with socket ID ${socket.id} disconnected, but was not found as a player in game ${game.gameCode}.`
             );
           }
         }
