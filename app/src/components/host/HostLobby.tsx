@@ -7,6 +7,7 @@ import { useGameplayStore } from "@/store/gameplayStore";
 import { IconDeviceGamepad2 } from "@tabler/icons-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getIcon, getColor } from "@/utils/iconUtils";
+import { motion } from "framer-motion";
 import QRCode from "./QRCode";
 import styles from "./styles/HostLobby.module.css";
 
@@ -84,17 +85,28 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
             ?.filter((player) => player.connected)
             ?.map((player) => {
               return (
-                <li
-                  onClick={() => handleClickPlayer(player)}
+                <motion.li
                   key={player.id}
-                  className={styles.playerItem}>
-                  <FontAwesomeIcon
-                    icon={getIcon(player.icon)}
-                    style={{ color: getColor(player.color) }}
-                    size="xl"
-                  />
-                  <p className={styles.playerName}>{player.name}</p>
-                </li>
+                  initial={{ scale: 0, rotate: 15 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 400,
+                    damping: 15,
+                    mass: 0.8,
+                  }}
+                  className={styles.playerListItem}>
+                  <div
+                    onClick={() => handleClickPlayer(player)}
+                    className={styles.playerItem}>
+                    <FontAwesomeIcon
+                      icon={getIcon(player.icon)}
+                      style={{ color: getColor(player.color) }}
+                      size="xl"
+                    />
+                    <p className={styles.playerName}>{player.name}</p>
+                  </div>
+                </motion.li>
               );
             })}
         </ul>
