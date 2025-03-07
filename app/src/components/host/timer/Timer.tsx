@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import styles from "../styles/Timer.module.css";
+import { useConnectionStore } from "@/store/connectionStore";
 
 interface TimerProps {
   initialTime?: number; // Initial time in seconds, default 60
@@ -28,6 +29,8 @@ export default function Timer({ initialTime = 20, onTimeUp }: TimerProps) {
   const [timeRemaining, setTimeRemaining] = useState(initialTime);
   const [isRunning, setIsRunning] = useState(false);
   const [startTime, setStartTime] = useState(0);
+  const { game } = useConnectionStore();
+  const [lastRoundState, setLastRoundState] = useState(game?.roundStatus);
 
   // Handle the countdown logic with decisecond precision
   useEffect(() => {
@@ -53,8 +56,19 @@ export default function Timer({ initialTime = 20, onTimeUp }: TimerProps) {
   }, [isRunning, startTime, initialTime, onTimeUp]);
 
   useEffect(() => {
-    startTimer();
-  }, []);
+    // Check if the game round status has changed
+    if (game?.roundStatus !== lastRoundState) {
+      setIsRunning(false);
+      setTimeRemaining(initialTime);
+      setLastRoundState(game?.roundStatus);
+      setStartTime(Date.now());
+    }
+
+    // Start the timer when the game round status is "started"
+    if (game?.roundStatus === "active" && !isRunning) {
+      startTimer();
+    }
+  }, [game?.roundStatus]);
 
   // Format the time as minutes:seconds (M:SS)
   const formatTime = (time: number) => {
