@@ -7,6 +7,7 @@ import { useConnectionStore } from "./connectionStore";
 interface GameplayStore {
   startGame: (gameCode: string) => Promise<boolean>;
   startRound: () => Promise<boolean>;
+  endRound: () => Promise<boolean>;
   playCoins: (coins: number) => Promise<boolean>;
   changeIcon: (icon: string, color: string) => Promise<boolean>;
 }
@@ -50,6 +51,35 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
           } else if (response.success && response.game) {
             // Update game state in connectionStore
             useConnectionStore.getState().setGame(response.game);
+            resolve(true);
+          } else {
+            console.error("Invalid response from server");
+            resolve(false);
+          }
+        }
+      );
+    });
+  },
+
+  // Function to end round
+  endRound: async () => {
+    const game = useConnectionStore.getState().game;
+
+    if (!game) {
+      console.error("No active game found");
+      return false;
+    }
+
+    return new Promise((resolve) => {
+      const socket = getSocket();
+      socket.emit(
+        "endRound",
+        game.gameCode,
+        (response: { error?: string; success?: boolean }) => {
+          if (response.error) {
+            console.error("Failed to end round:", response.error);
+            resolve(false);
+          } else if (response.success) {
             resolve(true);
           } else {
             console.error("Invalid response from server");

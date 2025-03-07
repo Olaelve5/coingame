@@ -1,4 +1,5 @@
 import { useConnectionStore } from "@/store/connectionStore";
+import { useGameplayStore } from "@/store/gameplayStore";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Timer from "./timer/Timer";
@@ -9,6 +10,7 @@ import styles from "./styles/HostGame.module.css";
 
 const HostGame = ({ gameCode }: { gameCode: string }) => {
   const { game, joinAsHost, cleanup } = useConnectionStore();
+  const { endRound } = useGameplayStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -28,7 +30,7 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Round {game.round}</h2>
-      <Timer />
+      <Timer onTimeUp={endRound}/>
       <PlayerPercentage />
       <PlayersIconGrid />
       {game.round > 0 && game.roundStatus === "completed" && (
