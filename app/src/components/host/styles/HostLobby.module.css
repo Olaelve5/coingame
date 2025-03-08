@@ -13,6 +13,7 @@
   background-color: rgb(232, 0, 46);
   padding: 1rem 2rem;
   gap: 2rem;
+  transform: translateX(-100)
 }
 
 .title {

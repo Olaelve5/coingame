@@ -1,6 +1,6 @@
 // components/GameRoom.tsx
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useConnectionStore } from "@/store/connectionStore";
 import { useGameplayStore } from "@/store/gameplayStore";
@@ -15,6 +15,9 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
   const router = useRouter();
   const { game, joinAsHost, cleanup, kickPlayer } = useConnectionStore();
   const { startGame } = useGameplayStore();
+  const [isExiting, setIsExiting] = useState(false);
+  const [playersAnimationComplete, setPlayersAnimationComplete] =
+    useState(false);
 
   useEffect(() => {
     const initGame = async () => {
@@ -27,6 +30,10 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
     initGame();
     return () => cleanup();
   }, [gameCode, joinAsHost, router, cleanup]);
+
+  const handleStartGameClick = () => {
+    setIsExiting(true);
+  };
 
   const handleStartGame = async () => {
     const success = await startGame(gameCode);
@@ -49,22 +56,55 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
 
   return (
     <div className={styles.container}>
-      <div className={styles.sidebar}>
+      <motion.div
+        animate={{ x: isExiting ? "-100%" : 0 }}
+        transition={{ duration: 0.2, ease: "easeInOut", delay: 0.3 }}
+        className={styles.sidebar}>
         <h1 className={styles.title}>Cashfall.io</h1>
         <div className={styles.joinContainer}>
           <div className={styles.joinSection}>
             <p className={styles.sectionTitle}>Join by game code</p>
-            <h1 className={styles.gameCode}>{gameCodeString}</h1>
+            <motion.h1
+              initial={{ scale: 0, rotate: 15 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{
+                type: "spring",
+                stiffness: 400,
+                damping: 15,
+                mass: 0.8,
+              }}
+              className={styles.gameCode}>
+              {gameCodeString}
+            </motion.h1>
           </div>
           <div className={styles.joinSection}>
             <p className={styles.sectionTitle}>...or join by QR code</p>
-            <QRCode gameCode={gameCode} />
+            <motion.div
+              initial={{ scale: 0, rotate: 15 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{
+                type: "spring",
+                stiffness: 400,
+                damping: 15,
+                mass: 0.8,
+              }}
+              className={styles.qrCodeContainer}>
+              <QRCode gameCode={gameCode} />
+            </motion.div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       <div className={styles.rightSection}>
-        <div className={styles.playerCountSection}>
+        <motion.div
+          animate={{ y: isExiting ? "-100%" : 0 }}
+          transition={{ duration: 0.2, ease: "easeInOut", delay: 0.5 }}
+          onAnimationComplete={() => {
+            if (isExiting && playersAnimationComplete) {
+              handleStartGame();
+            }
+          }}
+          className={styles.playerCountSection}>
           <div className={styles.playerCount}>
             <h2 className={styles.playerCountNumber}>
               {game?.players.filter((player) => player.connected).length}
@@ -73,27 +113,41 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
           </div>
           <button
             className={styles.startGameButton}
-            onClick={handleStartGame}
+            onClick={handleStartGameClick}
             disabled={!game?.players.length || game.players.length < 3}>
             <p>Start</p>
             <IconDeviceGamepad2 size={26} />
           </button>
-        </div>
+        </motion.div>
 
         <ul className={styles.playerGrid}>
           {game?.players
             ?.filter((player) => player.connected)
-            ?.map((player) => {
+            ?.map((player, index) => {
+              const isLastPlayer = index === game.players.length - 1;
               return (
                 <motion.li
                   key={player.id}
                   initial={{ scale: 0, rotate: 15 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 400,
-                    damping: 15,
-                    mass: 0.8,
+                  animate={isExiting ? { opacity: 0 } : { scale: 1, rotate: 0 }}
+                  transition={
+                    isExiting
+                      ? {
+                          delay: 0,
+                          duration: 0.2,
+                          ease: "easeInOut",
+                        }
+                      : {
+                          type: "spring",
+                          stiffness: 400,
+                          damping: 15,
+                          mass: 0.8,
+                        }
+                  }
+                  onAnimationComplete={() => {
+                    if (isExiting && isLastPlayer) {
+                      setPlayersAnimationComplete(true);
+                    }
                   }}
                   className={styles.playerListItem}>
                   <div
