@@ -12,6 +12,7 @@
   --foreground: rgb(255, 255, 255);
 
   --accent: rgb(0, 136, 255);
+  --secondary-accent: rgb(255, 217, 0);
 }
 
 .audiowide-font {

@@ -57,8 +57,17 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
   return (
     <div className={styles.container}>
       <motion.div
-        animate={{ x: isExiting ? "-100%" : 0 }}
-        transition={{ duration: 0.2, ease: "easeInOut", delay: 0.3 }}
+        animate={
+          isExiting && playersAnimationComplete
+            ? { opacity: 1, x: "-100%" }
+            : { opacity: 1, x: 0 }
+        }
+        transition={{ duration: 0.25, ease: "easeInOut", delay: 0 }}
+        onAnimationComplete={() => {
+          if (isExiting && playersAnimationComplete) {
+            handleStartGame();
+          }
+        }}
         className={styles.sidebar}>
         <h1 className={styles.title}>Cashfall.io</h1>
         <div className={styles.joinContainer}>
@@ -98,12 +107,7 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
       <div className={styles.rightSection}>
         <motion.div
           animate={{ y: isExiting ? "-100%" : 0 }}
-          transition={{ duration: 0.2, ease: "easeInOut", delay: 0.5 }}
-          onAnimationComplete={() => {
-            if (isExiting && playersAnimationComplete) {
-              handleStartGame();
-            }
-          }}
+          transition={{ duration: 0.25, ease: "easeInOut", delay: 0.1 }}
           className={styles.playerCountSection}>
           <div className={styles.playerCount}>
             <h2 className={styles.playerCountNumber}>
@@ -124,16 +128,20 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
           {game?.players
             ?.filter((player) => player.connected)
             ?.map((player, index) => {
-              const isLastPlayer = index === game.players.length - 1;
+              const isLastPlayer = index === 0;
               return (
                 <motion.li
                   key={player.id}
                   initial={{ scale: 0, rotate: 15 }}
-                  animate={isExiting ? { opacity: 0 } : { scale: 1, rotate: 0 }}
+                  animate={
+                    isExiting
+                      ? { opacity: 0, y: -100 }
+                      : { scale: 1, rotate: 0 }
+                  }
                   transition={
                     isExiting
                       ? {
-                          delay: 0,
+                          delay: 0.1 * (game.players.length - index),
                           duration: 0.2,
                           ease: "easeInOut",
                         }
