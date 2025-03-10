@@ -16,6 +16,17 @@ export default function RoundTitle({
 }: RoundTitleProps) {
   const { game } = useConnectionStore();
   const [animationState, setAnimationState] = useState("initial");
+  const [roundNumber, setRoundNumber] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    if (!game) return;
+
+    if (game.roundStatus === "active") {
+      setRoundNumber(game.round);
+    } else if (game.roundStatus === "completed") {
+      setRoundNumber(game.round + 1);
+    }
+  }, [game]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -41,7 +52,7 @@ export default function RoundTitle({
       }}
       className={styles.title}>
       <h2>Round</h2>
-      <h2 className={styles.number}>{game.round}</h2>
+      <h2 className={styles.number}>{roundNumber}</h2>
     </motion.div>
   );
 }

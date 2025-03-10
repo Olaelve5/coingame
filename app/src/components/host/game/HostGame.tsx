@@ -5,14 +5,13 @@ import { useRouter } from "next/navigation";
 import Timer from "./Timer";
 import PlayerPercentage from "../PlayerPercentage";
 import PlayersIconGrid from "./PlayersIconGrid";
-import StartNewRoundButton from "../StartNewRoundButton";
 import styles from "../styles/HostGame.module.css";
 import { motion } from "framer-motion";
 import RoundTitle from "./RoundTitle";
 
 const HostGame = ({ gameCode }: { gameCode: string }) => {
   const { game, joinAsHost, cleanup } = useConnectionStore();
-  const { endRound } = useGameplayStore();
+  const { endRound, startRound } = useGameplayStore();
   const router = useRouter();
   const [titleAnimationFinished, setTitleAnimationFinished] = useState(false);
 
@@ -27,6 +26,26 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
     initGame();
     return () => cleanup();
   }, [gameCode, joinAsHost, router, cleanup]);
+
+  useEffect(() => {
+    // Only proceed if title animation is finished
+    if (titleAnimationFinished) {
+      console.log("Title animation finished, scheduling round start...");
+
+      // Set a timeout to start the round after 1 second
+      const timeout = setTimeout(() => {
+        console.log("Starting new round...");
+        startRound();
+      }, 1000); // 1 second delay
+
+      // Clean up timeout if component unmounts
+      return () => clearTimeout(timeout);
+    }
+  }, [titleAnimationFinished, startRound, gameCode]);
+
+  useEffect(() => {
+    console.log("Game state changed:", game);
+  },[game]);
 
   if (!game) return null;
 
@@ -63,11 +82,6 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
           <PlayersIconGrid />
         </>
       )}
-      {/* {game.round > 0 && game.roundStatus === "completed" && (
-        <div className={styles.buttonContainer}>
-          <StartNewRoundButton />
-        </div>
-      )} */}
     </div>
   );
 };

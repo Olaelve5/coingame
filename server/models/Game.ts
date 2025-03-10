@@ -25,7 +25,7 @@ const GameSchema = new mongoose.Schema({
     id: { type: String, required: true },
     socketId: { type: String, required: true },
   },
-  round: { type: Number, default: 1 },
+  round: { type: Number, default: 0 },
   roundStatus: { type: String, default: "completed" }, // completed, active
   lastRoundResults: {
     playersEliminated: [
