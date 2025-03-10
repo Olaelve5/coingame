@@ -12,7 +12,7 @@
   border-radius: 1rem;
   overflow: hidden;
   -webkit-mask-image: -webkit-radial-gradient(white, black);
-  background-color: rgb(0, 136, 255);
+  background-color: var(--accent);
 }
 
 .bar {

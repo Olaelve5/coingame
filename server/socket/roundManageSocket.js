@@ -13,7 +13,6 @@ const roundManageSocketHandler = (io) => {
           {
             $set: {
               status: "playing",
-              roundStatus: "active",
               round: 1,
               "players.$[].playedInRound": false, // Reset all players' played status
             },

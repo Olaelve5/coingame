@@ -1,4 +1,4 @@
-import styles from "./styles/PlayersIconGrid.module.css";
+import styles from "../styles/PlayersIconGrid.module.css";
 import { useConnectionStore } from "@/store/connectionStore";
 import PlayerIcon from "./PlayerIcon";
 import { useEffect, useState } from "react";

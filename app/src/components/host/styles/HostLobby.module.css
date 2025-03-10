@@ -4,13 +4,13 @@
   width: 100%;
   overflow-x: hidden;
   height: 100dvh;
-  background-color: rgb(7, 32, 51);
+  background-color: var(--background);
 }
 
 .sidebar {
   display: flex;
   flex-direction: column;
-  background-color: rgb(232, 0, 46);
+  background-color: var(--accent);
   padding: 1rem 2rem;
   gap: 2rem;
   transform: translateX(-100)
@@ -87,7 +87,7 @@
   display: flex;
   gap: 1rem;
   align-items: center;
-  background: rgb(255, 0, 51);
+  background: var(--accent);
   color: white;
   font-size: 1.25rem;
   font-weight: 700;

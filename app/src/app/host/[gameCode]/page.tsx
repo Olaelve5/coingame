@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import HostLobby from "@/components/host/HostLobby";
-import HostGame from "@/components/host/HostGame";
+import HostGame from "@/components/host/game/HostGame";
 import { useConnectionStore } from "@/store/connectionStore";
 
 export default function GamePage() {
