@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useConnectionStore } from "@/store/connectionStore";
 import { roundTitleAnimation } from "@/utils/animationUtils";
 import styles from "../styles/HostGame.module.css";
+import { useEffect, useState } from "react";
 
 // Define the interface for the props
 interface RoundTitleProps {
@@ -14,12 +15,33 @@ export default function RoundTitle({
   setTitleAnimationFinished,
 }: RoundTitleProps) {
   const { game } = useConnectionStore();
+  const [animationState, setAnimationState] = useState("initial");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setAnimationState("big"); // Animate to 'big' after a short delay
+      setTimeout(() => {
+        setAnimationState("normal"); // Animate to 'normal' after 'big' state
+      }, 1500); // Delay in 'big' state (adjust as needed)
+    }, 500); // Initial delay before starting animation (adjust as needed)
+
+    return () => clearTimeout(timer); // Clear timeout if component unmounts
+  }, []);
 
   if (!game) return null;
 
   return (
-    <motion.h2 variants={roundTitleAnimation} className={styles.title}>
-      Round {game.round}
-    </motion.h2>
+    <motion.div
+      animate={animationState}
+      variants={roundTitleAnimation}
+      onAnimationComplete={() => {
+        if (animationState === "normal") {
+          setTitleAnimationFinished(true);
+        }
+      }}
+      className={styles.title}>
+      <h2>Round</h2>
+      <h2 className={styles.number}>{game.round}</h2>
+    </motion.div>
   );
 }

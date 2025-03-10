@@ -8,7 +8,6 @@ import PlayersIconGrid from "./PlayersIconGrid";
 import StartNewRoundButton from "../StartNewRoundButton";
 import styles from "../styles/HostGame.module.css";
 import { motion } from "framer-motion";
-import { roundTitleAnimation } from "@/utils/animationUtils";
 import RoundTitle from "./RoundTitle";
 
 const HostGame = ({ gameCode }: { gameCode: string }) => {
@@ -36,19 +35,39 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
       <RoundTitle
         titleAnimationFinished={titleAnimationFinished}
         setTitleAnimationFinished={setTitleAnimationFinished}
-        />
-      <motion.div>
-        <Timer onTimeUp={endRound} />
-      </motion.div>
-      <motion.div>
-        <PlayerPercentage />
-      </motion.div>
-      <PlayersIconGrid />
-      {game.round > 0 && game.roundStatus === "completed" && (
+      />
+      {titleAnimationFinished && (
+        <>
+          <motion.div
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{
+              delay: 0.3,
+              duration: 0.5,
+              type: "spring",
+              bounce: 0.4,
+            }}>
+            <Timer onTimeUp={endRound} />
+          </motion.div>
+          <motion.div
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{
+              delay: 0.6,
+              duration: 0.5,
+              type: "spring",
+              bounce: 0.4,
+            }}>
+            <PlayerPercentage />
+          </motion.div>
+          <PlayersIconGrid />
+        </>
+      )}
+      {/* {game.round > 0 && game.roundStatus === "completed" && (
         <div className={styles.buttonContainer}>
           <StartNewRoundButton />
         </div>
-      )}
+      )} */}
     </div>
   );
 };
