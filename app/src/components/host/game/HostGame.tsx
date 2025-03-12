@@ -36,7 +36,7 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
       const timeout = setTimeout(() => {
         console.log("Starting new round...");
         startRound();
-      }, 1000); // 1 second delay
+      }, 1500); // 1 second delay
 
       // Clean up timeout if component unmounts
       return () => clearTimeout(timeout);

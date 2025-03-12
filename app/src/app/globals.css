@@ -8,10 +8,10 @@
     rgb(15, 23, 42) 0%,
     rgb(5, 16, 21) 100%
   );
-  --background: rgb(7, 32, 51);
+  --background: rgb(8, 34, 54);
   --foreground: rgb(255, 255, 255);
 
-  --accent: rgb(0, 136, 255);
+  --accent: rgb(0, 145, 255);
   --secondary-accent: rgb(255, 217, 0);
 }
 
@@ -24,6 +24,9 @@
 }
 
 body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Mono, Helvetica, sans-serif;
   color: var(--foreground);
   background: var(--background);
   font-family: Mono, Helvetica, sans-serif;

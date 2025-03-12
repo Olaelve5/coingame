@@ -106,8 +106,8 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
 
       <div className={styles.rightSection}>
         <motion.div
-          animate={{ y: isExiting ? "-100%" : 0 }}
-          transition={{ duration: 0.25, ease: "easeInOut", delay: 0.1 }}
+          animate={{ y: isExiting && playersAnimationComplete ? "-100%" : 0 }}
+          transition={{ duration: 0.25, ease: "easeInOut", delay: 0}}
           className={styles.playerCountSection}>
           <div className={styles.playerCount}>
             <h2 className={styles.playerCountNumber}>
@@ -141,8 +141,8 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
                   transition={
                     isExiting
                       ? {
-                          delay: 0.1 * (game.players.length - index),
-                          duration: 0.2,
+                          delay: 0.15 * (game.players.length - index),
+                          duration: 0.25,
                           ease: "easeInOut",
                         }
                       : {

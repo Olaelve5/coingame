@@ -22,34 +22,61 @@ export default function PlayersIconGrid() {
   useEffect(() => {
     if (!game || players.length === 0) return;
 
-    // Check if we need to assign new positions
-    const unpositionedPlayers = players.filter((p) => !playerPositions[p.id]);
+    // Create a copy of existing positions
+    const newPositions = { ...playerPositions };
 
-    if (unpositionedPlayers.length === 0) return;
-    // Create a pool of all grid positions
-    const allPositions: { row: number; col: number }[] = [];
+    // Track which positions are already occupied
+    const occupiedPositions = new Set();
+
+    // Mark current positions as occupied
+    Object.values(newPositions).forEach((pos) => {
+      occupiedPositions.add(`${pos.row},${pos.col}`);
+    });
+
+    // Create a pool of available positions
+    const availablePositions: { row: number; col: number }[] = [];
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < columns; col++) {
         if (col > 5 && col < 13) continue;
-        allPositions.push({ row, col });
+        const posKey = `${row},${col}`;
+        if (!occupiedPositions.has(posKey)) {
+          availablePositions.push({ row, col });
+        }
       }
     }
 
-    // Shuffle all positions
-    const shuffledPositions = [...allPositions].sort(() => Math.random() - 0.5);
+    // Shuffle available positions
+    const shuffledPositions = [...availablePositions].sort(
+      () => Math.random() - 0.5
+    );
 
-    // Create a copy of existing positions
-    const newPositions = { ...playerPositions };
+    // Find unpositioned players
+    const unpositionedPlayers = players.filter((p) => !playerPositions[p.id]);
 
     // Assign positions to unpositioned players
     unpositionedPlayers.forEach((player, index) => {
       if (index < shuffledPositions.length) {
         newPositions[player.id] = shuffledPositions[index];
+      } else {
+        // If we run out of positions, create fallback positions
+        console.warn("More players than available positions");
+        newPositions[player.id] = {
+          row: Math.floor(Math.random() * rows),
+          col: Math.floor(Math.random() * columns),
+        };
+      }
+    });
+
+    // Remove positions for players no longer in the game
+    const currentPlayerIds = new Set(players.map((p) => p.id));
+    Object.keys(newPositions).forEach((id) => {
+      if (!currentPlayerIds.has(id)) {
+        delete newPositions[id];
       }
     });
 
     setPlayerPositions(newPositions);
-  }, [game, players, playerPositions]);
+  }, [game, players]);
 
   if (!game) {
     return null;

@@ -1,0 +1,41 @@
+.createGameButton {
+  position: relative;
+  border: none;
+  background: transparent;
+  padding: 0;
+  outline: none;
+  cursor: pointer;
+  font-family: monospace;
+  font-weight: bold;
+  font-size: 1rem;
+  width: 80%;
+}
+
+.buttonContent {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.125rem;
+  color: white;
+  border-radius: 0.5rem;
+  transform: translateY(-0.25rem);
+  background: var(--accent);
+  gap: 0.75rem;
+  transition: transform 600ms cubic-bezier(0.3, 0.7, 0.4, 1), filter 600ms ease;
+}
+
+.createGameButton:hover .buttonContent {
+  transform: translateY(-0.375rem);
+  transition-duration: 250ms;
+  filter: brightness(1.1);
+}
+
+.createGameButton:active .buttonContent {
+  transform: translateY(-0.125rem);
+}
+
+.buttonText {
+  user-select: none;
+}

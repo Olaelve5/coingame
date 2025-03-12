@@ -33,8 +33,8 @@ export default function RoundTitle({
       setAnimationState("big"); // Animate to 'big' after a short delay
       setTimeout(() => {
         setAnimationState("normal"); // Animate to 'normal' after 'big' state
-      }, 1500); // Delay in 'big' state (adjust as needed)
-    }, 500); // Initial delay before starting animation (adjust as needed)
+      }, 2000); // Delay in 'big' state (adjust as needed)
+    }, 1000); // Initial delay before starting animation (adjust as needed)
 
     return () => clearTimeout(timer); // Clear timeout if component unmounts
   }, []);
