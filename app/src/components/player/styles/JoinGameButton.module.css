@@ -25,7 +25,7 @@
   color: white;
   border-radius: 0.5rem;
   transform: translateY(-0.25rem);
-  background:rgb(0, 116, 224);
+  background:rgb(224, 0, 45);
   gap: 0.75rem;
   transition: transform 600ms cubic-bezier(0.3, 0.7, 0.4, 1), filter 600ms ease;
 }

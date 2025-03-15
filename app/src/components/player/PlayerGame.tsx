@@ -8,8 +8,8 @@ const PlayerGame = ({
   gameCode,
   playerName,
 }: {
-  gameCode: string;
-  playerName: string;
+  gameCode?: string;
+  playerName?: string;
 }) => {
   const [coinsToPlay, setCoinsToPlay] = useState<number>(0);
   const { game, joinAsPlayer, cleanup, disconnect, getPlayerDetails } =
@@ -31,6 +31,10 @@ const PlayerGame = ({
   };
 
   useEffect(() => {
+    if (!gameCode || !playerName) {
+      return;
+    }
+
     const initGame = async () => {
       const success = await joinAsPlayer(gameCode, playerName);
       if (!success) {
@@ -45,24 +49,14 @@ const PlayerGame = ({
     };
   }, [gameCode, joinAsPlayer, router, cleanup, disconnect, playerName]);
 
-  if (!player) {
-    return <div>Olaolaola...</div>;
-  }
-
-  if (player.eliminated) {
+  if (player?.eliminated) {
     return <div>You have been eliminated</div>;
   }
 
   return (
     <div>
-      <h1>Game in progress</h1>
-      <p>Game code: {gameCode}</p>
-      <p>Player name: {player?.name}</p>
-      <p>Player coins: {player?.coins}</p>
-
-      {game?.roundStatus === "active" && !player?.playedInRound && (
+      {/* {game?.roundStatus === "active" && !player?.playedInRound && ( */}
         <div className="mt-4 space-y-4">
-          <h2 className="text-xl">Round {game.round}</h2>
           <div className="flex space-x-2">
             <input
               type="number"
@@ -81,7 +75,7 @@ const PlayerGame = ({
             </button>
           </div>
         </div>
-      )}
+      {/* )} */}
     </div>
   );
 };
