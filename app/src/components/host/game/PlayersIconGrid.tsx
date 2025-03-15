@@ -1,7 +1,7 @@
 import styles from "../styles/PlayersIconGrid.module.css";
 import { useConnectionStore } from "@/store/connectionStore";
 import PlayerIcon from "./PlayerIcon";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Player } from "@/models/Game";
 
 export default function PlayersIconGrid() {
@@ -18,9 +18,24 @@ export default function PlayersIconGrid() {
 
   const rows = 12;
   const columns = 18;
+  
+  // Use a ref to track player IDs we've already positioned
+  const positionedPlayersRef = useRef(new Set());
 
   useEffect(() => {
     if (!game || players.length === 0) return;
+    
+    // Get the game code for dependency tracking
+    const gameCode = game.gameCode;
+    
+    // Get current player IDs
+    const currentPlayerIds = new Set(players.map(p => p.id));
+    
+    // Only update positions if we have new players or game changed
+    const needsUpdate = players.some(p => !positionedPlayersRef.current.has(p.id)) || 
+                        Object.keys(playerPositions).some(id => !currentPlayerIds.has(id));
+    
+    if (!needsUpdate) return;
 
     // Create a copy of existing positions
     const newPositions = { ...playerPositions };
@@ -57,6 +72,7 @@ export default function PlayersIconGrid() {
     unpositionedPlayers.forEach((player, index) => {
       if (index < shuffledPositions.length) {
         newPositions[player.id] = shuffledPositions[index];
+        positionedPlayersRef.current.add(player.id);
       } else {
         // If we run out of positions, create fallback positions
         console.warn("More players than available positions");
@@ -64,19 +80,20 @@ export default function PlayersIconGrid() {
           row: Math.floor(Math.random() * rows),
           col: Math.floor(Math.random() * columns),
         };
+        positionedPlayersRef.current.add(player.id);
       }
     });
 
     // Remove positions for players no longer in the game
-    const currentPlayerIds = new Set(players.map((p) => p.id));
     Object.keys(newPositions).forEach((id) => {
       if (!currentPlayerIds.has(id)) {
         delete newPositions[id];
+        positionedPlayersRef.current.delete(id);
       }
     });
 
     setPlayerPositions(newPositions);
-  }, [game, players]);
+  }, [game?.gameCode, players]); // Only depend on gameCode and players array, not playerPositions
 
   if (!game) {
     return null;

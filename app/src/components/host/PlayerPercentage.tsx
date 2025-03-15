@@ -36,7 +36,10 @@ const PlayerPercentage = () => {
             bounce: 0.35,
           }}></motion.div>
       </div>
-      <h2 className={styles.text}>{formattedPercentage}% have played</h2>
+      <div className={styles.textContainer}>
+        <h2 className={styles.percentageText}>{formattedPercentage}%</h2>
+        <h2 className={styles.text}>have played</h2>
+      </div>
     </div>
   );
 };

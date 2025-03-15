@@ -12,19 +12,33 @@
   border-radius: 1rem;
   overflow: hidden;
   -webkit-mask-image: -webkit-radial-gradient(white, black);
-  background-color: var(--accent);
+  background-color: var(--secondary-accent);
 }
 
 .bar {
   width: 100%;
-  background-color: rgb(44, 71, 100);
+  background-color: rgb(58, 61, 65);
   border-radius: 1rem 1rem 0 0;
   position: relative;
   buttom: 0;
+}
+
+.textContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .text {
   font-size: 1.5rem;
   font-weight: 700;
   font-family: "bungee", sans-serif;
+}
+
+.percentageText {
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: "bungee", sans-serif;
+  color: var(--secondary-accent);
 }
