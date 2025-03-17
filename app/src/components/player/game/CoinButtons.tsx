@@ -1,4 +1,4 @@
-import { IconCircleFilled } from "@tabler/icons-react";
+import { IconCircleFilled, IconHexagonFilled } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import styles from "../styles/CoinButtons.module.css";
@@ -89,7 +89,7 @@ function CoinButton({
       className={styles.singleButtonContainer}
       onClick={handleClick}
       whileTap={{ scale: 0.95 }}>
-      <IconCircleFilled
+      <IconHexagonFilled
         size={64}
         className={
           innerButton ? styles.innerCoinButton : styles.outerCoinButton
