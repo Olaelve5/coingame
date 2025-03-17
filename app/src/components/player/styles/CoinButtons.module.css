@@ -1,0 +1,64 @@
+.buttonsContainer {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    align-items: center;
+    width: 100%;
+    max-width: 25rem;
+    gap: 2rem;
+  }
+  
+  .buttonsContainer > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  
+  .singleButtonContainer {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    cursor: pointer;
+  }
+  
+  .innerCoinButton {
+    color: var(--accent);
+  }
+  
+  .outerCoinButton {
+    color: rgb(255, 0, 68);
+  }
+  
+  .coinButtonText {
+    font-size: 1rem;
+    font-weight: 500;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    gap: 0.1rem;
+    font-family: "bungee", sans-serif;
+    pointer-events: none;
+    user-select: none;
+  }
+  
+  .flyingNumber {
+    position: absolute;
+    font-size: 1rem;
+    font-weight: 500;
+    font-family: "bungee", sans-serif;
+    pointer-events: none;
+    user-select: none;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .flyingNumber p {
+    margin: 0;
+  }
+  

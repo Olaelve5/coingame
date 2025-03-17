@@ -1,7 +1,9 @@
 // utils/socket.ts
 import { io, Socket } from "socket.io-client";
 
-const URL = "http://localhost:3001";
+// CHANGE TO:
+const URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://192.168.1.48:3001";
+
 let socket: Socket | null = null; //  IMPORTANT:  Starts as null
 
 export const getSocket = () => {

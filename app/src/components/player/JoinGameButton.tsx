@@ -3,8 +3,9 @@
 import { IconUserPlus } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import PinInput from "./PinInput";
-import { use, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./styles/JoinGameButton.module.css";
+import { getApiBaseUrl } from "@/utils/apiUrlUtils";
 
 const JoinGameButton = () => {
   const router = useRouter();
@@ -28,9 +29,7 @@ const JoinGameButton = () => {
       setIsLoading(true);
 
       // 1. Verify game exists
-      const gameResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/games/${gameCode}`
-      );
+      const gameResponse = await fetch(`${getApiBaseUrl()}/games/${gameCode}`);
 
       if (!gameResponse.ok) {
         setErrorMessage("Game not found");
@@ -51,7 +50,9 @@ const JoinGameButton = () => {
       router.push(`/join/${gameCode}`);
     } catch (error) {
       console.error("Join game failed:", error);
-      alert("Failed to join game. Please check the code and try again.");
+      alert(
+        "Failed to join game. Please check the code and try again." + error
+      );
     } finally {
       setIsLoading(false);
     }
@@ -80,7 +81,6 @@ const JoinGameButton = () => {
         className={`${styles.joinGameButton} ${
           showPinInput ? styles.buttonExpanded : ""
         }`}>
-
         <div className={styles.buttonContent}>
           <span className={styles.buttonText}>
             {showPinInput ? "Join game" : "Join with code"}

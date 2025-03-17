@@ -1,0 +1,44 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  border: none;
+  height: 100%;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: 500;
+  font-family: "bungee", sans-serif;
+  user-select: none;
+  pointer-events: none;
+}
+
+.circleContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+}
+
+.octagon {
+  color: var(--accent);
+  width: 12rem;
+  height: 12rem;
+}
+
+.digitContainer {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  font-weight: 700;
+  font-family: "bungee", sans-serif;
+  pointer-events: none;
+  user-select: none;
+}

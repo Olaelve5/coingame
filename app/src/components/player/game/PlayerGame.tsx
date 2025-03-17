@@ -2,9 +2,11 @@ import { useConnectionStore } from "@/store/connectionStore";
 import { useGameplayStore } from "@/store/gameplayStore";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import styles from "../styles/PlayerGame.module.css";
 import PlayerDetails from "./PlayerDetails";
-import PlayerBetCoins from "./PlayerBetCoins";
+import PlayerBetCoins from "./CoinCircle";
 import getPlayerId from "@/utils/getPlayerId";
+import CoinButtons from "./CoinButtons";
 
 const PlayerGame = ({
   gameCode,
@@ -61,11 +63,18 @@ const PlayerGame = ({
   }
 
   return (
-    <div>
+    <div className={styles.container}>
       <PlayerDetails player={player} />
-      {game?.roundStatus === "active" && !player?.playedInRound && <div>
-        <PlayerBetCoins player={player} coinsToBet={coinsToBet} setCoinsToBet={setCoinsToBet}/>
-        </div>}
+      {game?.roundStatus === "active" && !player?.playedInRound && (
+        <div>
+          <PlayerBetCoins coinsToBet={coinsToBet} />
+        </div>
+      )}
+      <CoinButtons
+        player={player}
+        coinsToBet={coinsToBet}
+        setCoinsToBet={setCoinsToBet}
+      />
     </div>
   );
 };

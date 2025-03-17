@@ -13,17 +13,18 @@ const httpServer = createServer(app);
 // CORS Configuration
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://192.168.10.123:3000"],
+    origin: "*", // Now safe to use wildcard
     methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
+    credentials: false, // Disable credentials
   })
 );
+
 app.options("*", cors()); // Handle preflight requests
 
 // Socket.io Configuration
 const io = new Server(httpServer, {
   cors: {
-    origin: ["http://localhost:3000", "http://192.168.10.123:3000"],
+    origin: "*", 
     methods: ["GET", "POST"],
   },
 });
@@ -35,7 +36,7 @@ app.use(express.json());
 const startServer = async () => {
   try {
     await connectDB(); // Use your existing connection function
-    httpServer.listen(3001, () => {
+    httpServer.listen(3001, '0.0.0.0', () => {
       console.log("Server running on http://localhost:3001");
     });
   } catch (error) {

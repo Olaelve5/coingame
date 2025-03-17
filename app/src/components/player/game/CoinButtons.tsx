@@ -1,21 +1,20 @@
-import { Player } from "@/models/Game";
-import { IconOctagonFilled, IconCircleFilled } from "@tabler/icons-react";
-import styles from "../styles/PlayerBetCoins.module.css";
+import { IconCircleFilled } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import AnimatedDigit from "@/components/universal/AnimateDigit";
+import styles from "../styles/CoinButtons.module.css";
+import { Player } from "@/models/Game";
 
-interface PlayerBetCoinsProps {
+interface CoinButtonsProps {
   player: Player;
   coinsToBet: number;
   setCoinsToBet: (coins: number) => void;
 }
 
-export default function PlayerBetCoins({
+export default function CoinButtons({
   player,
   coinsToBet,
   setCoinsToBet,
-}: PlayerBetCoinsProps) {
+}: CoinButtonsProps) {
   const handleCoinsChange = (coins: number) => {
     if (coinsToBet + coins > player.coins) {
       setCoinsToBet(player.coins);
@@ -28,42 +27,31 @@ export default function PlayerBetCoins({
     }
     setCoinsToBet(coinsToBet + coins);
   };
-
   return (
-    <div className={styles.container}>
-      <div className={styles.coinsContainer}>
-        <IconOctagonFilled className={styles.octagon} />
-        <div className={styles.digitContainer}>
-            {coinsToBet.toString().split("").map((digit, index) => (
-              <AnimatedDigit key={index} value={digit} />
-            ))}
-        </div>
+    <div className={styles.buttonsContainer}>
+      <div>
+        <CoinButton
+          coins={-5}
+          handleCoinsChange={handleCoinsChange}
+          innerButton={false}
+        />
+        <CoinButton
+          coins={-1}
+          handleCoinsChange={handleCoinsChange}
+          innerButton={true}
+        />
       </div>
-      <div className={styles.buttonsContainer}>
-        <div>
-          <CoinButton
-            coins={-5}
-            handleCoinsChange={handleCoinsChange}
-            innerButton={false}
-          />
-          <CoinButton
-            coins={-1}
-            handleCoinsChange={handleCoinsChange}
-            innerButton={true}
-          />
-        </div>
-        <div>
-          <CoinButton
-            coins={1}
-            handleCoinsChange={handleCoinsChange}
-            innerButton={true}
-          />
-          <CoinButton
-            coins={5}
-            handleCoinsChange={handleCoinsChange}
-            innerButton={false}
-          />
-        </div>
+      <div>
+        <CoinButton
+          coins={1}
+          handleCoinsChange={handleCoinsChange}
+          innerButton={true}
+        />
+        <CoinButton
+          coins={5}
+          handleCoinsChange={handleCoinsChange}
+          innerButton={false}
+        />
       </div>
     </div>
   );
@@ -102,7 +90,7 @@ function CoinButton({
       onClick={handleClick}
       whileTap={{ scale: 0.95 }}>
       <IconCircleFilled
-        size={60}
+        size={64}
         className={
           innerButton ? styles.innerCoinButton : styles.outerCoinButton
         }
@@ -119,7 +107,7 @@ function CoinButton({
             key={id}
             className={styles.flyingNumber}
             initial={{ opacity: 1, y: 0 }}
-            animate={{ opacity: 0, y: -75 }}
+            animate={{ opacity: 0, y: -100 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}>
             <p>
