@@ -5,6 +5,7 @@ import getPlayerId from "@/utils/getPlayerId";
 import { useConnectionStore } from "@/store/connectionStore";
 import { IconDeviceGamepad2 } from "@tabler/icons-react";
 import styles from "./styles/CreateGameButton.module.css";
+import { getApiBaseUrl } from "@/utils/apiUrlUtils";
 
 export default function CreateGameButton() {
   const router = useRouter();
@@ -22,7 +23,7 @@ export default function CreateGameButton() {
 
       // 2. Create game via POST
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/games`,
+        `${getApiBaseUrl()}/games`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

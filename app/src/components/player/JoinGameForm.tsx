@@ -4,6 +4,7 @@ import { useState, KeyboardEvent, useEffect, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useConnectionStore } from "@/store/connectionStore";
 import { IconArrowRight, IconDotsVertical } from "@tabler/icons-react";
+import { getApiBaseUrl } from "@/utils/apiUrlUtils";
 
 export default function JoinGameForm() {
   const router = useRouter();
@@ -34,9 +35,7 @@ export default function JoinGameForm() {
       prepareForNewGame();
 
       // 1. Verify game exists
-      const gameResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/games/${gameCode}`
-      );
+      const gameResponse = await fetch(`${getApiBaseUrl()}/games/${gameCode}`);
 
       if (!gameResponse.ok) {
         setErrorMessage("Game not found");

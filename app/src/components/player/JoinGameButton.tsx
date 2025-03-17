@@ -28,8 +28,10 @@ const JoinGameButton = () => {
     try {
       setIsLoading(true);
 
+      const baseUrl = getApiBaseUrl();
+
       // 1. Verify game exists
-      const gameResponse = await fetch(`${getApiBaseUrl()}/games/${gameCode}`);
+      const gameResponse = await fetch(`${baseUrl}/games/${gameCode}`);
 
       if (!gameResponse.ok) {
         setErrorMessage("Game not found");
