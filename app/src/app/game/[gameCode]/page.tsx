@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import PlayerLobby from "@/components/player/PlayerLobby";
-import PlayerGame from "@/components/player/PlayerGame";
+import PlayerGame from "@/components/player/game/PlayerGame";
 import { useConnectionStore } from "@/store/connectionStore";
 import { useRouter } from "next/navigation";
 

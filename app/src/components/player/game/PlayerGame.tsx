@@ -2,6 +2,9 @@ import { useConnectionStore } from "@/store/connectionStore";
 import { useGameplayStore } from "@/store/gameplayStore";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { getIcon, getColor } from "@/utils/iconUtils";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import PlayerDetails from "./PlayerDetails";
 import getPlayerId from "@/utils/getPlayerId";
 
 const PlayerGame = ({
@@ -19,10 +22,10 @@ const PlayerGame = ({
   const player = getPlayerDetails(getPlayerId());
 
   const handlePlay = () => {
-    if (coinsToPlay > 0 && player && coinsToPlay <= player.coins) {
-      playCoins(coinsToPlay);
-      setCoinsToPlay(0); // Reset after playing
-    }
+    // if (coinsToPlay > 0 && player && coinsToPlay <= player.coins) {
+    //   playCoins(coinsToPlay);
+    //   setCoinsToPlay(0); // Reset after playing
+    // }
   };
 
   const handleCoinsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,13 +52,18 @@ const PlayerGame = ({
     };
   }, [gameCode, joinAsPlayer, router, cleanup, disconnect, playerName]);
 
+  if (!player || !game) {
+    return <div>Loading...</div>;
+  }
+
   if (player?.eliminated) {
     return <div>You have been eliminated</div>;
   }
 
   return (
     <div>
-      {/* {game?.roundStatus === "active" && !player?.playedInRound && ( */}
+      <PlayerDetails player={player} />
+      {game?.roundStatus === "active" && !player?.playedInRound && (
         <div className="mt-4 space-y-4">
           <div className="flex space-x-2">
             <input
@@ -75,7 +83,7 @@ const PlayerGame = ({
             </button>
           </div>
         </div>
-      {/* )} */}
+      )}
     </div>
   );
 };

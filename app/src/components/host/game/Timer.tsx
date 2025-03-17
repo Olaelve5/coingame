@@ -47,7 +47,7 @@ export default function Timer({ initialTime = 20, onTimeUp }: TimerProps) {
         if (newTimeRemaining <= 0) {
           clearInterval(interval);
           setIsRunning(false);
-          if (onTimeUp) onTimeUp();
+          // if (onTimeUp) onTimeUp(); // Uncomment if you want to call onTimeUp when time is up
         }
       }, 100); // Update every 100ms (decisecond)
     }
