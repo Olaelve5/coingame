@@ -2,9 +2,8 @@ import { useConnectionStore } from "@/store/connectionStore";
 import { useGameplayStore } from "@/store/gameplayStore";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getIcon, getColor } from "@/utils/iconUtils";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PlayerDetails from "./PlayerDetails";
+import PlayerBetCoins from "./PlayerBetCoins";
 import getPlayerId from "@/utils/getPlayerId";
 
 const PlayerGame = ({
@@ -18,6 +17,7 @@ const PlayerGame = ({
   const { game, joinAsPlayer, cleanup, disconnect, getPlayerDetails } =
     useConnectionStore();
   const { playCoins } = useGameplayStore();
+  const [coinsToBet, setCoinsToBet] = useState<number>(1);
   const router = useRouter();
   const player = getPlayerDetails(getPlayerId());
 
@@ -63,27 +63,9 @@ const PlayerGame = ({
   return (
     <div>
       <PlayerDetails player={player} />
-      {game?.roundStatus === "active" && !player?.playedInRound && (
-        <div className="mt-4 space-y-4">
-          <div className="flex space-x-2">
-            <input
-              type="number"
-              value={coinsToPlay}
-              onChange={handleCoinsChange}
-              min="0"
-              max={player?.coins}
-              className="px-3 py-2 border rounded-lg"
-              placeholder="Enter coins to play"
-            />
-            <button
-              onClick={handlePlay}
-              disabled={coinsToPlay <= 0 || coinsToPlay > (player?.coins || 0)}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed">
-              Play coins
-            </button>
-          </div>
-        </div>
-      )}
+      {game?.roundStatus === "active" && !player?.playedInRound && <div>
+        <PlayerBetCoins player={player} coinsToBet={coinsToBet} setCoinsToBet={setCoinsToBet}/>
+        </div>}
     </div>
   );
 };

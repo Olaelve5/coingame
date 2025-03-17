@@ -1,27 +1,25 @@
 .container {
-    display: flex;
-    justify-content: space-between;
-    padding: 1rem 1rem;
-    font-size: 1.125rem;
-    font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 1rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  pointer-events: none;
+  user-select: none;
 }
 
 .nameIconContainer {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .coinsContainer {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-
-
-
-
 .coinIcon {
-    color: var(--secondary-accent);
+  color: var(--secondary-accent);
 }
