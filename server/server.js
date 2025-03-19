@@ -1,4 +1,7 @@
 // server.js
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
@@ -6,6 +9,8 @@ import cors from "cors";
 import { connectDB } from "./db/connect.ts";
 import { Game } from "./models/Game.ts";
 import { socketHandler } from "./socket/socket.js";
+import { generateTestPlayers } from "./utils/botUtils.ts";
+
 
 const app = express();
 const httpServer = createServer(app);
@@ -24,7 +29,7 @@ app.options("*", cors()); // Handle preflight requests
 // Socket.io Configuration
 const io = new Server(httpServer, {
   cors: {
-    origin: "*", 
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
@@ -36,7 +41,7 @@ app.use(express.json());
 const startServer = async () => {
   try {
     await connectDB(); // Use your existing connection function
-    httpServer.listen(3001, '0.0.0.0', () => {
+    httpServer.listen(3001, "0.0.0.0", () => {
       console.log("Server running on http://localhost:3001");
     });
   } catch (error) {
@@ -48,10 +53,20 @@ const startServer = async () => {
 // Attach the socket.io handler
 socketHandler(io);
 
-// Express routes (example)
 app.post("/games", async (req, res) => {
   try {
     const newGame = new Game(req.body);
+
+    // Add test players if requested OR in development mode
+    const shouldAddTestPlayers =
+      req.query.addTestPlayers === "true" ||
+      process.env.NODE_ENV === "development";
+
+    if (shouldAddTestPlayers) {
+      const testPlayers = generateTestPlayers();
+      newGame.players = [...(newGame.players || []), ...testPlayers];
+    }
+
     const savedGame = await newGame.save();
     res.status(201).json(savedGame);
   } catch (error) {

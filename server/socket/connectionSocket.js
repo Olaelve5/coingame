@@ -14,8 +14,10 @@ const connectionSocketHandler = (io) => {
         if (!game) {
           // Game not found: handle appropriately (maybe emit an error)
           if (typeof callback === "function") {
+            console.error("Game not found");
             callback({ error: "Game not found" });
           }
+          console.log(`Game with code ${gameCode} not found`);
           return socket.emit("error", "Game not found");
         }
 
@@ -25,6 +27,7 @@ const connectionSocketHandler = (io) => {
         if (!playerExists) {
           // Change this later
           if (game.players.length >= 30) {
+            console.log("Game is full");
             return socket.emit("error", "Game is full");
           }
 
@@ -39,6 +42,7 @@ const connectionSocketHandler = (io) => {
           );
 
           if (playerWithSameName) {
+            console.log("Player with the same name exists");
             return socket.emit("error", "Player with the same name exists");
           }
 

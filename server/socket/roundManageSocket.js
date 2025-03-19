@@ -1,7 +1,7 @@
 import { Game } from "../models/Game.ts";
 import { handleRoundEnd } from "../utils/roundUtils.js";
 
-const roundManageSocketHandler = (io) => {
+const roundManageSocketHandler = (io, botManager) => {
   // Handle change game status
   io.on("connection", (socket) => {
     // Start game handler --------------------------------------------------------------------------------------------->
@@ -32,6 +32,11 @@ const roundManageSocketHandler = (io) => {
         io.to(gameCode).emit("roundStarted", {
           roundNumber: game.round,
         });
+
+        // Trigger bot plays after a short delay
+        setTimeout(() => {
+          botManager.handleGameUpdate(game);
+        }, 2000); // Give players a couple seconds to see the round started
 
         if (callback) callback({ success: true, game });
       } catch (error) {
@@ -66,6 +71,11 @@ const roundManageSocketHandler = (io) => {
           roundNumber: updatedGame.round,
         });
         io.to(gameCode).emit("gameUpdate", updatedGame);
+
+        // Trigger bot plays after a short delay
+        setTimeout(() => {
+          botManager.handleGameUpdate(updatedGame);
+        }, 2000);
 
         if (callback) callback({ success: true, game: updatedGame });
       } catch (error) {

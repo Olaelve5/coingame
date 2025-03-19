@@ -1,13 +1,18 @@
 {
-    "compilerOptions": {
-      "target": "ES6",
-      "module": "commonjs",
-      "strict": true,
-      "esModuleInterop": true,
-      "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true,
-      "resolveJsonModule": true,
-      "outDir": "./dist"
-    },
-    "include": ["./**/*.ts", "utils/gameUtils.js"]
-  }
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "outDir": "./dist"
+  },
+  "include": [
+    "./**/*.ts",
+    "utils/gameUtils.js",
+    "utils/botManager.js",
+    "utils/iconUtils.js"
+  ]
+}

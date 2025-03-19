@@ -23,7 +23,7 @@ export default function CreateGameButton() {
 
       // 2. Create game via POST
       const response = await fetch(
-        `${getApiBaseUrl()}/games`,
+        `${getApiBaseUrl()}/games?addTestPlayers=true`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

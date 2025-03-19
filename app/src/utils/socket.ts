@@ -1,14 +1,24 @@
 // utils/socket.ts
 import { io, Socket } from "socket.io-client";
+import { getApiBaseUrl } from "@/utils/apiUrlUtils";
 
-// CHANGE TO:
-const URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://192.168.1.48:3001";
-
-let socket: Socket | null = null; //  IMPORTANT:  Starts as null
+let socket: Socket | null = null;
 
 export const getSocket = () => {
-    if (!socket) { // Only create a NEW socket if one doesn't exist
-        socket = io(URL, { autoConnect: false }); // You can still use autoConnect: false
+    if (!socket) {
+        const socketUrl = getApiBaseUrl();
+        console.log(`Creating socket connection to: ${socketUrl}`);
+        
+        socket = io(socketUrl, { 
+            autoConnect: false,
+            transports: ['websocket', 'polling'],
+            reconnectionAttempts: 5,
+            timeout: 10000
+        });
+        
+        // Add event listeners for debugging
+        socket.on('connect', () => console.log('Socket connected successfully'));
+        socket.on('connect_error', (err) => console.error('Socket connection error:', err));
     }
     return socket;
 };
