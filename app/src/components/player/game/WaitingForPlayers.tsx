@@ -15,7 +15,7 @@ export default function WaitingForPlayers({ player }: WaitingForPlayersProps) {
 
   return (
     <div className={styles.container}>
-      <FontAwesomeIcon icon={icon} color={color} style={{ fontSize: '6rem' }}  />
+      <FontAwesomeIcon icon={icon} color={color} style={{ fontSize: '5rem' }}  />
     </div>
   );
 }
