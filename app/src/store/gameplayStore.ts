@@ -7,6 +7,7 @@ import { useConnectionStore } from "./connectionStore";
 interface GameplayStore {
   startGame: (gameCode: string) => Promise<boolean>;
   startRound: () => Promise<boolean>;
+  prepareRound: () => Promise<boolean>;
   endRound: () => Promise<boolean>;
   playCoins: (coins: number) => Promise<boolean>;
   changeIcon: (icon: string, color: string) => Promise<boolean>;
@@ -26,6 +27,35 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
     });
   },
 
+  // Function to prepare for the next round
+  prepareRound: async () => {
+    const game = useConnectionStore.getState().game;
+
+    if (!game) {
+      console.error("No active game found");
+      return false;
+    }
+
+    return new Promise((resolve) => {
+      const socket = getSocket();
+      socket.emit(
+        "prepareNextRound",
+        game.gameCode,
+        (response: { error?: string; success?: boolean }) => {
+          if (response.error) {
+            console.error("Failed to prepare next round:", response.error);
+            resolve(false);
+          } else if (response.success) {
+            resolve(true);
+          } else {
+            console.error("Invalid response from server");
+            resolve(false);
+          }
+        }
+      );
+    });
+  },
+
   startRound: async () => {
     const game = useConnectionStore.getState().game;
 
@@ -34,7 +64,7 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
       return false;
     }
 
-    if (game.roundStatus !== "completed") {
+    if (game.roundStatus === "active") {
       console.error("Cannot start next round - current round not completed");
       return false;
     }

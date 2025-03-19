@@ -6,11 +6,15 @@ import AnimatedDigit from "@/components/universal/AnimateDigit";
 interface TimerProps {
   initialTime?: number; // Initial time in seconds, default 60
   onTimeUp?: () => void; // Callback when timer reaches zero
+  timerRunning: boolean; // Optional prop to control the timer state
 }
 
-export default function Timer({ initialTime = 20, onTimeUp }: TimerProps) {
+export default function Timer({
+  initialTime = 20,
+  onTimeUp,
+  timerRunning = false,
+}: TimerProps) {
   const [timeRemaining, setTimeRemaining] = useState(initialTime);
-  const [isRunning, setIsRunning] = useState(false);
   const [startTime, setStartTime] = useState(0);
   const { game } = useConnectionStore();
   const [lastRoundState, setLastRoundState] = useState(game?.roundStatus);
@@ -19,7 +23,7 @@ export default function Timer({ initialTime = 20, onTimeUp }: TimerProps) {
   useEffect(() => {
     let interval: NodeJS.Timeout;
 
-    if (isRunning) {
+    if (timerRunning) {
       interval = setInterval(() => {
         const currentTime = Date.now();
         const elapsedTimeSeconds = (currentTime - startTime) / 1000;
@@ -29,29 +33,20 @@ export default function Timer({ initialTime = 20, onTimeUp }: TimerProps) {
 
         if (newTimeRemaining <= 0) {
           clearInterval(interval);
-          setIsRunning(false);
-          // if (onTimeUp) onTimeUp(); // Uncomment if you want to call onTimeUp when time is up
+          if (onTimeUp) onTimeUp(); // Uncomment if you want to call onTimeUp when time is up
         }
       }, 100); // Update every 100ms (decisecond)
     }
 
     return () => clearInterval(interval);
-  }, [isRunning, startTime, initialTime, onTimeUp]);
+  }, [timerRunning, startTime, initialTime, onTimeUp]);
 
   useEffect(() => {
-    // Check if the game round status has changed
-    if (game?.roundStatus !== lastRoundState) {
-      setIsRunning(false);
+    if (timerRunning) {
       setTimeRemaining(initialTime);
-      setLastRoundState(game?.roundStatus);
       setStartTime(Date.now());
     }
-
-    // Start the timer when the game round status is "started"
-    if (game?.roundStatus === "active" && !isRunning) {
-      startTimer();
-    }
-  }, [game?.roundStatus]);
+  }, [timerRunning, initialTime]);
 
   // Format the time as minutes:seconds (M:SS)
   const formatTime = (time: number) => {
@@ -60,11 +55,6 @@ export default function Timer({ initialTime = 20, onTimeUp }: TimerProps) {
   };
 
   const timeString = formatTime(timeRemaining);
-
-  // Timer controls
-  const startTimer = () => {
-    setIsRunning(true), setStartTime(Date.now());
-  };
 
   return (
     <div className={styles.container}>

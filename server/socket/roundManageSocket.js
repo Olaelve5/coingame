@@ -13,7 +13,8 @@ const roundManageSocketHandler = (io, botManager) => {
           {
             $set: {
               status: "playing",
-              round: 0,
+              roundStatus: "active",
+              round: 1, // Start from round 1
               "players.$[].playedInRound": false, // Reset all players' played status
             },
           },
@@ -42,6 +43,23 @@ const roundManageSocketHandler = (io, botManager) => {
       } catch (error) {
         console.error("Error changing game status:", error);
         if (callback) callback({ error: "Failed to start game" });
+      }
+    });
+
+    // Handle prepare next round handler --------------------------------------------------------------------------------------------->@
+    socket.on("prepareNextRound", async (gameCode, callback) => {
+      try {
+        const game = await Game.findOneAndUpdate(
+          { gameCode },
+          { $set: { roundStatus: "preparing" } },
+          { new: true }
+        );
+
+        io.to(gameCode).emit("gameUpdate", game);
+        if (callback) callback({ success: true });
+      } catch (error) {
+        console.error("Error preparing round:", error);
+        if (callback) callback({ error: "Failed to prepare round" });
       }
     });
 

@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import HostLobby from "@/components/host/HostLobby";
 import HostGame from "@/components/host/game/HostGame";
 import { useConnectionStore } from "@/store/connectionStore";
+import RoundResult from "@/components/host/game/RoundResult";
 
 export default function GamePage() {
   const params = useParams(); // Get URL parameters
@@ -25,9 +26,14 @@ export default function GamePage() {
   if (!playerName) {
     return <div className="text-center p-8">Loading...</div>;
   }
+  
 
   if (game?.status !== "waiting") {
-    return <HostGame gameCode={params.gameCode as string} />;
+    if (game?.roundStatus === "active" || game?.roundStatus === "preparing") {
+      return <HostGame gameCode={params.gameCode as string} />;
+    } else if (game?.roundStatus === "completed") {
+      return <RoundResult />;
+    }
   }
 
   return <HostLobby gameCode={params.gameCode as string} />;

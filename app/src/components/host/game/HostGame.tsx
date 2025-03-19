@@ -14,6 +14,7 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
   const { endRound, startRound } = useGameplayStore();
   const router = useRouter();
   const [titleAnimationFinished, setTitleAnimationFinished] = useState(false);
+  const [timerRunning, setTimerRunning] = useState(false);
 
   useEffect(() => {
     const initGame = async () => {
@@ -29,23 +30,26 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
 
   useEffect(() => {
     // Only proceed if title animation is finished
-    if (titleAnimationFinished) {
+    if (titleAnimationFinished && game?.roundStatus === "active") {
       console.log("Title animation finished, scheduling round start...");
 
       // Set a timeout to start the round after 1 second
       const timeout = setTimeout(() => {
         console.log("Starting new round...");
-        startRound();
-      }, 1500); // 1 second delay
+        setTimerRunning(true);
+        startRound().then((success) => {
+          if (!success) {
+            console.error("Failed to start new round");
+          } else {
+            console.log("Round started successfully");
+          }
+        });
+      }, 1500); // 1.5 second delay
 
       // Clean up timeout if component unmounts
       return () => clearTimeout(timeout);
     }
-  }, [titleAnimationFinished, startRound, gameCode]);
-
-  useEffect(() => {
-    console.log("Game state changed:", game);
-  },[game]);
+  }, [titleAnimationFinished, game?.roundStatus, startRound]);
 
   if (!game) return null;
 
@@ -66,7 +70,7 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
               type: "spring",
               bounce: 0.4,
             }}>
-            <Timer onTimeUp={endRound} />
+            <Timer onTimeUp={endRound} timerRunning={timerRunning} />
           </motion.div>
           <motion.div
             initial={{ scale: 0.5, opacity: 0 }}
