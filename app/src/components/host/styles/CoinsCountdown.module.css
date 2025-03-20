@@ -4,6 +4,8 @@
     width: 100%;
     align-items: center;
     justify-content: center;
+    position: relative;
+    margin: 10rem 0;
 }
 
 .countdownContainer {
@@ -14,4 +16,11 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+}
+
+.hexagon {
+    width: 10rem;
+    height: 10rem;
+    color:rgb(255, 0, 68);
+    position: absolute;
 }

@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import styles from "../styles/CoinsCountdown.module.css";
 import AnimatedDigit from "@/components/universal/AnimateDigit";
+import { IconHexagonFilled } from "@tabler/icons-react";
 
 interface CoinsCountdownProps {
   intervalMs?: number; // Interval in milliseconds between decrements
@@ -11,7 +12,7 @@ interface CoinsCountdownProps {
 }
 
 export default function CoinsCountdown({
-  intervalMs = 150, // 0.2 seconds
+  intervalMs = 200, // 0.2 seconds
   onComplete,
   count,
   setCount,
@@ -49,6 +50,7 @@ export default function CoinsCountdown({
 
   return (
     <div className={styles.container}>
+      <IconHexagonFilled className={styles.hexagon} />
       <div className={styles.countdownContainer}>
         {count
           .toString()

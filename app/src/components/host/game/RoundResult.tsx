@@ -3,10 +3,11 @@ import { useConnectionStore } from "@/store/connectionStore";
 import CoinsCountdown from "./CoinsCountdown";
 import PlayerEliminationList from "./PlayerEliminationList";
 import { useState, useEffect } from "react";
+import styles from "../styles/RoundResult.module.css";
 
 export default function RoundResult() {
   const { game } = useConnectionStore();
-  const [count, setCount] = useState(100);
+  const [count, setCount] = useState(50);
   const [isCountdownRunning, setIsCountdownRunning] = useState(false);
 
   useEffect(() => {
@@ -18,8 +19,11 @@ export default function RoundResult() {
   if (!game) return null;
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-4xl font-bold mb-4">Round {game.round} results</h1>
+    <div className={styles.container}>
+      <div className={styles.titleContainer}>
+        <h1>Elimination Report</h1>
+        <h1 className={styles.roundNumber}>{game.round}</h1>
+      </div>
       <CoinsCountdown
         count={count}
         setCount={setCount}
@@ -28,7 +32,7 @@ export default function RoundResult() {
       <div className="mb-4">
         <PlayerEliminationList count={count} />
       </div>
-      <StartNewRoundButton />
+      {count <= 0 && <StartNewRoundButton />}
     </div>
   );
 }
