@@ -14,7 +14,7 @@ import styles from "./styles/HostLobby.module.css";
 export default function HostLobby({ gameCode }: { gameCode: string }) {
   const router = useRouter();
   const { game, joinAsHost, cleanup, kickPlayer } = useConnectionStore();
-  const { startGame } = useGameplayStore();
+  const { prepareRound } = useGameplayStore();
   const [isExiting, setIsExiting] = useState(false);
   const [playersAnimationComplete, setPlayersAnimationComplete] =
     useState(false);
@@ -36,7 +36,7 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
   };
 
   const handleStartGame = async () => {
-    const success = await startGame(gameCode);
+    const success = await prepareRound(gameCode);
     if (!success) {
       alert("Failed to start game");
     }
@@ -107,7 +107,7 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
       <div className={styles.rightSection}>
         <motion.div
           animate={{ y: isExiting && playersAnimationComplete ? "-100%" : 0 }}
-          transition={{ duration: 0.25, ease: "easeInOut", delay: 0}}
+          transition={{ duration: 0.25, ease: "easeInOut", delay: 0 }}
           className={styles.playerCountSection}>
           <div className={styles.playerCount}>
             <h2 className={styles.playerCountNumber}>
@@ -141,7 +141,7 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
                   transition={
                     isExiting
                       ? {
-                          delay: 0.15 * (game.players.length - index),
+                          delay: 0.05 * (game.players.length - index),
                           duration: 0.25,
                           ease: "easeInOut",
                         }

@@ -16,8 +16,6 @@ export default function Timer({
 }: TimerProps) {
   const [timeRemaining, setTimeRemaining] = useState(initialTime);
   const [startTime, setStartTime] = useState(0);
-  const { game } = useConnectionStore();
-  const [lastRoundState, setLastRoundState] = useState(game?.roundStatus);
 
   // Handle the countdown logic with decisecond precision
   useEffect(() => {

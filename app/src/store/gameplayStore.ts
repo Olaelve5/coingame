@@ -5,51 +5,31 @@ import getPlayerId from "@/utils/getPlayerId";
 import { useConnectionStore } from "./connectionStore";
 
 interface GameplayStore {
-  startGame: (gameCode: string) => Promise<boolean>;
   startRound: () => Promise<boolean>;
-  prepareRound: () => Promise<boolean>;
+  prepareRound: (gameCode: string) => Promise<boolean>;
   endRound: () => Promise<boolean>;
   playCoins: (coins: number) => Promise<boolean>;
   changeIcon: (icon: string, color: string) => Promise<boolean>;
 }
 
 export const useGameplayStore = create<GameplayStore>((set, get) => ({
-  startGame: async (gameCode: string): Promise<boolean> => {
-    return new Promise((resolve) => {
-      const socket = getSocket();
-      socket.emit("startGame", gameCode, (response: { error?: string }) => {
-        if (response.error) {
-          resolve(false);
-        } else {
-          resolve(true);
-        }
-      });
-    });
-  },
-
   // Function to prepare for the next round
-  prepareRound: async () => {
-    const game = useConnectionStore.getState().game;
-
-    if (!game) {
-      console.error("No active game found");
-      return false;
-    }
-
+  prepareRound: async (gameCode: string): Promise<boolean> => {
     return new Promise((resolve) => {
       const socket = getSocket();
       socket.emit(
-        "prepareNextRound",
-        game.gameCode,
-        (response: { error?: string; success?: boolean }) => {
+        "prepareRound",
+        gameCode,
+        (response: { error?: string; game?: Game }) => {
           if (response.error) {
-            console.error("Failed to prepare next round:", response.error);
+            console.error("Failed to prepare round:", response.error);
             resolve(false);
-          } else if (response.success) {
-            resolve(true);
           } else {
-            console.error("Invalid response from server");
-            resolve(false);
+            // Update game state if provided
+            if (response.game) {
+              useConnectionStore.getState().setGame(response.game);
+            }
+            resolve(true);
           }
         }
       );
@@ -77,6 +57,7 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
         (response: { error?: string; success?: boolean; game?: Game }) => {
           if (response.error) {
             console.error("Failed to start next round:", response.error);
+            console.log(response);
             resolve(false);
           } else if (response.success && response.game) {
             // Update game state in connectionStore

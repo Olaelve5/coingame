@@ -1,10 +1,14 @@
 import { useGameplayStore } from "@/store/gameplayStore";
+import { useConnectionStore } from "@/store/connectionStore";
 
 const StartNewRoundButton = () => {
-  const { startRound, prepareRound } = useGameplayStore();
+  const { prepareRound } = useGameplayStore();
+  const { game } = useConnectionStore();
+
+  if (!game) return null;
 
   const handleStartRound = () => {
-    prepareRound();
+    prepareRound(game.gameCode);
   };
 
   return (

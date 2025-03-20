@@ -4,59 +4,43 @@ import { handleRoundEnd } from "../utils/roundUtils.js";
 const roundManageSocketHandler = (io, botManager) => {
   // Handle change game status
   io.on("connection", (socket) => {
-    // Start game handler --------------------------------------------------------------------------------------------->
-    socket.on("startGame", async (gameCode, callback) => {
+    // Prepare round handler --------------------------------------------------------------------------------------------->
+    socket.on("prepareRound", async (gameCode, callback) => {
       try {
-        console.log(`Starting game: ${gameCode}`);
-        const game = await Game.findOneAndUpdate(
-          { gameCode },
-          {
-            $set: {
-              status: "playing",
-              roundStatus: "active",
-              round: 1, // Start from round 1
-              "players.$[].playedInRound": false, // Reset all players' played status
-            },
-          },
-          { new: true }
-        );
+        // First check the current game status
+        const currentGame = await Game.findOne({ gameCode });
 
-        if (!game) {
-          console.error(`Game with code ${gameCode} not found`);
+        if (!currentGame) {
           if (callback) callback({ error: "Game not found" });
           return;
         }
 
-        // Emit the game start and round start events
-        io.to(gameCode).emit("gameUpdate", game);
+        // Different update logic depending on whether this is the first round or not
+        const update = {
+          $set: {
+            roundStatus: "preparing",
+            "players.$[].playedInRound": false,
+          },
+        };
 
-        io.to(gameCode).emit("roundStarted", {
-          roundNumber: game.round,
+        // For first round (game starting)
+        if (currentGame.status === "waiting") {
+          update.$set.status = "playing";
+          update.$set.round = 1;
+        }
+        // For subsequent rounds
+        else if (currentGame.status === "playing") {
+          update.$inc = { round: 1 };
+        }
+
+        const game = await Game.findOneAndUpdate({ gameCode }, update, {
+          new: true,
         });
 
-        // Trigger bot plays after a short delay
-        setTimeout(() => {
-          botManager.handleGameUpdate(game);
-        }, 2000); // Give players a couple seconds to see the round started
+        console.log(`Prepared round ${game.round} for game ${gameCode}`);
+        io.to(gameCode).emit("gameUpdate", game);
 
         if (callback) callback({ success: true, game });
-      } catch (error) {
-        console.error("Error changing game status:", error);
-        if (callback) callback({ error: "Failed to start game" });
-      }
-    });
-
-    // Handle prepare next round handler --------------------------------------------------------------------------------------------->@
-    socket.on("prepareNextRound", async (gameCode, callback) => {
-      try {
-        const game = await Game.findOneAndUpdate(
-          { gameCode },
-          { $set: { roundStatus: "preparing" } },
-          { new: true }
-        );
-
-        io.to(gameCode).emit("gameUpdate", game);
-        if (callback) callback({ success: true });
       } catch (error) {
         console.error("Error preparing round:", error);
         if (callback) callback({ error: "Failed to prepare round" });
@@ -68,7 +52,7 @@ const roundManageSocketHandler = (io, botManager) => {
       try {
         const currentGame = await Game.findOne({ gameCode });
 
-        if (!currentGame || currentGame.roundStatus !== "completed") {
+        if (!currentGame || currentGame.roundStatus !== "preparing") {
           if (callback) callback({ error: "Cannot start next round" });
           return;
         }
@@ -76,10 +60,8 @@ const roundManageSocketHandler = (io, botManager) => {
         const updatedGame = await Game.findOneAndUpdate(
           { gameCode },
           {
-            $inc: { round: 1 }, // Changed from currentRound to round
             $set: {
               roundStatus: "active",
-              "players.$[].playedInRound": false,
             },
           },
           { new: true }

@@ -13,8 +13,8 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
   const { game, joinAsHost, cleanup } = useConnectionStore();
   const { endRound, startRound } = useGameplayStore();
   const router = useRouter();
-  const [titleAnimationFinished, setTitleAnimationFinished] = useState(false);
   const [timerRunning, setTimerRunning] = useState(false);
+  const [titleAnimationFinished, setTitleAnimationFinished] = useState(false);
 
   useEffect(() => {
     const initGame = async () => {
@@ -28,37 +28,34 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
     return () => cleanup();
   }, [gameCode, joinAsHost, router, cleanup]);
 
-  useEffect(() => {
-    // Only proceed if title animation is finished
-    if (titleAnimationFinished && game?.roundStatus === "active") {
-      console.log("Title animation finished, scheduling round start...");
-
-      // Set a timeout to start the round after 1 second
-      const timeout = setTimeout(() => {
-        console.log("Starting new round...");
+  // Function to handle the start of the round
+  // This function is called from the RoundTitle component
+  // when the title animation is finished
+  const handleRoundStart = () => {
+    if (game?.roundStatus !== "active") {
+      setTitleAnimationFinished(true);
+      console.log("Starting round from animation completion");
+      setTimeout(() => {
+        console.log("Starting round after delay");
+        startRound();
         setTimerRunning(true);
-        startRound().then((success) => {
-          if (!success) {
-            console.error("Failed to start new round");
-          } else {
-            console.log("Round started successfully");
-          }
-        });
-      }, 1500); // 1.5 second delay
-
-      // Clean up timeout if component unmounts
-      return () => clearTimeout(timeout);
+      }, 2000); // Delay before starting the round
+    } else {
+      console.log("Round already active, skipping startRound call");
     }
-  }, [titleAnimationFinished, game?.roundStatus, startRound]);
+  };
+
+  // Useeffect to log game status and round status
+  useEffect(() => {
+    console.log("Game status:", game?.status);
+    console.log("Round status:", game?.roundStatus);
+  }, [game]);
 
   if (!game) return null;
 
   return (
     <div className={styles.container}>
-      <RoundTitle
-        titleAnimationFinished={titleAnimationFinished}
-        setTitleAnimationFinished={setTitleAnimationFinished}
-      />
+      <RoundTitle handleRoundStart={handleRoundStart} />
       {titleAnimationFinished && (
         <>
           <motion.div

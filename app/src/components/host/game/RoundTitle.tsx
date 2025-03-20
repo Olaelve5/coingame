@@ -2,31 +2,17 @@ import { motion } from "framer-motion";
 import { useConnectionStore } from "@/store/connectionStore";
 import { roundTitleAnimation } from "@/utils/animationUtils";
 import styles from "../styles/HostGame.module.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // Define the interface for the props
 interface RoundTitleProps {
-  titleAnimationFinished: boolean;
-  setTitleAnimationFinished: (finished: boolean) => void;
+  handleRoundStart: () => void;
 }
 
-export default function RoundTitle({
-  titleAnimationFinished,
-  setTitleAnimationFinished,
-}: RoundTitleProps) {
+export default function RoundTitle({ handleRoundStart }: RoundTitleProps) {
   const { game } = useConnectionStore();
   const [animationState, setAnimationState] = useState("initial");
-  const [roundNumber, setRoundNumber] = useState<number | undefined>(undefined);
-
-  useEffect(() => {
-    if (!game) return;
-
-    if (game.roundStatus === "active") {
-      setRoundNumber(game.round);
-    } else if (game.roundStatus === "completed") {
-      setRoundNumber(game.round + 1);
-    }
-  }, [game]);
+  const animationHandled = useRef(false); // Track if animation has been handled, to prevent multiple calls
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -46,13 +32,15 @@ export default function RoundTitle({
       animate={animationState}
       variants={roundTitleAnimation}
       onAnimationComplete={() => {
-        if (animationState === "normal") {
-          setTitleAnimationFinished(true);
+        if (animationState === "normal" && !animationHandled.current) {
+          console.log("Animation complete - handling round start");
+          animationHandled.current = true; // Set to true to prevent multiple calls
+          handleRoundStart();
         }
       }}
       className={styles.title}>
       <h2>Round</h2>
-      <h2 className={styles.number}>{roundNumber}</h2>
+      <h2 className={styles.number}>{game.round}</h2>
     </motion.div>
   );
 }

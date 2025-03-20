@@ -28,7 +28,7 @@ export default function GamePage() {
   }
   
 
-  if (game?.status !== "waiting") {
+  if (game?.status === "playing") {
     if (game?.roundStatus === "active" || game?.roundStatus === "preparing") {
       return <HostGame gameCode={params.gameCode as string} />;
     } else if (game?.roundStatus === "completed") {
