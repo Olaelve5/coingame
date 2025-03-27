@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "node server.js"
+    "start": "NODE_OPTIONS='--no-warnings' node --loader ts-node/esm server.js"
   },
   "dependencies": {
     "@types/express": "^5.0.0",

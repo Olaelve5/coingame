@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "module": "commonjs",
+    "target": "ES2022",
+    "module": "NodeNext",        // Changed from "commonjs"
+    "moduleResolution": "NodeNext", // Added
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
