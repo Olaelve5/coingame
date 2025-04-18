@@ -4,6 +4,7 @@ import { Player } from "@/models/Game";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "../styles/WaitingForPlayers.module.css";
 import PlayerDetails from "./PlayerDetails";
+import PlayerIcon from "@/components/host/game/PlayerIcon";
 
 interface WaitingForPlayersProps {
   player: Player;

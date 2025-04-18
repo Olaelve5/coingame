@@ -11,7 +11,7 @@ function QRCode({ gameCode }: QRCodeProps) {
   return (
     <div className="overflow-hidden w-fit rounded-2xl bg-blue-300 mt-6">
       <Canvas
-        text={`http://192.168.1.48:3000/join/${gameCode}`}
+        text={`http://192.168.1.106:3000/join/${gameCode}`}
         options={{
           type: "image/jpeg",
           quality: 0.3,

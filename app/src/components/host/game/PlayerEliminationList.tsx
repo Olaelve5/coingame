@@ -69,11 +69,11 @@ export default function PlayerEliminationList({
               <motion.li
                 key={player.id}
                 layout // This is crucial - it handles position changes automatically
-                initial={{ opacity: 0, height: 0, x: -200 }}
+                initial={{ opacity: 0, height: 0, scale: 0.5 }}
                 animate={{
                   opacity: 1,
                   height: "auto",
-                  x: 0,
+                  scale: 1,
                 }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{

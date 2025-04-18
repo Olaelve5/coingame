@@ -49,7 +49,7 @@ const PlayerGame = ({
     return <div>You have been eliminated</div>;
   }
 
-  if (game.roundStatus === "active" && player?.playedInRound) {
+  if (player?.playedInRound || game?.roundStatus != "active") {
     return (
       <div className={styles.container}>
         <WaitingForPlayers player={player} />

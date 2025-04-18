@@ -7,6 +7,7 @@ import HostLobby from "@/components/host/HostLobby";
 import HostGame from "@/components/host/game/HostGame";
 import { useConnectionStore } from "@/store/connectionStore";
 import RoundResult from "@/components/host/game/RoundResult";
+import WinningPage from "@/components/host/WinningPage";
 
 export default function GamePage() {
   const params = useParams(); // Get URL parameters
@@ -34,6 +35,10 @@ export default function GamePage() {
     } else if (game?.roundStatus === "completed") {
       return <RoundResult />;
     }
+  }
+
+  if (game?.status === "finished") {
+    return <WinningPage />;
   }
 
   return <HostLobby gameCode={params.gameCode as string} />;
