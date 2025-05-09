@@ -12,7 +12,7 @@ export default function TestAnimations() {
     <div className={styles.container}>
       <RoundTitle handleRoundStart={() => console.log("Round started")} />
       <Timer timerRunning={timerRunning} testingSignal={testingSignal} />
-      <PlayerPercentage />
+      <PlayerPercentage testingSignal={testingSignal} />
       <button
         style={{ position: "absolute", top: "10px", left: "10px" }}
         onClick={() => {

@@ -31,7 +31,7 @@ export const useTimerAnimations = () => {
     await animate(
       scope.current,
       {
-        scale: 1.12,
+        scale: 1.08,
         x: xKeyframes,
       },
       {

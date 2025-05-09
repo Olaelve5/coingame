@@ -2,14 +2,24 @@ import { useConnectionStore } from "@/store/connectionStore";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import styles from "../styles/PlayerPercentage.module.css";
+import { usePlayerPercentageAnimation } from "@/utils/animations/playerPercentageAnimations";
+import { relative } from "path";
 
 interface PlayerPercentage {
   testingSignal?: boolean;
 }
 
-const PlayerPercentage = ({testingSignal}: PlayerPercentage) => {
+const PlayerPercentage = ({ testingSignal }: PlayerPercentage) => {
   const { game } = useConnectionStore();
   const [percentage, setPercentage] = useState(0);
+  const {
+    scope,
+    textScope,
+    playAppearAnimation,
+    playBaloonPopAnimation,
+    playTextExitAnimation,
+    playTextAppearAnimation,
+  } = usePlayerPercentageAnimation();
 
   useEffect(() => {
     if (game) {
@@ -23,38 +33,50 @@ const PlayerPercentage = ({testingSignal}: PlayerPercentage) => {
     }
   }, [game]);
 
-  // if (!game) return null;
+  // Play the appear animation when the component is mounted
+  useEffect(() => {
+    playAppearAnimation();
+    playTextAppearAnimation();
+  }, []);
+
+  useEffect(() => {
+    if (testingSignal) {
+      playBaloonPopAnimation();
+      playTextExitAnimation();
+    }
+  }, [testingSignal]);
 
   const formattedPercentage = Math.round(percentage);
 
+  // Disabled the game check for testing purposes
+  // if (!game) return null;
+
   return (
-    <motion.div
-      initial={{ scale: 0.5, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{
-        delay: 0.6,
-        duration: 0.5,
-        type: "spring",
-        bounce: 0.4,
-      }}>
+    <div>
       <div className={styles.container}>
-        <div className={styles.barContainer}>
+        <motion.div
+          ref={scope}
+          style={{ scale: 0.5, opacity: 0 }}
+          className={styles.barContainer}>
           <motion.div
             className={styles.bar}
             initial={{ height: 0 }}
-            animate={{ height: `${50 + formattedPercentage}%` }}
+            animate={{ height: `${formattedPercentage}%` }}
             transition={{
               duration: 0.5,
               type: "spring",
               bounce: 0.35,
             }}></motion.div>
-        </div>
-        <div className={styles.textContainer}>
+        </motion.div>
+        <motion.div
+          ref={textScope}
+          className={styles.textContainer}
+          style={{ opacity: 0}}>
           <h2 className={styles.percentageText}>{formattedPercentage}%</h2>
           <h2 className={styles.text}>have played</h2>
-        </div>
+        </motion.div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
