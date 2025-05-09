@@ -3,10 +3,9 @@ import { useGameplayStore } from "@/store/gameplayStore";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Timer from "./Timer";
-import PlayerPercentage from "../PlayerPercentage";
+import PlayerPercentage from "./PlayerPercentage";
 import PlayersIconGrid from "./PlayersIconGrid";
 import styles from "../styles/HostGame.module.css";
-import { motion } from "framer-motion";
 import RoundTitle from "./RoundTitle";
 
 const HostGame = ({ gameCode }: { gameCode: string }) => {
@@ -58,28 +57,8 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
       <RoundTitle handleRoundStart={handleRoundStart} />
       {titleAnimationFinished && (
         <>
-          <motion.div
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{
-              delay: 0.3,
-              duration: 0.5,
-              type: "spring",
-              bounce: 0.4,
-            }}>
-            <Timer onTimeUp={endRound} timerRunning={timerRunning} />
-          </motion.div>
-          <motion.div
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{
-              delay: 0.6,
-              duration: 0.5,
-              type: "spring",
-              bounce: 0.4,
-            }}>
-            <PlayerPercentage />
-          </motion.div>
+          <Timer onTimeUp={endRound} timerRunning={timerRunning} />
+          <PlayerPercentage />
           <PlayersIconGrid />
         </>
       )}

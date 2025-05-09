@@ -163,21 +163,6 @@ class BotManager {
 
       // Notify all clients of the game update
       this.io.to(gameCode).emit("gameUpdate", updatedGame);
-
-      // Check if all players have now played
-      const allPlayed = updatedGame.players
-        .filter((p) => !p.eliminated)
-        .every((p) => p.playedInRound);
-
-      if (allPlayed) {
-        console.log(
-          `All players have played in game ${gameCode}. Ending round.`
-        );
-        // Import and use the handleRoundEnd function directly
-        const { handleRoundEnd } = await import("../utils/roundUtils.js");
-        const gameWithResults = await handleRoundEnd(gameCode, updatedGame);
-        this.io.to(gameCode).emit("gameUpdate", gameWithResults);
-      }
     } catch (error) {
       console.error(`Error executing bot play: ${error.message}`);
     }

@@ -1,21 +1,26 @@
 import { useState, useEffect } from "react";
 import styles from "../styles/Timer.module.css";
-import { useConnectionStore } from "@/store/connectionStore";
 import AnimatedDigit from "@/components/universal/AnimateDigit";
+import { motion } from "framer-motion";
+import { useTimerAnimations } from "@/utils/animations/timerAnimations";
 
 interface TimerProps {
-  initialTime?: number; // Initial time in seconds, default 60
-  onTimeUp?: () => void; // Callback when timer reaches zero
-  timerRunning: boolean; // Optional prop to control the timer state
+  initialTime?: number;
+  onTimeUp?: () => void;
+  timerRunning: boolean;
+  testingSignal?: boolean;
 }
 
 export default function Timer({
   initialTime = 20,
   onTimeUp,
   timerRunning = false,
+  testingSignal = false,
 }: TimerProps) {
   const [timeRemaining, setTimeRemaining] = useState(initialTime);
   const [startTime, setStartTime] = useState(0);
+  const { scope, playAppearAnimation, playBaloonPopAnimation } =
+    useTimerAnimations();
 
   // Handle the countdown logic with decisecond precision
   useEffect(() => {
@@ -31,9 +36,9 @@ export default function Timer({
 
         if (newTimeRemaining <= 0) {
           clearInterval(interval);
-          if (onTimeUp) onTimeUp(); // Uncomment if you want to call onTimeUp when time is up
+          //if (onTimeUp) onTimeUp(); // Call the onTimeUp function if provided
         }
-      }, 100); // Update every 100ms (decisecond)
+      }, 100);
     }
 
     return () => clearInterval(interval);
@@ -46,6 +51,17 @@ export default function Timer({
     }
   }, [timerRunning, initialTime]);
 
+  // Play the appear animation when the timer is mounted
+  useEffect(() => {
+    playAppearAnimation();
+  }, []);
+
+  useEffect(() => {
+    if (testingSignal) {  
+      playBaloonPopAnimation();
+    }
+  }, [testingSignal]);
+
   // Format the time as minutes:seconds (M:SS)
   const formatTime = (time: number) => {
     const seconds = Math.floor(time % 60);
@@ -55,14 +71,16 @@ export default function Timer({
   const timeString = formatTime(timeRemaining);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.timer}>
-        <div className={styles.timerText}>
-          {timeString.split("").map((digit, index) => (
-            <AnimatedDigit key={`digit-${index}`} value={digit} />
-          ))}
+    <motion.div ref={scope} style={{ scale: 0.5, opacity: 0 }}>
+      <div className={styles.container}>
+        <div className={styles.timer}>
+          <div className={styles.timerText}>
+            {timeString.split("").map((digit, index) => (
+              <AnimatedDigit key={`digit-${index}`} value={digit} />
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
