@@ -1,14 +1,16 @@
 import { Player } from "@/models/Game";
-import { motion, useAnimate } from "framer-motion";
+import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getColor, getIcon } from "@/utils/iconUtils";
 import styles from "../styles/PlayersIconGrid.module.css";
-import { useEffect, useRef } from "react";
-import { useConnectionStore } from "@/store/connectionStore";
+import { useEffect, useState } from "react";
+import { usePlayerIconAnimations } from "@/utils/animations/playerIconAnimations";
+import PlayerIconParticles from "./PlayerIconParticle";
 
 interface PlayerIconProps {
   player: Player;
   index: number;
+  testingSignal?: boolean;
   gridPosition: {
     gridRow?: number;
     gridColumn?: number;
@@ -19,43 +21,28 @@ export default function PlayerIcon({
   player,
   index,
   gridPosition,
+  testingSignal,
 }: PlayerIconProps) {
-  const [scope, animate] = useAnimate();
-  const currentRotation = useRef(0);
-
-  const animateIcon = () => {
-    // Define a sequence of animations
-    animate([
-      // First, tilt slightly to the left
-      [
-        scope.current,
-        { rotate: currentRotation.current - 15 },
-        { duration: 0.5 },
-      ],
-
-      // Then perform the full rotation
-      [
-        scope.current,
-        { rotate: currentRotation.current + 360 },
-        { duration: 1, type: "spring", bounce: 0.5 },
-      ],
-    ]);
-
-    currentRotation.current = currentRotation.current + 360;
-  };
+  const { scope, playExitAnimation, playRotateAnimation } =
+    usePlayerIconAnimations();
 
   useEffect(() => {
     // Set up interval for random animation
     const interval = setInterval(() => {
       // 1 in 10 chance
       if (Math.random() < 0.1) {
-        animateIcon();
+        playRotateAnimation();
       }
-    }, 1500); // Check every 1.5 seconds
+    }, 1500);
 
-    // Clean up interval when component unmounts
     return () => clearInterval(interval);
-  }, []); // Empty dependency array so it only runs once on mount
+  }, []);
+
+  useEffect(() => {
+    if (testingSignal) {
+      playExitAnimation();
+    }
+  }, [testingSignal]);
 
   return (
     <>
@@ -73,6 +60,7 @@ export default function PlayerIcon({
           color={getColor(player.color)}
         />
       </motion.div>
+      {testingSignal && <PlayerIconParticles color={player.color} />}
     </>
   );
 }
