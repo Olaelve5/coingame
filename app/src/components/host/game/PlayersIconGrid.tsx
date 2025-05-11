@@ -3,38 +3,47 @@ import { useConnectionStore } from "@/store/connectionStore";
 import PlayerIcon from "./PlayerIcon";
 import { useEffect, useState, useRef } from "react";
 import { Player } from "@/models/Game";
+import { findPossibleEliminations } from "@/utils/eliminationOfPlayersUtils";
 
-export default function PlayersIconGrid() {
+interface PlayersIconGridProps {
+  startEliminationAnimations?: boolean;
+}
+
+export default function PlayersIconGrid({
+  startEliminationAnimations,
+}: PlayersIconGridProps) {
   const { game } = useConnectionStore();
+  const [safePlayers, setSafePlayers] = useState<Player[]>([]);
+  const [playersInDanger, setPlayersInDanger] = useState<Player[]>([]);
+
   const players =
     game?.players.filter(
       (player) => !player.eliminated && player.playedInRound
     ) || [];
 
-  // Store player positions
   const [playerPositions, setPlayerPositions] = useState<{
     [id: string]: { row: number; col: number };
   }>({});
 
   const rows = 12;
   const columns = 18;
-  
+
   // Use a ref to track player IDs we've already positioned
   const positionedPlayersRef = useRef(new Set());
 
   useEffect(() => {
     if (!game || players.length === 0) return;
-    
-    // Get the game code for dependency tracking
+
     const gameCode = game.gameCode;
-    
+
     // Get current player IDs
-    const currentPlayerIds = new Set(players.map(p => p.id));
-    
+    const currentPlayerIds = new Set(players.map((p) => p.id));
+
     // Only update positions if we have new players or game changed
-    const needsUpdate = players.some(p => !positionedPlayersRef.current.has(p.id)) || 
-                        Object.keys(playerPositions).some(id => !currentPlayerIds.has(id));
-    
+    const needsUpdate =
+      players.some((p) => !positionedPlayersRef.current.has(p.id)) ||
+      Object.keys(playerPositions).some((id) => !currentPlayerIds.has(id));
+
     if (!needsUpdate) return;
 
     // Create a copy of existing positions
@@ -93,7 +102,7 @@ export default function PlayersIconGrid() {
     });
 
     setPlayerPositions(newPositions);
-  }, [game?.gameCode, players]); // Only depend on gameCode and players array, not playerPositions
+  }, [game?.gameCode, players]);
 
   if (!game) {
     return null;
@@ -110,6 +119,14 @@ export default function PlayersIconGrid() {
     };
   };
 
+  useEffect(() => {
+    if (startEliminationAnimations) {
+      const { safePlayers, playersInDanger } = findPossibleEliminations(game);
+      setSafePlayers(safePlayers);
+      setPlayersInDanger(playersInDanger);
+    }
+  }, [startEliminationAnimations]);
+
   return (
     <div className={styles.container}>
       {players.map((player, index) => {
@@ -119,6 +136,9 @@ export default function PlayersIconGrid() {
             player={player}
             index={index}
             gridPosition={getGridPosition(player)}
+            playerIsSafe={safePlayers.some((p) => p.id === player.id)}
+            playerIsInDanger={playersInDanger.some((p) => p.id === player.id)}
+            animationDelay={0.5 + index * 0.2}
           />
         );
       })}

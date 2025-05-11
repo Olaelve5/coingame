@@ -18,8 +18,13 @@ export const sortPlayersByCoinsPlayed = (game: Game) => {
   });
 };
 
-export const findPossibleEliminations = (game: Game): Player[] => {
-  if (!game) return [];
+interface EliminationResult {
+  playersInDanger: Player[];
+  safePlayers: Player[];
+}
+
+export const findPossibleEliminations = (game: Game): EliminationResult => {
+  if (!game) return { safePlayers: [], playersInDanger: [] };
 
   const players = sortPlayersByCoinsPlayed(game);
   const possibleEliminations: Player[] = [players[players.length - 1]]; // Start with the player with the least coins played
@@ -52,5 +57,10 @@ export const findPossibleEliminations = (game: Game): Player[] => {
     possibleEliminations.push(...randomPlayers);
   }
 
-  return possibleEliminations;
+  return {
+    playersInDanger: possibleEliminations,
+    safePlayers: players.filter(
+      (player) => !possibleEliminations.includes(player)
+    ),
+  };
 };

@@ -84,43 +84,55 @@ const roundManageSocketHandler = (io, botManager) => {
       }
     });
 
-    // Handle end round --------------------------------------------------------------------------------------------->
-    // Players who are not eliminated and have not played in the round
-    // will play 0 coins and be marked as played in the round
-    socket.on("endRound", async (gameCode, callback) => {
+    socket.on("finalizeRoundPlays", async (gameCode, callback) => {
       try {
         const game = await Game.findOne({ gameCode });
 
-        if (!game) {
-          console.error(`Game with code ${gameCode} not found`);
-          if (callback) callback({ error: "Game not found" });
-          return;
-        }
-
+        // Make non-played players play 0 coins
         const notPlayedPlayers = game.players.filter(
           (player) => !player.playedInRound && !player.eliminated
         );
 
-        // Set default plays for these players (0 coins)
+        if (notPlayedPlayers.length === 0) {
+          console.log("All players have played in this round.");
+          if (callback) callback({ success: true, game });
+          return;
+        }
+
+        // Update these players to have played 0 coins
         const playerUpdates = notPlayedPlayers.map((player) => ({
           updateOne: {
-            filter: {
-              gameCode,
-              "players._id": player._id,
-            },
+            filter: { gameCode, "players._id": player._id },
             update: {
               $set: {
                 "players.$.playedInRound": true,
-                "players.$.coinsPlayed": 0, // Default to playing 0 coins
+                "players.$.roundHistory": [
+                  ...player.roundHistory,
+                  { round: game.round, coinsPlayed: 0 },
+                ],
               },
             },
           },
         }));
 
-        // Execute all the player updates if there are any
         if (playerUpdates.length > 0) {
           await Game.bulkWrite(playerUpdates);
         }
+
+        const updatedGame = await Game.findOne({ gameCode });
+        io.to(gameCode).emit("gameUpdate", updatedGame);
+
+        if (callback) callback({ success: true, game: updatedGame });
+      } catch (error) {
+        console.error("Error finalizing round plays:", error);
+        if (callback) callback({ error: "Failed to finalize round plays" });
+      }
+    });
+
+    // Handle end round - eliminate players --------------------------------------------------------------------------------------------->
+    socket.on("endRound", async (gameCode, callback) => {
+      try {
+        const game = await Game.findOne({ gameCode });
 
         // Handle round end logic
         const updatedGame = await handleRoundEnd(gameCode, game);

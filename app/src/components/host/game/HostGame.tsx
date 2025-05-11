@@ -7,14 +7,15 @@ import PlayerPercentage from "./PlayerPercentage";
 import PlayersIconGrid from "./PlayersIconGrid";
 import styles from "../styles/HostGame.module.css";
 import RoundTitle from "./RoundTitle";
-import { findPossibleEliminations } from "@/utils/eliminationOfPlayersUtils";
 
 const HostGame = ({ gameCode }: { gameCode: string }) => {
   const { game, joinAsHost, cleanup } = useConnectionStore();
-  const { endRound, startRound } = useGameplayStore();
+  const { endRound, finalizeRoundPlays, startRound } = useGameplayStore();
   const router = useRouter();
   const [timerRunning, setTimerRunning] = useState(false);
   const [titleAnimationFinished, setTitleAnimationFinished] = useState(false);
+  const [startEliminationAnimations, setStartEliminationAnimations] =
+    useState(false);
 
   useEffect(() => {
     const initGame = async () => {
@@ -43,13 +44,17 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
     }
   };
 
-  const handleRoundEnd = () => {
+  const handleRoundEnd = async () => {
     if (!game) return;
-    const possibleEliminations = findPossibleEliminations(game);
 
-    // endRound()
+    const startElimination = await finalizeRoundPlays();
 
-    console.log("Possible eliminations:", possibleEliminations);
+    if (!startElimination) {
+      console.error("Failed to finalize round plays");
+      return;
+    }
+
+    setStartEliminationAnimations(true);
   };
 
   if (!game) return null;
@@ -59,9 +64,15 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
       <RoundTitle handleRoundStart={handleRoundStart} />
       {titleAnimationFinished && (
         <>
-          <Timer onTimeUp={handleRoundEnd} timerRunning={timerRunning} />
-          <PlayerPercentage />
-          <PlayersIconGrid />
+          <Timer
+            onTimeUp={handleRoundEnd}
+            timerRunning={timerRunning}
+            startEliminationAnimations={startEliminationAnimations}
+          />
+          <PlayerPercentage startEliminationAnimations={startEliminationAnimations}/>
+          <PlayersIconGrid
+            startEliminationAnimations={startEliminationAnimations}
+          />
         </>
       )}
     </div>

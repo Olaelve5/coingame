@@ -8,6 +8,7 @@ interface GameplayStore {
   startRound: () => Promise<boolean>;
   prepareRound: (gameCode: string) => Promise<boolean>;
   endRound: () => Promise<boolean>;
+  finalizeRoundPlays: () => Promise<boolean>;
   playCoins: (coins: number) => Promise<boolean>;
   changeIcon: (icon: string, color: string) => Promise<boolean>;
 }
@@ -72,7 +73,34 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
     });
   },
 
-  // Function to end round
+  // Function to signal to server to make all players play their coins
+  // if they haven't already
+  finalizeRoundPlays: async () => {
+    const game = useConnectionStore.getState().game;
+    if (!game) return false;
+
+    return new Promise((resolve) => {
+      const socket = getSocket();
+      socket.emit(
+        "finalizeRoundPlays",
+        game.gameCode,
+        (response: { error?: string; success?: boolean; game?: Game }) => {
+          if (response.error) {
+            console.error("Failed to finalize round plays:", response.error);
+            resolve(false);
+          } else if (response.success && response.game) {
+            useConnectionStore.getState().setGame(response.game);
+            resolve(true);
+          } else {
+            console.error("Invalid response from server");
+            resolve(false);
+          }
+        }
+      );
+    });
+  },
+
+  // Function to end round and eliminate players
   endRound: async () => {
     const game = useConnectionStore.getState().game;
 

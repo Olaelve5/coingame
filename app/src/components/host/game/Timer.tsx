@@ -9,6 +9,7 @@ interface TimerProps {
   onTimeUp?: () => void;
   timerRunning: boolean;
   testingSignal?: boolean;
+  startEliminationAnimations?: boolean;
 }
 
 export default function Timer({
@@ -16,9 +17,11 @@ export default function Timer({
   onTimeUp,
   timerRunning = false,
   testingSignal = false,
+  startEliminationAnimations = false,
 }: TimerProps) {
   const [timeRemaining, setTimeRemaining] = useState(initialTime);
   const [startTime, setStartTime] = useState(0);
+  const [timeUpTriggered, setTimeUpTriggered] = useState(false);
   const { scope, playAppearAnimation, playBaloonPopAnimation } =
     useTimerAnimations();
 
@@ -34,7 +37,12 @@ export default function Timer({
 
         setTimeRemaining(newTimeRemaining);
 
-        if (newTimeRemaining <= 0) {
+        if (
+          newTimeRemaining <= 0 &&
+          !startEliminationAnimations &&
+          !timeUpTriggered
+        ) {
+          setTimeUpTriggered(true);
           clearInterval(interval);
           if (onTimeUp) onTimeUp(); // Call the onTimeUp function if provided
         }
@@ -57,10 +65,10 @@ export default function Timer({
   }, []);
 
   useEffect(() => {
-    if (testingSignal) {  
+    if (startEliminationAnimations || testingSignal) {
       playBaloonPopAnimation();
     }
-  }, [testingSignal]);
+  }, [testingSignal, startEliminationAnimations]);
 
   // Format the time as minutes:seconds (M:SS)
   const formatTime = (time: number) => {

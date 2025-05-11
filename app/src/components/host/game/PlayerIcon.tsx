@@ -11,6 +11,9 @@ interface PlayerIconProps {
   player: Player;
   index: number;
   testingSignal?: boolean;
+  playerIsSafe?: boolean;
+  playerIsInDanger?: boolean;
+  animationDelay?: number;
   gridPosition: {
     gridRow?: number;
     gridColumn?: number;
@@ -22,9 +25,13 @@ export default function PlayerIcon({
   index,
   gridPosition,
   testingSignal,
+  playerIsSafe,
+  playerIsInDanger,
+  animationDelay = 0,
 }: PlayerIconProps) {
   const { scope, playExitAnimation, playRotateAnimation } =
     usePlayerIconAnimations();
+  const [showParticles, setShowParticles] = useState(false);
 
   useEffect(() => {
     // Set up interval for random animation
@@ -39,13 +46,22 @@ export default function PlayerIcon({
   }, []);
 
   useEffect(() => {
-    if (testingSignal) {
-      playExitAnimation();
+    if (playerIsSafe || testingSignal) {
+      setTimeout(() => {
+        setShowParticles(true);
+        playExitAnimation();
+      }, animationDelay * 1000);
     }
-  }, [testingSignal]);
+  }, [testingSignal, playerIsSafe, playerIsInDanger]);
 
   return (
-    <>
+    <div
+      className={styles.playerIconWrapper}
+      style={{
+        position: "relative",
+        gridRow: gridPosition.gridRow,
+        gridColumn: gridPosition.gridColumn,
+      }}>
       <motion.div
         key={player.id}
         ref={scope}
@@ -60,7 +76,7 @@ export default function PlayerIcon({
           color={getColor(player.color)}
         />
       </motion.div>
-      {testingSignal && <PlayerIconParticles color={player.color} />}
-    </>
+      {showParticles && <PlayerIconParticles color={player.color} />}
+    </div>
   );
 }

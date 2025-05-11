@@ -3,13 +3,16 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import styles from "../styles/PlayerPercentage.module.css";
 import { usePlayerPercentageAnimation } from "@/utils/animations/playerPercentageAnimations";
-import { relative } from "path";
 
 interface PlayerPercentage {
   testingSignal?: boolean;
+  startEliminationAnimations?: boolean;
 }
 
-const PlayerPercentage = ({ testingSignal }: PlayerPercentage) => {
+const PlayerPercentage = ({
+  testingSignal,
+  startEliminationAnimations,
+}: PlayerPercentage) => {
   const { game } = useConnectionStore();
   const [percentage, setPercentage] = useState(0);
   const {
@@ -40,16 +43,16 @@ const PlayerPercentage = ({ testingSignal }: PlayerPercentage) => {
   }, []);
 
   useEffect(() => {
-    if (testingSignal) {
+    if (testingSignal || startEliminationAnimations) {
       playBaloonPopAnimation();
       playTextExitAnimation();
     }
-  }, [testingSignal]);
+  }, [testingSignal, startEliminationAnimations]);
 
   const formattedPercentage = Math.round(percentage);
 
   // Disabled the game check for testing purposes
-  // if (!game) return null;
+  if (!game) return null;
 
   return (
     <div>
@@ -71,7 +74,7 @@ const PlayerPercentage = ({ testingSignal }: PlayerPercentage) => {
         <motion.div
           ref={textScope}
           className={styles.textContainer}
-          style={{ opacity: 0}}>
+          style={{ opacity: 0 }}>
           <h2 className={styles.percentageText}>{formattedPercentage}%</h2>
           <h2 className={styles.text}>have played</h2>
         </motion.div>
