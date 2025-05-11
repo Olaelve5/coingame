@@ -1,6 +1,6 @@
 import { useConnectionStore } from "@/store/connectionStore";
 import { motion, AnimatePresence } from "framer-motion";
-import { sortPlayersByCoinsPlayed } from "@/utils/sortPlayerUtils";
+import { sortPlayersByCoinsPlayed } from "@/utils/eliminationOfPlayersUtils";
 import { useEffect, useMemo, useState } from "react";
 import { Player } from "@/models/Game";
 import { getIcon, getColor } from "@/utils/iconUtils";

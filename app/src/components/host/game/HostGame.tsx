@@ -7,6 +7,7 @@ import PlayerPercentage from "./PlayerPercentage";
 import PlayersIconGrid from "./PlayersIconGrid";
 import styles from "../styles/HostGame.module.css";
 import RoundTitle from "./RoundTitle";
+import { findPossibleEliminations } from "@/utils/eliminationOfPlayersUtils";
 
 const HostGame = ({ gameCode }: { gameCode: string }) => {
   const { game, joinAsHost, cleanup } = useConnectionStore();
@@ -33,9 +34,7 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
   const handleRoundStart = () => {
     if (game?.roundStatus !== "active") {
       setTitleAnimationFinished(true);
-      console.log("Starting round from animation completion");
       setTimeout(() => {
-        console.log("Starting round after delay");
         startRound();
         setTimerRunning(true);
       }, 2000); // Delay before starting the round
@@ -44,11 +43,14 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
     }
   };
 
-  // Useeffect to log game status and round status
-  useEffect(() => {
-    console.log("Game status:", game?.status);
-    console.log("Round status:", game?.roundStatus);
-  }, [game]);
+  const handleRoundEnd = () => {
+    if (!game) return;
+    const possibleEliminations = findPossibleEliminations(game);
+
+    // endRound()
+
+    console.log("Possible eliminations:", possibleEliminations);
+  };
 
   if (!game) return null;
 
@@ -57,7 +59,7 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
       <RoundTitle handleRoundStart={handleRoundStart} />
       {titleAnimationFinished && (
         <>
-          <Timer onTimeUp={endRound} timerRunning={timerRunning} />
+          <Timer onTimeUp={handleRoundEnd} timerRunning={timerRunning} />
           <PlayerPercentage />
           <PlayersIconGrid />
         </>

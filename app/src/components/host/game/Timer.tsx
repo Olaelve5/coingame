@@ -36,7 +36,7 @@ export default function Timer({
 
         if (newTimeRemaining <= 0) {
           clearInterval(interval);
-          //if (onTimeUp) onTimeUp(); // Call the onTimeUp function if provided
+          if (onTimeUp) onTimeUp(); // Call the onTimeUp function if provided
         }
       }, 100);
     }
