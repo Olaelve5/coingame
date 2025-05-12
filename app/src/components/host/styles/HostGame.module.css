@@ -9,6 +9,16 @@
     height: 100dvh;
 }
 
+.roundTitleContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
 .title {
     font-size: 1.5rem;
     font-weight: 700;
@@ -24,8 +34,23 @@
     }
 }
 
+.subTitle {
+    font-size: 1.2rem;
+    font-weight: 700;
+    font-family: 'bungee', sans-serif;
+    position: absolute;
+    opacity: 0;
+    display: flex;
+    gap: 0.5rem;
+
+    .playerCount {
+        color: var(--accent);
+    }
+}
+
 .buttonContainer {
     position: absolute;
     right: 2rem;
     top: 2rem;
 }
+

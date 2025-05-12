@@ -82,9 +82,9 @@ const PlayerPercentage = ({
       </div>
       {(startEliminationAnimations || testingSignal) && (
         <div className={styles.particleContainer}>
-          <PlayerIconParticles color="yellow" distance={1.3} />
-          <PlayerIconParticles color="orangeRed" distance={2} />
-          <PlayerIconParticles color="yellow" distance={1.5} />
+          <PlayerIconParticles color="yellow" distance={1.6} />
+          <PlayerIconParticles color="green" distance={1.1} />
+          <PlayerIconParticles color="cyan" distance={1.2} />
         </div>
       )}
     </div>

@@ -54,7 +54,9 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
       return;
     }
 
-    setStartEliminationAnimations(true);
+    setTimeout(() => {
+      setStartEliminationAnimations(true);
+    }, 1000); // Delay before ending the round
   };
 
   if (!game) return null;
@@ -69,7 +71,9 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
             timerRunning={timerRunning}
             startEliminationAnimations={startEliminationAnimations}
           />
-          <PlayerPercentage startEliminationAnimations={startEliminationAnimations}/>
+          <PlayerPercentage
+            startEliminationAnimations={startEliminationAnimations}
+          />
           <PlayersIconGrid
             startEliminationAnimations={startEliminationAnimations}
           />

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useConnectionStore } from "@/store/connectionStore";
-import { roundTitleAnimation } from "@/utils/animationUtils";
+import { roundTitleAnimation, subTitleAnimation } from "@/utils/animationUtils";
 import styles from "../styles/HostGame.module.css";
 import { useEffect, useRef, useState } from "react";
 
@@ -19,28 +19,40 @@ export default function RoundTitle({ handleRoundStart }: RoundTitleProps) {
       setAnimationState("big"); // Animate to 'big' after a short delay
       setTimeout(() => {
         setAnimationState("normal"); // Animate to 'normal' after 'big' state
-      }, 2000); // Delay in 'big' state (adjust as needed)
-    }, 1000); // Initial delay before starting animation (adjust as needed)
+      }, 3000); // Delay in 'big' state
+    }, 1000); // Initial delay before starting animation
 
     return () => clearTimeout(timer); // Clear timeout if component unmounts
   }, []);
 
-  if (!game) return null;
+  const playerCount = game?.players.filter(
+    (player) => !player.eliminated
+  ).length;
+
+  // if (!game) return null;
 
   return (
-    <motion.div
-      animate={animationState}
-      variants={roundTitleAnimation}
-      onAnimationComplete={() => {
-        if (animationState === "normal" && !animationHandled.current) {
-          console.log("Animation complete - handling round start");
-          animationHandled.current = true; // Set to true to prevent multiple calls
-          handleRoundStart();
-        }
-      }}
-      className={styles.title}>
-      <h2>Round</h2>
-      <h2 className={styles.number}>{game.round}</h2>
-    </motion.div>
+    <div className={styles.roundTitleContainer}>
+      <motion.div
+        animate={animationState}
+        variants={roundTitleAnimation}
+        onAnimationComplete={() => {
+          if (animationState === "normal" && !animationHandled.current) {
+            animationHandled.current = true;
+            handleRoundStart();
+          }
+        }}
+        className={styles.title}>
+        <h2>Round</h2>
+        <h2 className={styles.number}>{game?.round || 1}</h2>
+      </motion.div>
+      <motion.div
+        className={styles.subTitle}
+        animate={animationState}
+        variants={subTitleAnimation}>
+        <h3 className={styles.playerCount}>20</h3>
+        <h3>players remaining</h3>
+      </motion.div>
+    </div>
   );
 }
