@@ -37,7 +37,7 @@ export default function PlayerIcon({
     // Set up interval for random animation
     const interval = setInterval(() => {
       // 1 in 10 chance
-      if (Math.random() < 0.1) {
+      if (Math.random() < 0.1 && !playerIsSafe && !playerIsInDanger) {
         playRotateAnimation();
       }
     }, 1500);

@@ -3,6 +3,7 @@ import styles from "../styles/Timer.module.css";
 import AnimatedDigit from "@/components/universal/AnimateDigit";
 import { motion } from "framer-motion";
 import { useTimerAnimations } from "@/utils/animations/timerAnimations";
+import PlayerIconParticles from "./PlayerIconParticle";
 
 interface TimerProps {
   initialTime?: number;
@@ -79,16 +80,25 @@ export default function Timer({
   const timeString = formatTime(timeRemaining);
 
   return (
-    <motion.div ref={scope} style={{ scale: 0.5, opacity: 0 }}>
-      <div className={styles.container}>
-        <div className={styles.timer}>
-          <div className={styles.timerText}>
-            {timeString.split("").map((digit, index) => (
-              <AnimatedDigit key={`digit-${index}`} value={digit} />
-            ))}
+    <div style={{ position: "relative" }}>
+      <motion.div ref={scope} style={{ scale: 0.5, opacity: 0 }}>
+        <div className={styles.container}>
+          <div className={styles.timer}>
+            <div className={styles.timerText}>
+              {timeString.split("").map((digit, index) => (
+                <AnimatedDigit key={`digit-${index}`} value={digit} />
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+      {(startEliminationAnimations || testingSignal) && (
+        <div className={styles.particleContainer}>
+          <PlayerIconParticles color="cyan" distance={1.3}/>
+          <PlayerIconParticles color="azure" distance={2}/>
+          <PlayerIconParticles color="violet" distance={1.5}/>
+        </div>
+      )}
+    </div>
   );
 }

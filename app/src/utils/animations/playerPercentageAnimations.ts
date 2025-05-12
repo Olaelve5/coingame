@@ -4,9 +4,9 @@ export const usePlayerPercentageAnimation = () => {
   const [scope, animate] = useAnimate();
   const [textScope, textAnimate] = useAnimate();
 
-  const playAppearAnimation = () => {
-    animate(scope.current, { scale: 0.5, opacity: 0 }, { duration: 0 });
-    animate(
+  const playAppearAnimation = async () => {
+    await animate(scope.current, { scale: 0.5, opacity: 0 }, { duration: 0 });
+    await animate(
       scope.current,
       { scale: 1, opacity: 1 },
       { delay: 0.6, duration: 0.5, type: "spring", bounce: 0.4 }

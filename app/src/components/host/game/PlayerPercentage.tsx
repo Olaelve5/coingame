@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import styles from "../styles/PlayerPercentage.module.css";
 import { usePlayerPercentageAnimation } from "@/utils/animations/playerPercentageAnimations";
+import PlayerIconParticles from "./PlayerIconParticle";
 
 interface PlayerPercentage {
   testingSignal?: boolean;
@@ -52,7 +53,7 @@ const PlayerPercentage = ({
   const formattedPercentage = Math.round(percentage);
 
   // Disabled the game check for testing purposes
-  if (!game) return null;
+  // if (!game) return null;
 
   return (
     <div>
@@ -79,6 +80,13 @@ const PlayerPercentage = ({
           <h2 className={styles.text}>have played</h2>
         </motion.div>
       </div>
+      {(startEliminationAnimations || testingSignal) && (
+        <div className={styles.particleContainer}>
+          <PlayerIconParticles color="yellow" distance={1.3} />
+          <PlayerIconParticles color="orangeRed" distance={2} />
+          <PlayerIconParticles color="yellow" distance={1.5} />
+        </div>
+      )}
     </div>
   );
 };

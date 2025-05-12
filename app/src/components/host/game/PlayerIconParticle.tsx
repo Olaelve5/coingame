@@ -6,11 +6,13 @@ import { useMemo } from "react";
 interface PlayerIconParticlesProps {
   color: string;
   position?: { top?: string; left?: string };
+  distance?: number;
 }
 
 export default function PlayerIconParticles({
   color,
   position = {},
+  distance = 1,
 }: PlayerIconParticlesProps) {
   const particleColor = getColor(color);
 
@@ -32,39 +34,39 @@ export default function PlayerIconParticles({
         let startY = 0;
 
         switch (i) {
-          case 0:
-            baseY = -60 + yVariation;
+          case 0: 
+            baseY = -60 * distance + yVariation;
             baseX = xVariation;
             startY = -0;
             startX = xVariation * 0.1;
             break;
-          case 1:
-            baseY = -60 + yVariation;
-            baseX = 40 + xVariation;
+          case 1: 
+            baseY = -60 * distance + yVariation;
+            baseX = 40 * distance + xVariation;
             startY = -0;
             startX = 0;
             break;
           case 2:
-            baseY = 50 + yVariation;
-            baseX = 50 + xVariation;
+            baseY = 50 * distance + yVariation;
+            baseX = 50 * distance + xVariation;
             startY = 0;
             startX = 0;
             break;
           case 3:
-            baseY = 50 + yVariation;
+            baseY = 50 * distance + yVariation;
             baseX = xVariation;
             startY = 0;
             startX = xVariation * 0.1;
             break;
           case 4:
-            baseY = 50 + yVariation;
-            baseX = -60 + xVariation;
+            baseY = 50 * distance + yVariation;
+            baseX = -60 * distance + xVariation;
             startY = 0;
             startX = -0;
             break;
           case 5:
-            baseY = -40 + yVariation;
-            baseX = -60 + xVariation;
+            baseY = -40 * distance + yVariation;
+            baseX = -60 * distance + xVariation;
             startY = -0;
             startX = -0;
             break;

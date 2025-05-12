@@ -124,6 +124,8 @@ export default function PlayersIconGrid({
       const { safePlayers, playersInDanger } = findPossibleEliminations(game);
       setSafePlayers(safePlayers);
       setPlayersInDanger(playersInDanger);
+      console.log("Safe players:", safePlayers);
+      console.log("Players in danger:", playersInDanger);
     }
   }, [startEliminationAnimations]);
 
