@@ -45,7 +45,7 @@ export default function Timer({
         ) {
           setTimeUpTriggered(true);
           clearInterval(interval);
-          if (onTimeUp) onTimeUp(); // Call the onTimeUp function if provided
+          if (onTimeUp) onTimeUp();
         }
       }, 100);
     }

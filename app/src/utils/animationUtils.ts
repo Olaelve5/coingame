@@ -37,7 +37,7 @@ export const subTitleAnimation = {
     scale: 0, // Start small
     x: "50%", // Center horizontally
     translateX: "-50%", // Adjust for perfect horizontal centering
-    top: "56%", // Position in the middle vertically
+    top: "calc(50% + 3rem)", 
   },
   big: {
     opacity: 1,
@@ -45,7 +45,7 @@ export const subTitleAnimation = {
     scale: 1.6, // Enlarge significantly
     x: "50%", // Center horizontally
     translateX: "-50%", // Adjust for perfect horizontal centering
-    top: "56%", // Position in the middle vertically
+    top: "calc(50% + 4.5rem)", // Position in the middle vertically
     transition: {
       type: "spring",
       duration: 0.6,

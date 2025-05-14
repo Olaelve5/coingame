@@ -3,7 +3,7 @@ import styles from "../styles/Timer.module.css";
 
 interface TimerProps {
   timeRemaining: number;
-  initialTime: number; // Add this prop
+  initialTime: number;
 }
 
 export default function TimerArch({ timeRemaining, initialTime }: TimerProps) {

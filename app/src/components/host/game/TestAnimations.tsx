@@ -30,7 +30,7 @@ export default function TestAnimations() {
           }}
           index={1}
           gridPosition={{ gridRow: 1, gridColumn: 1 }}
-          testingSignal={testingSignal} // Pass the testing
+          testingSignal={testingSignal} 
         />
       </div>
       <button

@@ -16,6 +16,13 @@ export default function PlayersIconGrid({
   const [safePlayers, setSafePlayers] = useState<Player[]>([]);
   const [playersInDanger, setPlayersInDanger] = useState<Player[]>([]);
 
+  const [completedExitAnimations, setCompletedExitAnimations] = useState<
+    Set<string>
+  >(new Set());
+  const [allSafePlayersAnimatedOut, setAllSafePlayersAnimatedOut] =
+    useState(false);
+  const playersToAnimateOutRef = useRef<Player[]>([]); // Store the players that are expected to animate out
+
   const players =
     game?.players.filter(
       (player) => !player.eliminated && player.playedInRound
@@ -83,7 +90,6 @@ export default function PlayersIconGrid({
         newPositions[player.id] = shuffledPositions[index];
         positionedPlayersRef.current.add(player.id);
       } else {
-        // If we run out of positions, create fallback positions
         console.warn("More players than available positions");
         newPositions[player.id] = {
           row: Math.floor(Math.random() * rows),
@@ -111,36 +117,70 @@ export default function PlayersIconGrid({
   // Function to generate CSS grid position
   const getGridPosition = (player: Player) => {
     const pos = playerPositions[player.id];
-    if (!pos) return {}; // Default positioning if not assigned
+    if (!pos)
+      return {
+        position: "relative",
+      }; // Default positioning if not assigned
 
     return {
+      position: "relative",
       gridRow: pos.row + 1, // +1 because grid lines start at 1, not 0
       gridColumn: pos.col + 1,
     };
   };
 
   useEffect(() => {
-    if (startEliminationAnimations) {
+    if (startEliminationAnimations && game) {
       const { safePlayers, playersInDanger } = findPossibleEliminations(game);
       setSafePlayers(safePlayers);
       setPlayersInDanger(playersInDanger);
-      console.log("Safe players:", safePlayers);
-      console.log("Players in danger:", playersInDanger);
+
+      setAllSafePlayersAnimatedOut(false);
+      setCompletedExitAnimations(new Set());
+      playersToAnimateOutRef.current = safePlayers;
     }
   }, [startEliminationAnimations]);
+
+  const handlePlayerAnimationComplete = (playerId: string) => {
+    setCompletedExitAnimations((prevCompleted) => {
+      const newCompleted = new Set(prevCompleted);
+      newCompleted.add(playerId);
+
+      // Check if all players that were supposed to animate out have done so
+      const expectedToAnimateCount = playersToAnimateOutRef.current.length;
+      if (
+        expectedToAnimateCount > 0 &&
+        newCompleted.size === expectedToAnimateCount
+      ) {
+        console.log("All safe players have finished their exit animations!");
+        setAllSafePlayersAnimatedOut(true);
+      }
+      return newCompleted;
+    });
+  };
 
   return (
     <div className={styles.container}>
       {players.map((player, index) => {
+        if (!playerPositions[player.id]) {
+          return null; // Skip rendering if position is not assigned
+        }
+
+        const isSafe = safePlayers.some((p) => p.id === player.id);
+        const isDanger = playersInDanger.some((p) => p.id === player.id);
+
         return (
           <PlayerIcon
             key={player.id}
             player={player}
             index={index}
             gridPosition={getGridPosition(player)}
-            playerIsSafe={safePlayers.some((p) => p.id === player.id)}
-            playerIsInDanger={playersInDanger.some((p) => p.id === player.id)}
+            playerIsSafe={isSafe}
+            playerIsInDanger={isDanger}
             animationDelay={0.5 + index * 0.2}
+            onAnimationComplete={
+              isSafe ? handlePlayerAnimationComplete : undefined
+            }
           />
         );
       })}

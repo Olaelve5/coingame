@@ -18,6 +18,7 @@ interface PlayerIconProps {
     gridRow?: number;
     gridColumn?: number;
   };
+  onAnimationComplete?: (playerId: string) => void;
 }
 
 export default function PlayerIcon({
@@ -28,6 +29,7 @@ export default function PlayerIcon({
   playerIsSafe,
   playerIsInDanger,
   animationDelay = 0,
+  onAnimationComplete,
 }: PlayerIconProps) {
   const { scope, playExitAnimation, playRotateAnimation } =
     usePlayerIconAnimations();
@@ -47,29 +49,32 @@ export default function PlayerIcon({
 
   useEffect(() => {
     if (playerIsSafe || testingSignal) {
-      setTimeout(() => {
+      const timer = setTimeout(async () => {
         setShowParticles(true);
-        playExitAnimation();
+        await playExitAnimation();
+
+        if (onAnimationComplete) {
+          onAnimationComplete(player.id);
+        }
       }, animationDelay * 1000);
+
+      return () => {
+        clearTimeout(timer);
+        setShowParticles(false);
+      };
     }
   }, [testingSignal, playerIsSafe, playerIsInDanger]);
 
   return (
-    <div
-      className={styles.playerIconWrapper}
-      style={{
-        position: "relative",
-        gridRow: gridPosition.gridRow,
-        gridColumn: gridPosition.gridColumn,
-      }}>
-      <motion.div
-        key={player.id}
-        ref={scope}
-        className={styles.iconContainer}
-        style={gridPosition}
-        initial={{ scale: 0, rotate: 180 }}
-        animate={{ scale: 1, rotate: 0 }}
-        transition={{ delay: index * 0.1, type: "spring", bounce: 0.5 }}>
+    <motion.div
+      key={player.id}
+      layout
+      className={styles.playerIcon}
+      style={gridPosition}
+      initial={{ scale: 0, rotate: 180 }}
+      animate={{ scale: 1, rotate: 0 }}
+      transition={{ delay: index * 0.1, type: "spring", bounce: 0.5 }}>
+      <motion.div ref={scope} className={styles.iconContainer}>
         <FontAwesomeIcon
           icon={getIcon(player.icon)}
           size="2x"
@@ -77,6 +82,7 @@ export default function PlayerIcon({
         />
       </motion.div>
       {showParticles && <PlayerIconParticles color={player.color} />}
-    </div>
+      {/* {playerIsInDanger && <h1>{player.name}</h1>} */}
+    </motion.div>
   );
 }
