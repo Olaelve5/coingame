@@ -9,24 +9,17 @@ interface PlayersIconGridProps {
   startEliminationAnimations?: boolean;
 }
 
-export default function PlayersIconGrid({
-  startEliminationAnimations,
-}: PlayersIconGridProps) {
+export default function PlayersIconGrid({ startEliminationAnimations }: PlayersIconGridProps) {
   const { game } = useConnectionStore();
   const [safePlayers, setSafePlayers] = useState<Player[]>([]);
   const [playersInDanger, setPlayersInDanger] = useState<Player[]>([]);
 
-  const [completedExitAnimations, setCompletedExitAnimations] = useState<
-    Set<string>
-  >(new Set());
-  const [allSafePlayersAnimatedOut, setAllSafePlayersAnimatedOut] =
-    useState(false);
+  const [completedExitAnimations, setCompletedExitAnimations] = useState<Set<string>>(new Set());
+  const [allSafePlayersAnimatedOut, setAllSafePlayersAnimatedOut] = useState(false);
   const playersToAnimateOutRef = useRef<Player[]>([]); // Store the players that are expected to animate out
 
   const players =
-    game?.players.filter(
-      (player) => !player.eliminated && player.playedInRound
-    ) || [];
+    game?.players.filter((player) => !player.eliminated && player.playedInRound) || [];
 
   const [playerPositions, setPlayerPositions] = useState<{
     [id: string]: { row: number; col: number };
@@ -77,9 +70,7 @@ export default function PlayersIconGrid({
     }
 
     // Shuffle available positions
-    const shuffledPositions = [...availablePositions].sort(
-      () => Math.random() - 0.5
-    );
+    const shuffledPositions = [...availablePositions].sort(() => Math.random() - 0.5);
 
     // Find unpositioned players
     const unpositionedPlayers = players.filter((p) => !playerPositions[p.id]);
@@ -148,10 +139,7 @@ export default function PlayersIconGrid({
 
       // Check if all players that were supposed to animate out have done so
       const expectedToAnimateCount = playersToAnimateOutRef.current.length;
-      if (
-        expectedToAnimateCount > 0 &&
-        newCompleted.size === expectedToAnimateCount
-      ) {
+      if (expectedToAnimateCount > 0 && newCompleted.size === expectedToAnimateCount) {
         console.log("All safe players have finished their exit animations!");
         setAllSafePlayersAnimatedOut(true);
       }
@@ -178,9 +166,7 @@ export default function PlayersIconGrid({
             playerIsSafe={isSafe}
             playerIsInDanger={isDanger}
             animationDelay={0.5 + index * 0.2}
-            onAnimationComplete={
-              isSafe ? handlePlayerAnimationComplete : undefined
-            }
+            onAnimationComplete={isSafe ? handlePlayerAnimationComplete : undefined}
           />
         );
       })}
