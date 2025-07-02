@@ -1,17 +1,19 @@
 import Timer from "./Timer";
 import PlayerPercentage from "./PlayerPercentage";
-import RoundTitle from "./RoundTitle";
 import { useState } from "react";
 import styles from "../styles/HostGame.module.css";
 import PlayerIcon from "./PlayerIcon";
+import EliminationReport from "./EliminationReport/EliminationReport";
 
 export default function TestAnimations() {
   const [timerRunning, setTimerRunning] = useState(false);
   const [testingSignal, setTestingSignal] = useState(false);
 
   return (
-    <div className={styles.container}>
-      <RoundTitle handleRoundStart={() => console.log("Round started")} />
+    <div
+      className={styles.container}
+      style={{ overflow: "hidden", position: "relative", maxHeight: "100vh" }}
+    >
       <Timer timerRunning={timerRunning} testingSignal={testingSignal} />
       <PlayerPercentage testingSignal={testingSignal} />
       <div style={{ position: "absolute", top: "100px", right: "100px" }}>
@@ -30,16 +32,18 @@ export default function TestAnimations() {
           }}
           index={1}
           gridPosition={{ gridRow: 1, gridColumn: 1 }}
-          testingSignal={testingSignal} 
+          testingSignal={testingSignal}
         />
       </div>
       <button
         style={{ position: "absolute", top: "10px", left: "10px" }}
         onClick={() => {
           setTestingSignal(!testingSignal);
-        }}>
+        }}
+      >
         End round
       </button>
+      {testingSignal && <EliminationReport />}
     </div>
   );
 }

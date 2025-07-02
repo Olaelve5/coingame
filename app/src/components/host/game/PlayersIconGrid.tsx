@@ -16,7 +16,7 @@ export default function PlayersIconGrid({ startEliminationAnimations }: PlayersI
 
   const [completedExitAnimations, setCompletedExitAnimations] = useState<Set<string>>(new Set());
   const [allSafePlayersAnimatedOut, setAllSafePlayersAnimatedOut] = useState(false);
-  const playersToAnimateOutRef = useRef<Player[]>([]); // Store the players that are expected to animate out
+  const playersToAnimateOutRef = useRef<Player[]>([]);
 
   const players =
     game?.players.filter((player) => !player.eliminated && player.playedInRound) || [];

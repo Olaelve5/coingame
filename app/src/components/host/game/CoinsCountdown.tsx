@@ -74,7 +74,6 @@ export default function CoinsCountdown({
 
         const nextCount = prevCount - 1;
 
-        // If we hit a player's coin value and aren't already paused, pause the countdown
         if (
           shouldPauseAtCount(nextCount + 1) &&
           !isPaused.current &&

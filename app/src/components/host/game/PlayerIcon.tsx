@@ -14,10 +14,12 @@ interface PlayerIconProps {
   playerIsSafe?: boolean;
   playerIsInDanger?: boolean;
   animationDelay?: number;
-  gridPosition: {
-    gridRow?: number;
-    gridColumn?: number;
-  };
+  gridPosition:
+    | {
+        gridRow?: number;
+        gridColumn?: number;
+      }
+    | undefined;
   onAnimationComplete?: (playerId: string) => void;
 }
 
@@ -31,8 +33,7 @@ export default function PlayerIcon({
   animationDelay = 0,
   onAnimationComplete,
 }: PlayerIconProps) {
-  const { scope, playExitAnimation, playRotateAnimation } =
-    usePlayerIconAnimations();
+  const { scope, playExitAnimation, playRotateAnimation } = usePlayerIconAnimations();
   const [showParticles, setShowParticles] = useState(false);
 
   useEffect(() => {
@@ -73,13 +74,10 @@ export default function PlayerIcon({
       style={gridPosition}
       initial={{ scale: 0, rotate: 180 }}
       animate={{ scale: 1, rotate: 0 }}
-      transition={{ delay: index * 0.1, type: "spring", bounce: 0.5 }}>
+      transition={{ delay: index * 0.1, type: "spring", bounce: 0.5 }}
+    >
       <motion.div ref={scope} className={styles.iconContainer}>
-        <FontAwesomeIcon
-          icon={getIcon(player.icon)}
-          size="2x"
-          color={getColor(player.color)}
-        />
+        <FontAwesomeIcon icon={getIcon(player.icon)} size="2x" color={getColor(player.color)} />
       </motion.div>
       {showParticles && <PlayerIconParticles color={player.color} />}
       {/* {playerIsInDanger && <h1>{player.name}</h1>} */}
