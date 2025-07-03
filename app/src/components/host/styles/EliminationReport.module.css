@@ -3,12 +3,30 @@
   width: 100vw;
   height: 100vh;
   top: 5rem;
+  padding-bottom: 5rem;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   display: flex;
+  flex-direction: column;
   background-color: rgb(255, 235, 169);
   border-radius: 1rem 1rem 0 0;
   bottom: 0;
   color: rgb(52, 55, 61);
   font-family: "Bungee", "Sans-serif";
+}
+
+.titleContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.title {
+  font-size: 2rem;
+}
+
+.titleNumber {
+  font-size: 2rem;
+  color: var(--accent);
 }
