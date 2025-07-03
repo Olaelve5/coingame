@@ -13,9 +13,9 @@ const PlayedCoinsChart = () => {
 
   return (
     <div className={styles.container}>
-      <h3 className={styles.title}>Coins Distribution</h3>
+      <h3 className={styles.title}>Distribution</h3>
       <BarChart
-        h={200}
+        h={180}
         data={data}
         dataKey="intervalLow"
         className={styles.chart}
