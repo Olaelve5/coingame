@@ -13,14 +13,17 @@ const PlayedCoinsChart = () => {
 
   return (
     <div className={styles.container}>
+      <h3 className={styles.title}>Coins Distribution</h3>
       <BarChart
-        h={300}
+        h={200}
         data={data}
         dataKey="intervalLow"
+        className={styles.chart}
         yAxisProps={{ domain: [0, 20] }}
         series={[{ name: "count", color: "blue.5" }]}
         tickLine="none"
         gridAxis="none"
+        withYAxis={false}
       />
     </div>
   );

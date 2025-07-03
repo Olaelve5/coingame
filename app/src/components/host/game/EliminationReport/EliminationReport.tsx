@@ -2,6 +2,7 @@ import styles from "../../styles/EliminationReport.module.css";
 import { motion } from "framer-motion";
 import PlayedCoinsChart from "./PlayedCoinsChart";
 import { useMantineTheme } from "@mantine/core";
+import { IconCoins } from "@tabler/icons-react";
 
 const EliminationReport = () => {
   const theme = useMantineTheme();
@@ -19,7 +20,16 @@ const EliminationReport = () => {
           1
         </h2>
       </div>
-      <PlayedCoinsChart />
+      <div className={styles.dataContainer}>
+        <div className={styles.coinsPlayedContainer}>
+          <h3>Coins played this round</h3>
+          <div>
+            <IconCoins className={styles.coinsIcon} color={theme.colors.blue[5]} />
+            <h2>167</h2>
+          </div>
+        </div>
+        <PlayedCoinsChart />
+      </div>
     </motion.div>
   );
 };
