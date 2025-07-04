@@ -35,7 +35,9 @@ const EliminatedPlayers = ({ playersEliminated }: EliminatedPlayersProps) => {
 
   // Use test player if no real players are passed
   const displayPlayers =
-    playersEliminated.length === 0 ? [testPlayer, testPlayer] : playersEliminated;
+    playersEliminated.length === 0
+      ? [testPlayer, testPlayer, testPlayer, testPlayer, testPlayer]
+      : playersEliminated;
 
   return (
     <div className={styles.container}>

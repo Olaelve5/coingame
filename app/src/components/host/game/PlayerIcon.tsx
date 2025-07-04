@@ -80,7 +80,6 @@ export default function PlayerIcon({
         <FontAwesomeIcon icon={getIcon(player.icon)} size="2x" color={getColor(player.color)} />
       </motion.div>
       {showParticles && <PlayerIconParticles color={player.color} />}
-      {/* {playerIsInDanger && <h1>{player.name}</h1>} */}
     </motion.div>
   );
 }

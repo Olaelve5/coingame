@@ -2,11 +2,11 @@
   position: absolute;
   width: 100vw;
   height: 100vh;
-  top: 5rem;
-  padding: 2rem;
-  padding-bottom: 5rem;
+  top: 3rem;
+  padding: 3rem;
+  padding-bottom: 2rem;
   align-items: center;
-  gap: 7rem;
+  gap: 5rem;
   display: flex;
   flex-direction: column;
   background-color: rgb(255, 235, 169);
