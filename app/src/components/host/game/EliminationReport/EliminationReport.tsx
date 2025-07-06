@@ -36,7 +36,7 @@ const EliminationReport = () => {
               transition={{ duration: 0.3, delay: 0.8, ease: "easeInOut" }}
             >
               <IconCoins className={styles.coinsIcon} />
-              <h2>129</h2>
+              <h2>217</h2>
             </motion.div>
           </div>
           <PlayedCoinsChart />
@@ -46,7 +46,7 @@ const EliminationReport = () => {
         <motion.div
           initial={{ opacity: 0, scale: 1 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 1.5, ease: "easeInOut" }}
+          transition={{ duration: 0.5, delay: 2, ease: "easeInOut" }}
         >
           <EliminatedPlayers playersEliminated={[]} />
         </motion.div>
