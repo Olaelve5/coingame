@@ -28,7 +28,7 @@ const EliminatedPlayers = ({ playersEliminated }: EliminatedPlayersProps) => {
     roundHistory: [
       {
         round: 1,
-        coinsPlayed: 8,
+        coinsPlayed: 5,
       },
     ],
   };

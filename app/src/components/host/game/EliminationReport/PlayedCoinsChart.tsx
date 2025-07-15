@@ -48,8 +48,8 @@ const PlayedCoinsChart = () => {
             yAxisProps={{ domain: [0, 20] }}
             series={[{ name: "count", color: "blue.5" }]}
             tickLine="none"
-            gridAxis="none"
-            withYAxis={false}
+            
+            
             barProps={{
               radius: 5,
               isAnimationActive: true,

@@ -6,6 +6,7 @@ import { useMantineTheme } from "@mantine/core";
 import { IconCoins } from "@tabler/icons-react";
 import EliminatedPlayers from "./EliminatedPlayers";
 import { StaggeredText } from "../../StaggeredText";
+import StartRoundButton from "./StartRoundButton";
 
 const EliminationReport = () => {
   const [initialAnimationFinished, setInitialAnimationFinished] = useState(false);
@@ -20,11 +21,14 @@ const EliminationReport = () => {
       onAnimationComplete={() => setInitialAnimationFinished(true)}
       className={styles.container}
     >
-      <div className={styles.titleContainer}>
-        <h2 className={styles.title}>Report Round</h2>
-        <h2 className={styles.title} style={{ color: theme.colors.blue[5] }}>
-          1
-        </h2>
+      <div className={styles.header}>
+        <div className={styles.titleContainer}>
+          <h2 className={styles.title}>Report Round</h2>
+          <h2 className={styles.title} style={{ color: theme.colors.blue[5] }}>
+            1
+          </h2>
+        </div>
+        <StartRoundButton />
       </div>
       {initialAnimationFinished && (
         <div className={styles.dataContainer}>
@@ -36,7 +40,7 @@ const EliminationReport = () => {
               transition={{ duration: 0.3, delay: 0.8, ease: "easeInOut" }}
             >
               <IconCoins className={styles.coinsIcon} />
-              <h2>217</h2>
+              <h2>887</h2>
             </motion.div>
           </div>
           <PlayedCoinsChart />
