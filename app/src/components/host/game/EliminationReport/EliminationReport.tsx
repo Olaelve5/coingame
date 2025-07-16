@@ -1,16 +1,30 @@
 import React, { useState } from "react";
 import styles from "./styles/EliminationReport.module.css";
-import { motion } from "framer-motion";
-import PlayedCoinsChart from "./PlayedCoinsChart";
+import { motion, AnimatePresence } from "framer-motion";
 import { useMantineTheme } from "@mantine/core";
-import { IconCoins } from "@tabler/icons-react";
 import EliminatedPlayers from "./EliminatedPlayers";
-import { StaggeredText } from "../../StaggeredText";
-import StartRoundButton from "./StartRoundButton";
+import PageIndicators from "./PageIndicators";
+import StatsPage from "./StatsPage";
 
 const EliminationReport = () => {
   const [initialAnimationFinished, setInitialAnimationFinished] = useState(false);
+  const [page, setPage] = useState(1);
   const theme = useMantineTheme();
+
+  const slideVariants = {
+    enter: {
+      x: "100%",
+      opacity: 1,
+    },
+    center: {
+      x: 0,
+      opacity: 1,
+    },
+    exit: {
+      x: "-100%",
+      opacity: 1,
+    },
+  };
 
   return (
     <motion.div
@@ -28,33 +42,28 @@ const EliminationReport = () => {
             1
           </h2>
         </div>
-        <StartRoundButton />
       </div>
+
       {initialAnimationFinished && (
-        <div className={styles.dataContainer}>
-          <div className={styles.coinsPlayedContainer}>
-            <StaggeredText text="Coins played this round" staggerSpeed={0.02} />
+        <div className={styles.carouselContainer}>
+          <AnimatePresence mode="wait">
             <motion.div
-              initial={{ opacity: 0, scale: 1, y: 50 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.8, ease: "easeInOut" }}
+              key={page}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className={styles.pageContainer}
             >
-              <IconCoins className={styles.coinsIcon} />
-              <h2>887</h2>
+              {page === 1 && <StatsPage />}
+              {page === 2 && <EliminatedPlayers playersEliminated={[]} />}
             </motion.div>
-          </div>
-          <PlayedCoinsChart />
+          </AnimatePresence>
         </div>
       )}
-      {initialAnimationFinished && (
-        <motion.div
-          initial={{ opacity: 0, scale: 1 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 2, ease: "easeInOut" }}
-        >
-          <EliminatedPlayers playersEliminated={[]} />
-        </motion.div>
-      )}
+
+      <PageIndicators page={page} setPage={setPage} />
     </motion.div>
   );
 };
