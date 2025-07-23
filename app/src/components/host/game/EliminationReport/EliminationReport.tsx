@@ -11,19 +11,21 @@ const EliminationReport = () => {
   const [page, setPage] = useState(1);
   const theme = useMantineTheme();
 
-  const slideVariants = {
-    enter: {
-      x: "100%",
-      opacity: 1,
-    },
-    center: {
-      x: 0,
-      opacity: 1,
-    },
-    exit: {
-      x: "-100%",
-      opacity: 1,
-    },
+  const getSlideVariants = (page: number) => {
+    return {
+      enter: {
+        x: page === 1 ? "-100%" : "100%",
+        opacity: 1,
+      },
+      center: {
+        x: 0,
+        opacity: 1,
+      },
+      exit: {
+        x: page === 1 ? "-100%" : "100%",
+        opacity: 1,
+      },
+    };
   };
 
   return (
@@ -49,15 +51,15 @@ const EliminationReport = () => {
           <AnimatePresence mode="wait">
             <motion.div
               key={page}
-              variants={slideVariants}
+              variants={getSlideVariants(page)}
               initial="enter"
               animate="center"
               exit="exit"
-              transition={{ duration: 0.3, ease: "easeInOut" }}
+              transition={{ duration: 0.4, ease: "easeInOut" }}
               className={styles.pageContainer}
             >
-              {page === 1 && <StatsPage />}
-              {page === 2 && <EliminatedPlayers playersEliminated={[]} />}
+              {page === 2 && <StatsPage />}
+              {page === 1 && <EliminatedPlayers playersEliminated={[]} />}
             </motion.div>
           </AnimatePresence>
         </div>

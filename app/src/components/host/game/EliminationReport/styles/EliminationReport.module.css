@@ -40,6 +40,10 @@
   color: var(--accent);
 }
 
+.carouselContainer {
+  width: 100%;
+}
+
 .dataContainer {
   display: flex;
   align-items: center;
