@@ -1,133 +1,91 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState, useCallback } from "react";
 import styles from "../styles/CoinsCountdown.module.css";
-import AnimatedDigit from "@/components/universal/AnimateDigit";
-import { IconHexagonFilled } from "@tabler/icons-react";
+import { motion } from "framer-motion";
+import { StaggeredText } from "../StaggeredText";
+import { IconCoinFilled } from "@tabler/icons-react";
 
 interface CoinsCountdownProps {
-  intervalMs?: number;
   onComplete?: () => void;
-  count: number;
-  setCount: React.Dispatch<React.SetStateAction<number>>;
-  playerCoinValues?: number[];
-  pauseDuration?: number;
-  isCountdownRunning?: boolean;
+  targetNumber: number;
+  isRunning?: boolean;
 }
 
+// Starting number for the countdown
+const START_NUMBER = 99;
+
 export default function CoinsCountdown({
-  intervalMs = 150,
   onComplete,
-  count,
-  setCount,
-  playerCoinValues = [],
-  pauseDuration = 50,
-  isCountdownRunning = false,
+  targetNumber,
+  isRunning = true,
 }: CoinsCountdownProps) {
-  const isPaused = useRef(false);
-  const pauseTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [count, setCount] = useState(START_NUMBER);
+  const [countCompleted, setCountCompleted] = useState(false);
+  const [fadeInCompleted, setFadeInCompleted] = useState(false);
 
-  // Add this after your other refs
-  const processedValues = useRef<Set<number>>(new Set());
+  const startIntervalMs = 25; // Fast start speed
+  const endIntervalMs = 1000; // Slow ending speed
 
-  // Create countdown effect
+  // Progressively slow down the countdown as it approaches the target
+  const getNextIntervalMS = useCallback(
+    (currentCount: number) => {
+      const totalSteps = START_NUMBER - targetNumber;
+      if (totalSteps <= 0) return endIntervalMs;
+
+      const stepsTaken = START_NUMBER - currentCount;
+      const progress = stepsTaken / totalSteps;
+      const exponentialProgress = Math.pow(progress, 18); // Exponential curve for slowing down
+
+      return startIntervalMs + (endIntervalMs - startIntervalMs) * exponentialProgress;
+    },
+    [targetNumber]
+  );
+
+  const numberVariants = {
+    counting: { scale: 1 },
+    finished: {
+      scale: [1, 1, 1],
+      color: "#22c55e",
+      transition: { duration: 0.1, delay: endIntervalMs / 1000 },
+    },
+  };
+
   useEffect(() => {
-    // Clear any existing timers on dependency changes
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
+    if (!fadeInCompleted || !isRunning) return;
 
-    if (pauseTimerRef.current) {
-      clearTimeout(pauseTimerRef.current);
-      pauseTimerRef.current = null;
-    }
-
-    // Reset pause state
-    isPaused.current = false;
-
-    // Don't proceed if countdown is not running
-    if (!isCountdownRunning) return;
-
-    // Don't start countdown if already at zero
-    if (count <= 0) {
-      if (onComplete) onComplete();
+    if (count <= targetNumber) {
+      if (count <= targetNumber) {
+        setCount(targetNumber);
+        setCountCompleted(true);
+        onComplete?.();
+      }
       return;
     }
 
-    // Function to check if we should pause at this count
-    const shouldPauseAtCount = (currentCount: number): boolean => {
-      return playerCoinValues.includes(currentCount);
-    };
+    const timerId = setTimeout(() => {
+      setCount((prevCount) => prevCount - 1);
+    }, getNextIntervalMS(count));
 
-    // Function to perform one countdown tick
-    const tick = () => {
-      setCount((prevCount) => {
-        // When we reach 0 or 1, stop and call onComplete
-        if (prevCount <= 1) {
-          if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-            intervalRef.current = null;
-          }
-          if (onComplete) onComplete();
-          return 0;
-        }
-
-        const nextCount = prevCount - 1;
-
-        if (
-          shouldPauseAtCount(nextCount + 1) &&
-          !isPaused.current &&
-          !processedValues.current.has(nextCount)
-        ) {
-          processedValues.current.add(nextCount); // Add to processed values
-          isPaused.current = true;
-
-          // Schedule resumption
-          pauseTimerRef.current = setTimeout(() => {
-            isPaused.current = false;
-            pauseTimerRef.current = null;
-          }, pauseDuration);
-
-          // Return current count (don't decrement yet)
-          return prevCount;
-        }
-
-        // Only decrement if not paused
-        return isPaused.current ? prevCount : nextCount;
-      });
-    };
-
-    // Set up the interval
-    intervalRef.current = setInterval(tick, intervalMs);
-
-    // Cleanup on unmount
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-      if (pauseTimerRef.current) clearTimeout(pauseTimerRef.current);
-    };
-  }, [
-    isCountdownRunning,
-    intervalMs,
-    onComplete,
-    playerCoinValues,
-    pauseDuration,
-  ]);
+    return () => clearTimeout(timerId);
+  }, [count, targetNumber, isRunning, onComplete, getNextIntervalMS, fadeInCompleted]);
 
   return (
     <div className={styles.container}>
-      <IconHexagonFilled className={styles.hexagon} />
-      <div className={styles.countdownContainer}>
-        {count
-          .toString()
-          .split("")
-          .map((digit, index) => (
-            <AnimatedDigit
-              key={`digit-${index}`}
-              value={digit}
-              duration={0.5}
-            />
-          ))}
-      </div>
+      <StaggeredText text="Safety Threshold" />
+      <motion.div
+        initial={{ opacity: 0, scale: 1, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.5 }}
+        onAnimationComplete={() => setFadeInCompleted(true)}
+        className={styles.countdownContainer}
+      >
+        <motion.h1
+          className={styles.count}
+          variants={numberVariants}
+          animate={countCompleted ? "finished" : "counting"}
+        >
+          {count}
+        </motion.h1>
+      </motion.div>
     </div>
   );
 }

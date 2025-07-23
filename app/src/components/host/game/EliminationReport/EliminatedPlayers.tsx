@@ -3,7 +3,7 @@ import styles from "./styles/EliminatedPlayers.module.css";
 import { useMantineTheme } from "@mantine/core";
 import { Player } from "@/models/Game";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getIcon, getColor } from "@/utils/iconUtils";
+import { getIcon } from "@/utils/iconUtils";
 
 // Define the props interface
 interface EliminatedPlayersProps {

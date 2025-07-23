@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "./styles/EliminationReport.module.css";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMantineTheme } from "@mantine/core";
-import EliminatedPlayers from "./EliminatedPlayers";
+import EliminationsPage from "./EliminationsPage";
 import PageIndicators from "./PageIndicators";
 import StatsPage from "./StatsPage";
 
@@ -10,6 +10,12 @@ const EliminationReport = () => {
   const [initialAnimationFinished, setInitialAnimationFinished] = useState(false);
   const [page, setPage] = useState(1);
   const theme = useMantineTheme();
+  const [hasPageChanged, setHasPageChanged] = useState(false);
+
+  const handleSetPage = (newPage: number) => {
+    setHasPageChanged(true);
+    setPage(newPage);
+  };
 
   const getSlideVariants = (page: number) => {
     return {
@@ -39,7 +45,7 @@ const EliminationReport = () => {
     >
       <div className={styles.header}>
         <div className={styles.titleContainer}>
-          <h2 className={styles.title}>Report Round</h2>
+          <h2 className={styles.title}>Elimination Report</h2>
           <h2 className={styles.title} style={{ color: theme.colors.blue[5] }}>
             1
           </h2>
@@ -52,20 +58,20 @@ const EliminationReport = () => {
             <motion.div
               key={page}
               variants={getSlideVariants(page)}
-              initial="enter"
+              initial={page === 1 && !hasPageChanged ? false : "enter"}
               animate="center"
               exit="exit"
               transition={{ duration: 0.4, ease: "easeInOut" }}
               className={styles.pageContainer}
             >
               {page === 2 && <StatsPage />}
-              {page === 1 && <EliminatedPlayers playersEliminated={[]} />}
+              {page === 1 && <EliminationsPage showCountdown={!hasPageChanged} />}
             </motion.div>
           </AnimatePresence>
         </div>
       )}
 
-      <PageIndicators page={page} setPage={setPage} />
+      <PageIndicators page={page} setPage={handleSetPage} />
     </motion.div>
   );
 };

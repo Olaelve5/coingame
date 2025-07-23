@@ -1,26 +1,27 @@
 .container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    margin: 10rem 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
 }
 
 .countdownContainer {
-    font-size: 3rem;
-    font-weight: bold;
-    font-family: "bungee", sans-serif;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
+  font-weight: bold;
+  font-family: "bungee", sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  position: relative;
 }
 
-.hexagon {
-    width: 10rem;
-    height: 10rem;
-    color:rgb(255, 0, 68);
-    position: absolute;
+.count {
+  font-size: 6rem;
+}
+
+.coinIcon {
+    width: 6rem;
+    height: 6rem;
 }
