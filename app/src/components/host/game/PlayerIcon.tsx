@@ -11,9 +11,8 @@ interface PlayerIconProps {
   player: Player;
   index: number;
   testingSignal?: boolean;
-  playerIsSafe?: boolean;
-  playerIsInDanger?: boolean;
   animationDelay?: number;
+  shouldAnimateOut?: boolean;
   gridPosition:
     | {
         gridRow?: number;
@@ -27,9 +26,8 @@ export default function PlayerIcon({
   player,
   index,
   gridPosition,
+  shouldAnimateOut = false,
   testingSignal,
-  playerIsSafe,
-  playerIsInDanger,
   animationDelay = 0,
   onAnimationComplete,
 }: PlayerIconProps) {
@@ -40,7 +38,7 @@ export default function PlayerIcon({
     // Set up interval for random animation
     const interval = setInterval(() => {
       // 1 in 10 chance
-      if (Math.random() < 0.1 && !playerIsSafe && !playerIsInDanger) {
+      if (Math.random() < 0.08) {
         playRotateAnimation();
       }
     }, 1500);
@@ -49,7 +47,7 @@ export default function PlayerIcon({
   }, []);
 
   useEffect(() => {
-    if (playerIsSafe || testingSignal) {
+    if (shouldAnimateOut || testingSignal) {
       const timer = setTimeout(async () => {
         setShowParticles(true);
         await playExitAnimation();
@@ -64,7 +62,7 @@ export default function PlayerIcon({
         setShowParticles(false);
       };
     }
-  }, [testingSignal, playerIsSafe, playerIsInDanger]);
+  }, [testingSignal, shouldAnimateOut]);
 
   return (
     <motion.div

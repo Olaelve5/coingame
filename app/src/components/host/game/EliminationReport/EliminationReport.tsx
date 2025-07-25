@@ -3,11 +3,13 @@ import styles from "./styles/EliminationReport.module.css";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMantineTheme } from "@mantine/core";
 import EliminationsPage from "./EliminationsPage";
-import EliminatedPlayers from "./EliminatedPlayers";
-import PageIndicators from "./PageIndicators";
 import StatsPage from "./StatsPage";
 
-const EliminationReport = () => {
+interface EliminationReportProps {
+  handleRoundPreparation: () => void;
+}
+
+const EliminationReport = ({ handleRoundPreparation }: EliminationReportProps) => {
   const [initialAnimationFinished, setInitialAnimationFinished] = useState(false);
   const [page, setPage] = useState(1);
   const [hasPageChanged, setHasPageChanged] = useState(false);
@@ -63,7 +65,12 @@ const EliminationReport = () => {
             transition={{ duration: 0.4, ease: "easeInOut" }}
             className={styles.pageContainer}
           >
-            {page === 1 && <EliminationsPage hasPageChanged={hasPageChanged} />}
+            {page === 1 && (
+              <EliminationsPage
+                hasPageChanged={hasPageChanged}
+                handleRoundPreparation={handleRoundPreparation}
+              />
+            )}
             {page === 2 && <StatsPage />}
           </motion.div>
         </AnimatePresence>

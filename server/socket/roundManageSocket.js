@@ -1,5 +1,5 @@
 import { Game } from "../models/Game.ts";
-import { handleRoundEnd } from "../utils/roundUtils.js";
+import { handleRoundEnd, executeEliminations } from "../utils/roundUtils.js";
 
 const roundManageSocketHandler = (io, botManager) => {
   // Handle change game status
@@ -51,6 +51,43 @@ const roundManageSocketHandler = (io, botManager) => {
     socket.on("startNextRound", async (gameCode, callback) => {
       try {
         const currentGame = await Game.findOne({ gameCode });
+
+        // If roundstatus is eliminating, we eliminated players
+        if (currentGame.roundStatus === "eliminating") {
+          console.log(`Executing eliminations for game ${gameCode}`);
+
+          const gameAfterElimination = await executeEliminations(gameCode);
+
+          // Check if game is finished
+          if (gameAfterElimination.status === "finished") {
+            io.to(gameCode).emit("gameUpdate", gameAfterElimination);
+            if (callback)
+              callback({
+                success: true,
+                game: gameAfterElimination,
+                gameFinished: true,
+              });
+            return;
+          }
+
+          // Game continues - prepare for next round
+          const nextRoundGame = await Game.findOneAndUpdate(
+            { gameCode },
+            {
+              $set: {
+                roundStatus: "preparing",
+                "players.$[].playedInRound": false,
+              },
+              $inc: { round: 1 },
+            },
+            { new: true }
+          );
+
+          console.log(`Prepared next round ${nextRoundGame.round} for game ${gameCode}`);
+          io.to(gameCode).emit("gameUpdate", nextRoundGame);
+          if (callback) callback({ success: true, game: nextRoundGame });
+          return;
+        }
 
         if (!currentGame || currentGame.roundStatus !== "preparing") {
           if (callback) callback({ error: "Cannot start next round" });
@@ -132,10 +169,8 @@ const roundManageSocketHandler = (io, botManager) => {
     // Handle end round - eliminate players --------------------------------------------------------------------------------------------->
     socket.on("endRound", async (gameCode, callback) => {
       try {
-        const game = await Game.findOne({ gameCode });
-
         // Handle round end logic
-        const updatedGame = await handleRoundEnd(gameCode, game);
+        const updatedGame = await handleRoundEnd(gameCode);
 
         if (!updatedGame) {
           console.error(`Failed to update game ${gameCode}`);

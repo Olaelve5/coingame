@@ -41,7 +41,7 @@ export interface Game {
   players: Player[];
   hostId: string;
   round: number;
-  roundStatus: "preparing" | "completed" | "active";
+  roundStatus: "preparing" | "completed" | "active" | "eliminating";
   lastRoundResults: LastRoundResults;
   status: "waiting" | "playing" | "finished";
   winner?: Winner; // Optional since it's only present when game is finished

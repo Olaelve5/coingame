@@ -2,8 +2,15 @@ import EliminatedPlayers from "./EliminatedPlayers";
 import CoinsCountdown from "../CoinsCountdown";
 import { useState } from "react";
 import styles from "./styles/EliminationsPage.module.css";
+import StartRoundButton from "./StartRoundButton";
 
-const EliminationsPage = ({ hasPageChanged }: { hasPageChanged: boolean }) => {
+const EliminationsPage = ({
+  hasPageChanged,
+  handleRoundPreparation,
+}: {
+  hasPageChanged: boolean;
+  handleRoundPreparation: () => void;
+}) => {
   const [countdownComplete, setCountdownComplete] = useState(false);
 
   return (
@@ -16,7 +23,12 @@ const EliminationsPage = ({ hasPageChanged }: { hasPageChanged: boolean }) => {
           setCountdownComplete(true);
         }}
       />
-      {(hasPageChanged || countdownComplete) && <EliminatedPlayers playersEliminated={[]} />}
+      {(hasPageChanged || countdownComplete) && (
+        <>
+          <EliminatedPlayers playersEliminated={[]} />
+          <StartRoundButton handleRoundPreparation={handleRoundPreparation} />
+        </>
+      )}
     </div>
   );
 };

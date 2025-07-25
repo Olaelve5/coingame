@@ -7,6 +7,7 @@ import PlayerPercentage from "./PlayerPercentage";
 import PlayersIconGrid from "./PlayersIconGrid";
 import styles from "../styles/HostGame.module.css";
 import RoundTitle from "./RoundTitle";
+import EliminationReport from "./EliminationReport/EliminationReport";
 
 const HostGame = ({ gameCode }: { gameCode: string }) => {
   const { game, joinAsHost, cleanup } = useConnectionStore();
@@ -14,8 +15,9 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
   const router = useRouter();
   const [timerRunning, setTimerRunning] = useState(false);
   const [titleAnimationFinished, setTitleAnimationFinished] = useState(false);
-  const [startEliminationAnimations, setStartEliminationAnimations] =
-    useState(false);
+  const [playerAnimationsFinished, setPlayerAnimationsFinished] = useState(false);
+  const [startEliminationAnimations, setStartEliminationAnimations] = useState(false);
+  const [timerEndAnimationFinished, setTimerEndAnimationFinished] = useState(false);
 
   useEffect(() => {
     const initGame = async () => {
@@ -29,9 +31,6 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
     return () => cleanup();
   }, [gameCode, joinAsHost, router, cleanup]);
 
-  // Function to handle the start of the round
-  // This function is called from the RoundTitle component
-  // when the title animation is finished
   const handleRoundStart = () => {
     if (game?.roundStatus !== "active") {
       setTitleAnimationFinished(true);
@@ -46,7 +45,6 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
 
   const handleRoundEnd = async () => {
     if (!game) return;
-
     const startElimination = await finalizeRoundPlays();
 
     if (!startElimination) {
@@ -59,25 +57,48 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
     }, 100); // Delay before ending the round
   };
 
+  const handleRoundPreparation = () => {
+    setTitleAnimationFinished(false);
+    setPlayerAnimationsFinished(false);
+    setStartEliminationAnimations(false);
+    setTimerEndAnimationFinished(false);
+    setTimerRunning(false);
+  };
+
+  useEffect(() => {
+    if (timerEndAnimationFinished && game?.roundStatus === "active") {
+      console.log("Ending round due to timer animation finished");
+      endRound();
+    }
+  }, [timerEndAnimationFinished, endRound, game?.roundStatus]);
+
   if (!game) return null;
 
   return (
     <div className={styles.container}>
-      <RoundTitle handleRoundStart={handleRoundStart} />
-      {titleAnimationFinished && (
+      {game.roundStatus !== "eliminating" && (
         <>
-          <Timer
-            onTimeUp={handleRoundEnd}
-            timerRunning={timerRunning}
-            startEliminationAnimations={startEliminationAnimations}
-          />
-          <PlayerPercentage
-            startEliminationAnimations={startEliminationAnimations}
-          />
-          <PlayersIconGrid
-            startEliminationAnimations={startEliminationAnimations}
-          />
+          <RoundTitle handleRoundStart={handleRoundStart} />
+          {titleAnimationFinished && (
+            <>
+              <Timer
+                onTimeUp={handleRoundEnd}
+                timerRunning={timerRunning}
+                startEliminationAnimations={playerAnimationsFinished}
+                setTimerEndAnimationFinished={setTimerEndAnimationFinished}
+              />
+              <PlayerPercentage startEliminationAnimations={playerAnimationsFinished} />
+              <PlayersIconGrid
+                setPlayerAnimationsFinished={setPlayerAnimationsFinished}
+                startEliminationAnimations={startEliminationAnimations}
+              />
+            </>
+          )}
         </>
+      )}
+
+      {game.roundStatus === "eliminating" && (
+        <EliminationReport handleRoundPreparation={handleRoundPreparation} />
       )}
     </div>
   );

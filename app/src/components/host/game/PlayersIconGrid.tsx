@@ -1,21 +1,23 @@
 import styles from "../styles/PlayersIconGrid.module.css";
 import { useConnectionStore } from "@/store/connectionStore";
 import PlayerIcon from "./PlayerIcon";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, use } from "react";
 import { Player } from "@/models/Game";
 import { findPossibleEliminations } from "@/utils/eliminationOfPlayersUtils";
 
 interface PlayersIconGridProps {
   startEliminationAnimations?: boolean;
+  setPlayerAnimationsFinished: (finished: boolean) => void;
 }
 
-export default function PlayersIconGrid({ startEliminationAnimations }: PlayersIconGridProps) {
+export default function PlayersIconGrid({
+  startEliminationAnimations,
+  setPlayerAnimationsFinished,
+}: PlayersIconGridProps) {
   const { game } = useConnectionStore();
-  const [safePlayers, setSafePlayers] = useState<Player[]>([]);
-  const [playersInDanger, setPlayersInDanger] = useState<Player[]>([]);
 
   const [completedExitAnimations, setCompletedExitAnimations] = useState<Set<string>>(new Set());
-  const [allSafePlayersAnimatedOut, setAllSafePlayersAnimatedOut] = useState(false);
+  const [allPlayersAnimatedOut, setAllPlayersAnimatedOut] = useState(false);
   const playersToAnimateOutRef = useRef<Player[]>([]);
 
   const players =
@@ -28,7 +30,7 @@ export default function PlayersIconGrid({ startEliminationAnimations }: PlayersI
   const rows = 12;
   const columns = 18;
 
-  // Use a ref to track player IDs we've already positioned
+  // Use a ref to track player IDs already positioned
   const positionedPlayersRef = useRef(new Set());
 
   useEffect(() => {
@@ -39,7 +41,7 @@ export default function PlayersIconGrid({ startEliminationAnimations }: PlayersI
     // Get current player IDs
     const currentPlayerIds = new Set(players.map((p) => p.id));
 
-    // Only update positions if we have new players or game changed
+    // Only update positions if there are players that need positioning
     const needsUpdate =
       players.some((p) => !positionedPlayersRef.current.has(p.id)) ||
       Object.keys(playerPositions).some((id) => !currentPlayerIds.has(id));
@@ -122,13 +124,9 @@ export default function PlayersIconGrid({ startEliminationAnimations }: PlayersI
 
   useEffect(() => {
     if (startEliminationAnimations && game) {
-      const { safePlayers, playersInDanger } = findPossibleEliminations(game);
-      setSafePlayers(safePlayers);
-      setPlayersInDanger(playersInDanger);
-
-      setAllSafePlayersAnimatedOut(false);
+      setPlayerAnimationsFinished(false);
       setCompletedExitAnimations(new Set());
-      playersToAnimateOutRef.current = safePlayers;
+      playersToAnimateOutRef.current = game.players.filter((player) => !player.eliminated);
     }
   }, [startEliminationAnimations]);
 
@@ -140,12 +138,17 @@ export default function PlayersIconGrid({ startEliminationAnimations }: PlayersI
       // Check if all players that were supposed to animate out have done so
       const expectedToAnimateCount = playersToAnimateOutRef.current.length;
       if (expectedToAnimateCount > 0 && newCompleted.size === expectedToAnimateCount) {
-        console.log("All safe players have finished their exit animations!");
-        setAllSafePlayersAnimatedOut(true);
+        setAllPlayersAnimatedOut(true);
       }
       return newCompleted;
     });
   };
+
+  useEffect(() => {
+    if (allPlayersAnimatedOut) {
+      setPlayerAnimationsFinished(true);
+    }
+  }, [allPlayersAnimatedOut, setPlayerAnimationsFinished]);
 
   return (
     <div className={styles.container}>
@@ -154,19 +157,15 @@ export default function PlayersIconGrid({ startEliminationAnimations }: PlayersI
           return null; // Skip rendering if position is not assigned
         }
 
-        const isSafe = safePlayers.some((p) => p.id === player.id);
-        const isDanger = playersInDanger.some((p) => p.id === player.id);
-
         return (
           <PlayerIcon
             key={player.id}
             player={player}
             index={index}
+            shouldAnimateOut={startEliminationAnimations}
             gridPosition={getGridPosition(player)}
-            playerIsSafe={isSafe}
-            playerIsInDanger={isDanger}
-            animationDelay={0.5 + index * 0.2}
-            onAnimationComplete={isSafe ? handlePlayerAnimationComplete : undefined}
+            animationDelay={0.5 + index * 0.1}
+            onAnimationComplete={handlePlayerAnimationComplete}
           />
         );
       })}

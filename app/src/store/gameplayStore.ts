@@ -18,22 +18,18 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
   prepareRound: async (gameCode: string): Promise<boolean> => {
     return new Promise((resolve) => {
       const socket = getSocket();
-      socket.emit(
-        "prepareRound",
-        gameCode,
-        (response: { error?: string; game?: Game }) => {
-          if (response.error) {
-            console.error("Failed to prepare round:", response.error);
-            resolve(false);
-          } else {
-            // Update game state if provided
-            if (response.game) {
-              useConnectionStore.getState().setGame(response.game);
-            }
-            resolve(true);
+      socket.emit("prepareRound", gameCode, (response: { error?: string; game?: Game }) => {
+        if (response.error) {
+          console.error("Failed to prepare round:", response.error);
+          resolve(false);
+        } else {
+          // Update game state if provided
+          if (response.game) {
+            useConnectionStore.getState().setGame(response.game);
           }
+          resolve(true);
         }
-      );
+      });
     });
   },
 
@@ -100,7 +96,7 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
     });
   },
 
-  // Function to end round and eliminate players
+  // Function to end round
   endRound: async () => {
     const game = useConnectionStore.getState().game;
 
@@ -111,24 +107,19 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
 
     return new Promise((resolve) => {
       const socket = getSocket();
-      socket.emit(
-        "endRound",
-        game.gameCode,
-        (response: { error?: string; success?: boolean }) => {
-          if (response.error) {
-            console.error("Failed to end round:", response.error);
-            resolve(false);
-          } else if (response.success) {
-            resolve(true);
-          } else {
-            console.error("Invalid response from server");
-            resolve(false);
-          }
+      socket.emit("endRound", game.gameCode, (response: { error?: string; success?: boolean }) => {
+        if (response.error) {
+          console.error("Failed to end round:", response.error);
+          resolve(false);
+        } else if (response.success) {
+          resolve(true);
+        } else {
+          console.error("Invalid response from server");
+          resolve(false);
         }
-      );
+      });
     });
   },
-
   playCoins: async (coins: number) => {
     return new Promise((resolve) => {
       const socket = getSocket();
@@ -140,21 +131,15 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
         return;
       }
 
-      socket.emit(
-        "playCoins",
-        game.gameCode,
-        playerId,
-        coins,
-        (response: any) => {
-          if (response?.error) {
-            resolve(false);
-            console.error(response.error);
-          } else {
-            resolve(true);
-            console.log("Played coins successfully");
-          }
+      socket.emit("playCoins", game.gameCode, playerId, coins, (response: any) => {
+        if (response?.error) {
+          resolve(false);
+          console.error(response.error);
+        } else {
+          resolve(true);
+          console.log("Played coins successfully");
         }
-      );
+      });
     });
   },
 
@@ -169,22 +154,15 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
         return;
       }
 
-      socket.emit(
-        "changeIcon",
-        game.gameCode,
-        playerId,
-        icon,
-        color,
-        (response: any) => {
-          if (response?.error) {
-            resolve(false);
-            console.error(response.error);
-          } else {
-            resolve(true);
-            console.log("Played coins successfully");
-          }
+      socket.emit("changeIcon", game.gameCode, playerId, icon, color, (response: any) => {
+        if (response?.error) {
+          resolve(false);
+          console.error(response.error);
+        } else {
+          resolve(true);
+          console.log("Played coins successfully");
         }
-      );
+      });
     });
   },
 }));

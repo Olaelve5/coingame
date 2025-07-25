@@ -11,6 +11,7 @@ interface TimerProps {
   timerRunning: boolean;
   testingSignal?: boolean;
   startEliminationAnimations?: boolean;
+  setTimerEndAnimationFinished?: (finished: boolean) => void;
 }
 
 export default function Timer({
@@ -19,12 +20,12 @@ export default function Timer({
   timerRunning = false,
   testingSignal = false,
   startEliminationAnimations = false,
+  setTimerEndAnimationFinished,
 }: TimerProps) {
   const [timeRemaining, setTimeRemaining] = useState(initialTime);
   const [startTime, setStartTime] = useState(0);
   const [timeUpTriggered, setTimeUpTriggered] = useState(false);
-  const { scope, playAppearAnimation, playBaloonPopAnimation } =
-    useTimerAnimations();
+  const { scope, playAppearAnimation, playBaloonPopAnimation } = useTimerAnimations();
 
   // Handle the countdown logic with decisecond precision
   useEffect(() => {
@@ -38,11 +39,7 @@ export default function Timer({
 
         setTimeRemaining(newTimeRemaining);
 
-        if (
-          newTimeRemaining <= 0 &&
-          !startEliminationAnimations &&
-          !timeUpTriggered
-        ) {
+        if (newTimeRemaining <= 0 && !startEliminationAnimations && !timeUpTriggered) {
           setTimeUpTriggered(true);
           clearInterval(interval);
           if (onTimeUp) onTimeUp();
@@ -68,6 +65,13 @@ export default function Timer({
   useEffect(() => {
     if (startEliminationAnimations || testingSignal) {
       playBaloonPopAnimation();
+
+      // Delay to ensure animation is finished before setting state
+      setTimeout(() => {
+        if (setTimerEndAnimationFinished) {
+          setTimerEndAnimationFinished(true);
+        }
+      }, 1000);
     }
   }, [testingSignal, startEliminationAnimations]);
 
@@ -94,9 +98,9 @@ export default function Timer({
       </motion.div>
       {(startEliminationAnimations || testingSignal) && (
         <div className={styles.particleContainer}>
-          <PlayerIconParticles color="cyan" distance={1.3}/>
-          <PlayerIconParticles color="azure" distance={1.9}/>
-          <PlayerIconParticles color="violet" distance={1.5}/>
+          <PlayerIconParticles color="cyan" distance={1.3} />
+          <PlayerIconParticles color="azure" distance={1.9} />
+          <PlayerIconParticles color="violet" distance={1.5} />
         </div>
       )}
     </div>
