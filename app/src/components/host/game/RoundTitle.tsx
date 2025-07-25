@@ -50,7 +50,7 @@ export default function RoundTitle({ handleRoundStart }: RoundTitleProps) {
         className={styles.subTitle}
         animate={animationState}
         variants={subTitleAnimation}>
-        <h3 className={styles.playerCount}>20</h3>
+        <h3 className={styles.playerCount}>{playerCount}</h3>
         <h3>players remaining</h3>
       </motion.div>
     </div>
