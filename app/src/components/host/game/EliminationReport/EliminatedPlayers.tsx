@@ -1,9 +1,10 @@
-import { IconXboxXFilled, IconCoinFilled } from "@tabler/icons-react";
+import { IconCoins, IconCoinFilled } from "@tabler/icons-react";
 import styles from "./styles/EliminatedPlayers.module.css";
 import { useMantineTheme } from "@mantine/core";
 import { Player } from "@/models/Game";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getIcon } from "@/utils/iconUtils";
+import { motion } from "framer-motion";
 
 // Define the props interface
 interface EliminatedPlayersProps {
@@ -34,13 +35,21 @@ const EliminatedPlayers = ({ playersEliminated }: EliminatedPlayersProps) => {
   };
 
   // Use test player if no real players are passed
-  const displayPlayers = playersEliminated.length === 0 ? [testPlayer] : playersEliminated;
+  const displayPlayers =
+    playersEliminated.length === 0
+      ? [testPlayer, testPlayer, testPlayer, testPlayer, testPlayer]
+      : playersEliminated;
 
   return (
-    <div className={styles.container}>
+    <motion.div
+      initial={{ opacity: 0, y: "100%" }}
+      animate={{ opacity: 1, y: "0%" }}
+      transition={{ duration: 0.5, ease: "easeInOut" }}
+      className={styles.container}
+    >
       <div className={styles.titleContainer}>
-        <IconXboxXFilled className={styles.xIcon} color={theme.colors.red[7]} />
-        <h1>Eliminated Players</h1>
+        <IconCoins className={styles.coinsIcon} stroke={2} />
+        <h1>Player Bets</h1>
       </div>
       <div className={styles.playersContainer}>
         {displayPlayers.map((player) => {
@@ -58,7 +67,7 @@ const EliminatedPlayers = ({ playersEliminated }: EliminatedPlayersProps) => {
           );
         })}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

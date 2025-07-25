@@ -56,7 +56,7 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
 
     setTimeout(() => {
       setStartEliminationAnimations(true);
-    }, 1000); // Delay before ending the round
+    }, 100); // Delay before ending the round
   };
 
   if (!game) return null;

@@ -3,13 +3,13 @@ import styles from "./styles/EliminationReport.module.css";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMantineTheme } from "@mantine/core";
 import EliminationsPage from "./EliminationsPage";
+import EliminatedPlayers from "./EliminatedPlayers";
 import PageIndicators from "./PageIndicators";
 import StatsPage from "./StatsPage";
 
 const EliminationReport = () => {
   const [initialAnimationFinished, setInitialAnimationFinished] = useState(false);
   const [page, setPage] = useState(1);
-  const theme = useMantineTheme();
   const [hasPageChanged, setHasPageChanged] = useState(false);
 
   const handleSetPage = (newPage: number) => {
@@ -43,35 +43,33 @@ const EliminationReport = () => {
       onAnimationComplete={() => setInitialAnimationFinished(true)}
       className={styles.container}
     >
-      <div className={styles.header}>
+      {/* <div className={styles.header}>
         <div className={styles.titleContainer}>
           <h2 className={styles.title}>Elimination Report</h2>
           <h2 className={styles.title} style={{ color: theme.colors.blue[5] }}>
             1
           </h2>
         </div>
-      </div>
+      </div> */}
 
       {initialAnimationFinished && (
-        <div className={styles.carouselContainer}>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={page}
-              variants={getSlideVariants(page)}
-              initial={page === 1 && !hasPageChanged ? false : "enter"}
-              animate="center"
-              exit="exit"
-              transition={{ duration: 0.4, ease: "easeInOut" }}
-              className={styles.pageContainer}
-            >
-              {page === 2 && <StatsPage />}
-              {page === 1 && <EliminationsPage showCountdown={!hasPageChanged} />}
-            </motion.div>
-          </AnimatePresence>
-        </div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={page}
+            variants={getSlideVariants(page)}
+            initial={page === 1 && !hasPageChanged ? false : "enter"}
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.4, ease: "easeInOut" }}
+            className={styles.pageContainer}
+          >
+            {page === 1 && <EliminationsPage hasPageChanged={hasPageChanged} />}
+            {page === 2 && <StatsPage />}
+          </motion.div>
+        </AnimatePresence>
       )}
 
-      <PageIndicators page={page} setPage={handleSetPage} />
+      {/* <PageIndicators page={page} setPage={handleSetPage} /> */}
     </motion.div>
   );
 };

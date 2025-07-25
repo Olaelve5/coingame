@@ -2,7 +2,6 @@ import { useEffect, useState, useCallback } from "react";
 import styles from "../styles/CoinsCountdown.module.css";
 import { motion } from "framer-motion";
 import { StaggeredText } from "../StaggeredText";
-import { IconCoinFilled } from "@tabler/icons-react";
 
 interface CoinsCountdownProps {
   onComplete?: () => void;
@@ -21,6 +20,7 @@ export default function CoinsCountdown({
   const [count, setCount] = useState(START_NUMBER);
   const [countCompleted, setCountCompleted] = useState(false);
   const [fadeInCompleted, setFadeInCompleted] = useState(false);
+  const [shouldShrink, setShouldShrink] = useState(false);
 
   const startIntervalMs = 25; // Fast start speed
   const endIntervalMs = 1000; // Slow ending speed
@@ -43,9 +43,21 @@ export default function CoinsCountdown({
   const numberVariants = {
     counting: { scale: 1 },
     finished: {
-      scale: [1, 1, 1],
-      color: "#22c55e",
+      color: "#0bc54fff",
       transition: { duration: 0.1, delay: endIntervalMs / 1000 },
+    },
+  };
+
+  const containerVariants = {
+    big: {
+      scale: 1,
+      top: "30%",
+      transition: { duration: 0.5, ease: "easeInOut" },
+    },
+    normal: {
+      scale: 1,
+      top: "5%",
+      transition: { duration: 0.5, ease: "easeInOut" },
     },
   };
 
@@ -56,7 +68,11 @@ export default function CoinsCountdown({
       if (count <= targetNumber) {
         setCount(targetNumber);
         setCountCompleted(true);
-        onComplete?.();
+
+        // Trigger onComplete callback after a delay
+        setTimeout(() => {
+          setShouldShrink(true);
+        }, 2000);
       }
       return;
     }
@@ -66,10 +82,21 @@ export default function CoinsCountdown({
     }, getNextIntervalMS(count));
 
     return () => clearTimeout(timerId);
-  }, [count, targetNumber, isRunning, onComplete, getNextIntervalMS, fadeInCompleted]);
+  }, [count, targetNumber, isRunning, getNextIntervalMS, fadeInCompleted]);
 
   return (
-    <div className={styles.container}>
+    <motion.div
+      variants={containerVariants}
+      initial="big"
+      animate={shouldShrink ? "normal" : "big"}
+      onAnimationComplete={(definition) => {
+        if (definition === "normal") {
+          setCountCompleted(true);
+          onComplete?.();
+        }
+      }}
+      className={styles.container}
+    >
       <StaggeredText text="Safety Threshold" />
       <motion.div
         initial={{ opacity: 0, scale: 1, y: 20 }}
@@ -86,6 +113,6 @@ export default function CoinsCountdown({
           {count}
         </motion.h1>
       </motion.div>
-    </div>
+    </motion.div>
   );
 }
