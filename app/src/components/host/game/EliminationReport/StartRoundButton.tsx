@@ -7,8 +7,8 @@ const StartRoundButton = ({ handleRoundPreparation }: { handleRoundPreparation: 
   const { startRound } = useGameplayStore();
 
   const handleClick = async () => {
-    await startRound();
     handleRoundPreparation();
+    await startRound();
   };
 
   return (

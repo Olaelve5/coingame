@@ -5,40 +5,23 @@ import { Player } from "@/models/Game";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getIcon } from "@/utils/iconUtils";
 import { motion } from "framer-motion";
-
-// Define the props interface
-interface EliminatedPlayersProps {
-  playersEliminated: Player[];
-}
+import { useConnectionStore } from "@/store/connectionStore";
+import { testPlayer } from "@/utils/testPlayerUtils";
 
 // Correct destructuring
-const EliminatedPlayers = ({ playersEliminated }: EliminatedPlayersProps) => {
-  const theme = useMantineTheme();
-
-  // Test player for development
-  const testPlayer: Player = {
-    id: "test-player-1",
-    name: "TestPlayer123",
-    coins: 5,
-    connected: false,
-    socketId: "test-socket",
-    eliminated: true,
-    playedInRound: true,
-    icon: "dragon",
-    color: "violet",
-    roundHistory: [
-      {
-        round: 1,
-        coinsPlayed: 5,
-      },
-    ],
-  };
+const EliminatedPlayers = () => {
+  const { game } = useConnectionStore();
 
   // Use test player if no real players are passed
-  const displayPlayers =
-    playersEliminated.length === 0
-      ? [testPlayer]
-      : playersEliminated;
+  const displayPlayers = !game
+    ? [testPlayer]
+    : game.players.filter((player) => !player.eliminated && player.playedInRound);
+
+  displayPlayers.sort((a, b) => {
+    const aLastRound = a.roundHistory[a.roundHistory.length - 1];
+    const bLastRound = b.roundHistory[b.roundHistory.length - 1];
+    return (aLastRound?.coinsPlayed || 0) - (bLastRound?.coinsPlayed || 0);
+  });
 
   return (
     <motion.div
