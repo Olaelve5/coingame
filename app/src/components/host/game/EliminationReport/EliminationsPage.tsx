@@ -7,10 +7,10 @@ import { useConnectionStore } from "@/store/connectionStore";
 
 const EliminationsPage = ({
   hasPageChanged,
-  handleRoundPreparation,
+  setShouldAnimateOut,
 }: {
   hasPageChanged: boolean;
-  handleRoundPreparation: () => void;
+  setShouldAnimateOut: (shouldAnimate: boolean) => void;
 }) => {
   const [countdownComplete, setCountdownComplete] = useState(false);
   const { game } = useConnectionStore();
@@ -33,8 +33,8 @@ const EliminationsPage = ({
       />
       {(hasPageChanged || countdownComplete) && (
         <>
-          <EliminatedPlayers  />
-          <StartRoundButton handleRoundPreparation={handleRoundPreparation} />
+          <EliminatedPlayers />
+          <StartRoundButton setShouldAnimateOut={setShouldAnimateOut} />
         </>
       )}
     </div>

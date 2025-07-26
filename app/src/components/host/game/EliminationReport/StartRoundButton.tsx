@@ -3,12 +3,15 @@ import { Button } from "@mantine/core";
 import styles from "./styles/StartRoundButton.module.css";
 import { useGameplayStore } from "@/store/gameplayStore";
 
-const StartRoundButton = ({ handleRoundPreparation }: { handleRoundPreparation: () => void }) => {
+const StartRoundButton = ({
+  setShouldAnimateOut,
+}: {
+  setShouldAnimateOut: (shouldAnimate: boolean) => void;
+}) => {
   const { startRound } = useGameplayStore();
 
   const handleClick = async () => {
-    handleRoundPreparation();
-    await startRound();
+    setShouldAnimateOut(true);
   };
 
   return (

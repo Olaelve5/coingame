@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import styles from "./styles/EliminationReport.module.css";
 import { motion, AnimatePresence } from "framer-motion";
-import { useMantineTheme } from "@mantine/core";
 import EliminationsPage from "./EliminationsPage";
 import StatsPage from "./StatsPage";
+import { useGameplayStore } from "@/store/gameplayStore";
 
 interface EliminationReportProps {
   handleRoundPreparation: () => void;
@@ -13,6 +13,8 @@ const EliminationReport = ({ handleRoundPreparation }: EliminationReportProps) =
   const [initialAnimationFinished, setInitialAnimationFinished] = useState(false);
   const [page, setPage] = useState(1);
   const [hasPageChanged, setHasPageChanged] = useState(false);
+  const [shouldAnimateOut, setShouldAnimateOut] = useState(false);
+  const { startRound } = useGameplayStore();
 
   const handleSetPage = (newPage: number) => {
     setHasPageChanged(true);
@@ -39,10 +41,16 @@ const EliminationReport = ({ handleRoundPreparation }: EliminationReportProps) =
   return (
     <motion.div
       initial={{ y: "100%" }}
-      animate={{ y: 0 }}
-      exit={{ y: "100%" }}
-      transition={{ duration: 0.8, type: "spring", bounce: 0.2 }}
-      onAnimationComplete={() => setInitialAnimationFinished(true)}
+      animate={shouldAnimateOut ? { y: "100%" } : { y: 0 }}
+      transition={{ duration: 1, type: "spring", bounce: 0.15 }}
+      onAnimationComplete={() => {
+        if (shouldAnimateOut) {
+          handleRoundPreparation();
+          startRound();
+          return;
+        }
+        setInitialAnimationFinished(true);
+      }}
       className={styles.container}
     >
       {/* <div className={styles.header}>
@@ -68,7 +76,7 @@ const EliminationReport = ({ handleRoundPreparation }: EliminationReportProps) =
             {page === 1 && (
               <EliminationsPage
                 hasPageChanged={hasPageChanged}
-                handleRoundPreparation={handleRoundPreparation}
+                setShouldAnimateOut={setShouldAnimateOut}
               />
             )}
             {page === 2 && <StatsPage />}

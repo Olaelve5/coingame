@@ -23,7 +23,10 @@ export default function CoinsCountdown({
   const [shouldShrink, setShouldShrink] = useState(false);
 
   const startIntervalMs = 25; // Fast start speed
-  const endIntervalMs = 1000; // Slow ending speed
+  const endIntervalMs = 1500; // Slow ending speed
+
+  // Generate random power when component mounts
+  const [randomPower] = useState(() => Math.random() * (25 - 15) + 15);
 
   // Progressively slow down the countdown as it approaches the target
   const getNextIntervalMS = useCallback(
@@ -33,11 +36,13 @@ export default function CoinsCountdown({
 
       const stepsTaken = START_NUMBER - currentCount;
       const progress = stepsTaken / totalSteps;
-      const exponentialProgress = Math.pow(progress, 18); // Exponential curve for slowing down
+
+      console.log("Random Power:", randomPower);
+      const exponentialProgress = Math.pow(progress, randomPower);
 
       return startIntervalMs + (endIntervalMs - startIntervalMs) * exponentialProgress;
     },
-    [targetNumber]
+    [targetNumber, randomPower]
   );
 
   const numberVariants = {
