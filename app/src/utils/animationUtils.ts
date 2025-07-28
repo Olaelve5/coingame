@@ -4,7 +4,7 @@ export const roundTitleAnimation = {
     scale: 0.5, // Start small
     x: "50%", // Center horizontally
     translateX: "-50%", // Adjust for perfect horizontal centering
-    top: "50%", // Position in the middle vertically
+    top: "40%", // Position in the middle vertically
   },
   big: {
     opacity: 1,
@@ -12,7 +12,7 @@ export const roundTitleAnimation = {
     scale: 3, // Enlarge significantly
     x: "50%", // Center horizontally
     translateX: "-50%", // Adjust for perfect horizontal centering
-    top: "50%", // Position in the middle vertically
+    top: "40%", // Position in the middle vertically
     transition: {
       type: "spring",
       duration: 0.6,
@@ -35,7 +35,7 @@ export const subTitleAnimation = {
     scale: 0, // Start small
     x: "50%", // Center horizontally
     translateX: "-50%", // Adjust for perfect horizontal centering
-    top: "calc(50% + 3rem)", 
+    top: "calc(40% + 5rem)", 
   },
   big: {
     opacity: 1,
@@ -43,7 +43,7 @@ export const subTitleAnimation = {
     scale: 1.6, // Enlarge significantly
     x: "50%", // Center horizontally
     translateX: "-50%", // Adjust for perfect horizontal centering
-    top: "calc(50% + 4.5rem)", // Position in the middle vertically
+    top: "calc(40% + 5rem)", // Position in the middle vertically
     transition: {
       type: "spring",
       duration: 0.6,

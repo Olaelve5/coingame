@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
-import styles from "../styles/CoinsCountdown.module.css";
+import styles from "./styles/CoinsCountdown.module.css";
 import { motion } from "framer-motion";
-import { StaggeredText } from "../StaggeredText";
+import { StaggeredText } from "../../StaggeredText";
 
 interface CoinsCountdownProps {
   onComplete?: () => void;
@@ -36,8 +36,6 @@ export default function CoinsCountdown({
 
       const stepsTaken = START_NUMBER - currentCount;
       const progress = stepsTaken / totalSteps;
-
-      console.log("Random Power:", randomPower);
       const exponentialProgress = Math.pow(progress, randomPower);
 
       return startIntervalMs + (endIntervalMs - startIntervalMs) * exponentialProgress;
@@ -48,7 +46,7 @@ export default function CoinsCountdown({
   const numberVariants = {
     counting: { scale: 1 },
     finished: {
-      color: "#0bc54fff",
+      color: "#00b7f9ff",
       transition: { duration: 0.1, delay: endIntervalMs / 1000 },
     },
   };

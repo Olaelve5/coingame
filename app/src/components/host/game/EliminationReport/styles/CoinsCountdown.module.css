@@ -5,7 +5,8 @@
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  position: absolute;
+  position: relative;
+  bottom: 2rem;
 }
 
 .countdownContainer {
@@ -15,7 +16,6 @@
   align-items: center;
   justify-content: center;
   gap: 2rem;
-  position: relative;
 }
 
 .count {

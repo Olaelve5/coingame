@@ -42,7 +42,7 @@ const EliminationReport = ({ handleRoundPreparation }: EliminationReportProps) =
     <motion.div
       initial={{ y: "100%" }}
       animate={shouldAnimateOut ? { y: "100%" } : { y: 0 }}
-      transition={{ duration: 1, type: "spring", bounce: 0.15 }}
+      transition={{ duration: 0.8, type: "spring", bounce: 0.15 }}
       onAnimationComplete={() => {
         if (shouldAnimateOut) {
           handleRoundPreparation();

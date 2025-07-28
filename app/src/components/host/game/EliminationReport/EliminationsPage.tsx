@@ -1,5 +1,5 @@
 import EliminatedPlayers from "./EliminatedPlayers";
-import CoinsCountdown from "../CoinsCountdown";
+import CoinsCountdown from "./CoinsCountdown";
 import { useState } from "react";
 import styles from "./styles/EliminationsPage.module.css";
 import StartRoundButton from "./StartRoundButton";
@@ -15,17 +15,17 @@ const EliminationsPage = ({
   const [countdownComplete, setCountdownComplete] = useState(false);
   const { game } = useConnectionStore();
 
-  if (!game) {
-    return <div>Loading...</div>;
-  }
+  // if (!game) {
+  //   return <div>Loading...</div>;
+  // }
 
-  const targetNumber = game.lastRoundResults.minCoinsPlayed + 1 || 0;
+  // const targetNumber = game.lastRoundResults.minCoinsPlayed + 1 || 0;
 
   return (
     <div className={styles.pageContainer}>
       {!countdownComplete && (
         <CoinsCountdown
-          targetNumber={targetNumber}
+          targetNumber={9}
           isRunning={true}
           onComplete={() => {
             console.log("Countdown complete");
