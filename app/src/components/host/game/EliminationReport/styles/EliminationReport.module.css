@@ -5,6 +5,7 @@
   top: 2rem;
   padding: 2rem;
   align-items: center;
+  justify-content: center;
   gap: 4rem;
   display: flex;
   flex-direction: column;

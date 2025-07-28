@@ -1,9 +1,7 @@
 import { IconCoins, IconCoinFilled } from "@tabler/icons-react";
 import styles from "./styles/EliminatedPlayers.module.css";
-import { useMantineTheme } from "@mantine/core";
-import { Player } from "@/models/Game";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getIcon } from "@/utils/iconUtils";
+import { getColor, getIcon } from "@/utils/iconUtils";
 import { motion } from "framer-motion";
 import { useConnectionStore } from "@/store/connectionStore";
 import { testPlayer } from "@/utils/testPlayerUtils";
@@ -37,9 +35,12 @@ const EliminatedPlayers = () => {
       <div className={styles.playersContainer}>
         {displayPlayers.map((player) => {
           const lastRound = player.roundHistory[player.roundHistory.length - 1];
+          const isEliminated = game?.lastRoundResults?.playersEliminated.some(
+            (eliminatedPlayer) => eliminatedPlayer.id === player.id
+          );
 
           return (
-            <div key={player.id} className={styles.playerContainer}>
+            <div key={player.id} className={styles.playerContainer} style={isEliminated ? {} : {}}>
               <FontAwesomeIcon icon={getIcon(player.icon)} className={styles.playerIcon} />
               <p>{player.name}</p>
               <div className={styles.playedCoinsContainer}>

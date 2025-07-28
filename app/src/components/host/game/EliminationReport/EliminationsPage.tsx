@@ -23,14 +23,16 @@ const EliminationsPage = ({
 
   return (
     <div className={styles.pageContainer}>
-      <CoinsCountdown
-        targetNumber={targetNumber}
-        isRunning={true}
-        onComplete={() => {
-          console.log("Countdown complete");
-          setCountdownComplete(true);
-        }}
-      />
+      {!countdownComplete && (
+        <CoinsCountdown
+          targetNumber={targetNumber}
+          isRunning={true}
+          onComplete={() => {
+            console.log("Countdown complete");
+            setCountdownComplete(true);
+          }}
+        />
+      )}
       {(hasPageChanged || countdownComplete) && (
         <>
           <EliminatedPlayers />

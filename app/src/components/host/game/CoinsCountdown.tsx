@@ -55,13 +55,11 @@ export default function CoinsCountdown({
 
   const containerVariants = {
     big: {
-      scale: 1,
-      top: "30%",
+      opacity: 1,
       transition: { duration: 0.5, ease: "easeInOut" },
     },
     normal: {
-      scale: 1,
-      top: "5%",
+      opacity: 0,
       transition: { duration: 0.5, ease: "easeInOut" },
     },
   };
@@ -77,7 +75,7 @@ export default function CoinsCountdown({
         // Trigger onComplete callback after a delay
         setTimeout(() => {
           setShouldShrink(true);
-        }, 2000);
+        }, 3000);
       }
       return;
     }
