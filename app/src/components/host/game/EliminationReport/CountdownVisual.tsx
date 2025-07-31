@@ -17,7 +17,7 @@ const CountdownVisual = ({ count, maxCount }: { count: number; maxCount: number 
         duration: 1.5,
         ease: "easeOut",
       }}
-    />
+    ></motion.div>
   );
 };
 

@@ -2,8 +2,6 @@ import { useEffect, useState, useCallback } from "react";
 import styles from "./styles/CoinsCountdown.module.css";
 import { motion } from "framer-motion";
 import { StaggeredText } from "../../StaggeredText";
-import CountdownVisual from "./CountdownVisual";
-import { start } from "repl";
 
 interface CoinsCountdownProps {
   count: number;
@@ -77,7 +75,7 @@ export default function CoinsCountdown({
         // Trigger onComplete callback after a delay
         setTimeout(() => {
           setShouldShrink(true);
-        }, 3000);
+        }, 3500);
       }
       return;
     }
@@ -92,7 +90,6 @@ export default function CoinsCountdown({
   return (
     <motion.div
       variants={containerVariants}
-      initial="big"
       animate={shouldShrink ? "normal" : "big"}
       onAnimationComplete={(definition) => {
         if (definition === "normal") {
