@@ -2,22 +2,26 @@ import { useEffect, useState, useCallback } from "react";
 import styles from "./styles/CoinsCountdown.module.css";
 import { motion } from "framer-motion";
 import { StaggeredText } from "../../StaggeredText";
+import CountdownVisual from "./CountdownVisual";
+import { start } from "repl";
 
 interface CoinsCountdownProps {
+  count: number;
+  setCount: (count: number) => void;
+  startNumber: number;
   onComplete?: () => void;
   targetNumber: number;
   isRunning?: boolean;
 }
 
-// Starting number for the countdown
-const START_NUMBER = 99;
-
 export default function CoinsCountdown({
+  count,
+  setCount,
+  startNumber = 99,
   onComplete,
   targetNumber,
   isRunning = true,
 }: CoinsCountdownProps) {
-  const [count, setCount] = useState(START_NUMBER);
   const [countCompleted, setCountCompleted] = useState(false);
   const [fadeInCompleted, setFadeInCompleted] = useState(false);
   const [shouldShrink, setShouldShrink] = useState(false);
@@ -31,10 +35,10 @@ export default function CoinsCountdown({
   // Progressively slow down the countdown as it approaches the target
   const getNextIntervalMS = useCallback(
     (currentCount: number) => {
-      const totalSteps = START_NUMBER - targetNumber;
+      const totalSteps = startNumber - targetNumber;
       if (totalSteps <= 0) return endIntervalMs;
 
-      const stepsTaken = START_NUMBER - currentCount;
+      const stepsTaken = startNumber - currentCount;
       const progress = stepsTaken / totalSteps;
       const exponentialProgress = Math.pow(progress, randomPower);
 
@@ -79,7 +83,7 @@ export default function CoinsCountdown({
     }
 
     const timerId = setTimeout(() => {
-      setCount((prevCount) => prevCount - 1);
+      setCount(count - 1);
     }, getNextIntervalMS(count));
 
     return () => clearTimeout(timerId);
@@ -98,7 +102,10 @@ export default function CoinsCountdown({
       }}
       className={styles.container}
     >
-      <StaggeredText text="Safety Threshold" />
+      <div className={styles.textContainer}>
+        <StaggeredText text="Safety Threshold" />
+      </div>
+
       <motion.div
         initial={{ opacity: 0, scale: 1, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}

@@ -4,6 +4,9 @@ import { useState } from "react";
 import styles from "./styles/EliminationsPage.module.css";
 import StartRoundButton from "./StartRoundButton";
 import { useConnectionStore } from "@/store/connectionStore";
+import CountdownVisual from "./CountdownVisual";
+
+const START_NUMBER = 99;
 
 const EliminationsPage = ({
   hasPageChanged,
@@ -13,19 +16,24 @@ const EliminationsPage = ({
   setShouldAnimateOut: (shouldAnimate: boolean) => void;
 }) => {
   const [countdownComplete, setCountdownComplete] = useState(false);
+  const [count, setCount] = useState(START_NUMBER);
   const { game } = useConnectionStore();
 
-  // if (!game) {
-  //   return <div>Loading...</div>;
-  // }
+  if (!game) {
+    return <div>Loading...</div>;
+  }
 
-  // const targetNumber = game.lastRoundResults.minCoinsPlayed + 1 || 0;
+  const targetNumber = game.lastRoundResults.minCoinsPlayed + 1 || 5;
 
   return (
     <div className={styles.pageContainer}>
+      <CountdownVisual count={count} maxCount={START_NUMBER} />
       {!countdownComplete && (
         <CoinsCountdown
-          targetNumber={9}
+          count={count}
+          setCount={setCount}
+          startNumber={START_NUMBER}
+          targetNumber={targetNumber}
           isRunning={true}
           onComplete={() => {
             console.log("Countdown complete");

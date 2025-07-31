@@ -62,7 +62,7 @@ const EliminationReport = ({ handleRoundPreparation }: EliminationReportProps) =
         </div>
       </div> */}
 
-      {initialAnimationFinished && (
+      {true && (
         <AnimatePresence mode="wait">
           <motion.div
             key={page}
