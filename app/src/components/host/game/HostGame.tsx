@@ -45,6 +45,7 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
 
   const handleRoundEnd = async () => {
     if (!game) return;
+    setTimerRunning(false);
     const startElimination = await finalizeRoundPlays();
 
     if (!startElimination) {
@@ -87,7 +88,10 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
                 startEliminationAnimations={playerAnimationsFinished}
                 setTimerEndAnimationFinished={setTimerEndAnimationFinished}
               />
-              <PlayerPercentage startEliminationAnimations={playerAnimationsFinished} />
+              <PlayerPercentage
+                startEliminationAnimations={playerAnimationsFinished}
+                onRoundEnd={handleRoundEnd}
+              />
               <PlayersIconGrid
                 setPlayerAnimationsFinished={setPlayerAnimationsFinished}
                 startEliminationAnimations={startEliminationAnimations}

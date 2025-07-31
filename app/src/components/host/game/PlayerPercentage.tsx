@@ -6,11 +6,13 @@ import { usePlayerPercentageAnimation } from "@/utils/animations/playerPercentag
 import PlayerIconParticles from "./PlayerIconParticle";
 
 interface PlayerPercentage {
+  onRoundEnd?: () => void;
   testingSignal?: boolean;
   startEliminationAnimations?: boolean;
 }
 
 const PlayerPercentage = ({
+  onRoundEnd,
   testingSignal,
   startEliminationAnimations,
 }: PlayerPercentage) => {
@@ -27,13 +29,14 @@ const PlayerPercentage = ({
 
   useEffect(() => {
     if (game) {
-      const totalPlayersAlive = game.players.filter(
-        (player) => !player.eliminated
-      ).length;
-      const playedPlayer = game.players.filter(
-        (player) => player.playedInRound
-      ).length;
-      setPercentage((playedPlayer / totalPlayersAlive) * 100);
+      const totalPlayersAlive = game.players.filter((player) => !player.eliminated).length;
+      const playedPlayer = game.players.filter((player) => player.playedInRound).length;
+      const percentage = (playedPlayer / totalPlayersAlive) * 100;
+      setPercentage(percentage);
+
+      if (percentage >= 100 && onRoundEnd) {
+        onRoundEnd();
+      }
     }
   }, [game]);
 
@@ -52,16 +55,10 @@ const PlayerPercentage = ({
 
   const formattedPercentage = Math.round(percentage);
 
-  // Disabled the game check for testing purposes
-  // if (!game) return null;
-
   return (
     <div>
       <div className={styles.container}>
-        <motion.div
-          ref={scope}
-          style={{ scale: 0.5, opacity: 0 }}
-          className={styles.barContainer}>
+        <motion.div ref={scope} style={{ scale: 0.5, opacity: 0 }} className={styles.barContainer}>
           <motion.div
             className={styles.bar}
             initial={{ height: 0 }}
@@ -70,12 +67,10 @@ const PlayerPercentage = ({
               duration: 0.5,
               type: "spring",
               bounce: 0.35,
-            }}></motion.div>
+            }}
+          ></motion.div>
         </motion.div>
-        <motion.div
-          ref={textScope}
-          className={styles.textContainer}
-          style={{ opacity: 0 }}>
+        <motion.div ref={textScope} className={styles.textContainer} style={{ opacity: 0 }}>
           <h2 className={styles.percentageText}>{formattedPercentage}%</h2>
           <h2 className={styles.text}>have played</h2>
         </motion.div>
