@@ -55,7 +55,7 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
 
     setTimeout(() => {
       setStartEliminationAnimations(true);
-    }, 100); // Delay before ending the round
+    }, 200); // Delay before ending the round
   };
 
   const handleRoundPreparation = () => {
@@ -79,7 +79,10 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
     <div className={styles.container}>
       {game.roundStatus !== "eliminating" && (
         <>
-          <RoundTitle handleRoundStart={handleRoundStart} />
+          <RoundTitle
+            handleRoundStart={handleRoundStart}
+            startEliminationAnimations={playerAnimationsFinished}
+          />
           {titleAnimationFinished && (
             <>
               <Timer

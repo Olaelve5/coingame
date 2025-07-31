@@ -71,7 +71,7 @@ export default function Timer({
         if (setTimerEndAnimationFinished) {
           setTimerEndAnimationFinished(true);
         }
-      }, 1000);
+      }, 2000); // Delay before the elimination report starts
     }
   }, [testingSignal, startEliminationAnimations]);
 

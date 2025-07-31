@@ -9,14 +9,12 @@ const EliminationsPage = ({
   count,
   setCount,
   START_NUMBER,
-  hasPageChanged,
   setShouldAnimateOut,
   initialAnimationFinished,
 }: {
   count: number;
   setCount: (count: number) => void;
   START_NUMBER: number;
-  hasPageChanged: boolean;
   setShouldAnimateOut: (shouldAnimate: boolean) => void;
   initialAnimationFinished: boolean;
 }) => {
@@ -46,7 +44,7 @@ const EliminationsPage = ({
           }}
         />
       )}
-      {(hasPageChanged || countdownComplete) && (
+      {countdownComplete && (
         <>
           <EliminatedPlayers />
           <StartRoundButton setShouldAnimateOut={setShouldAnimateOut} />

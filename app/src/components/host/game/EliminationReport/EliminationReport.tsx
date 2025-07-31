@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import styles from "./styles/EliminationReport.module.css";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import EliminationsPage from "./EliminationsPage";
-import StatsPage from "./StatsPage";
 import { useGameplayStore } from "@/store/gameplayStore";
 import { useMantineTheme } from "@mantine/core";
 import CountdownVisual from "@/components/host/game/EliminationReport/CountdownVisual";
@@ -16,33 +15,9 @@ interface EliminationReportProps {
 const EliminationReport = ({ handleRoundPreparation }: EliminationReportProps) => {
   const [initialAnimationFinished, setInitialAnimationFinished] = useState(false);
   const theme = useMantineTheme();
-  const [page, setPage] = useState(1);
-  const [hasPageChanged, setHasPageChanged] = useState(false);
   const [shouldAnimateOut, setShouldAnimateOut] = useState(false);
   const [count, setCount] = useState(START_NUMBER);
   const { startRound } = useGameplayStore();
-
-  const handleSetPage = (newPage: number) => {
-    setHasPageChanged(true);
-    setPage(newPage);
-  };
-
-  const getSlideVariants = (page: number) => {
-    return {
-      enter: {
-        x: page === 1 ? "-100%" : "100%",
-        opacity: 1,
-      },
-      center: {
-        x: 0,
-        opacity: 1,
-      },
-      exit: {
-        x: page === 1 ? "-100%" : "100%",
-        opacity: 1,
-      },
-    };
-  };
 
   return (
     <motion.div
@@ -69,32 +44,13 @@ const EliminationReport = ({ handleRoundPreparation }: EliminationReportProps) =
           </h2>
         </div>
       </div>
-
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={page}
-          variants={getSlideVariants(page)}
-          initial={page === 1 && !hasPageChanged ? false : "enter"}
-          animate="center"
-          exit="exit"
-          transition={{ duration: 0.4, ease: "easeInOut" }}
-          className={styles.pageContainer}
-        >
-          {page === 1 && (
-            <EliminationsPage
-              count={count}
-              setCount={setCount}
-              START_NUMBER={START_NUMBER}
-              hasPageChanged={hasPageChanged}
-              setShouldAnimateOut={setShouldAnimateOut}
-              initialAnimationFinished={initialAnimationFinished}
-            />
-          )}
-          {page === 2 && <StatsPage />}
-        </motion.div>
-      </AnimatePresence>
-
-      {/* <PageIndicators page={page} setPage={handleSetPage} /> */}
+      <EliminationsPage
+        count={count}
+        setCount={setCount}
+        START_NUMBER={START_NUMBER}
+        setShouldAnimateOut={setShouldAnimateOut}
+        initialAnimationFinished={initialAnimationFinished}
+      />
     </motion.div>
   );
 };

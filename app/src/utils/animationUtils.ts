@@ -1,3 +1,5 @@
+import { delay } from "framer-motion";
+
 // --- Round Title Animation Variants ---
 export const roundTitleAnimation = {
   initial: {
@@ -28,6 +30,14 @@ export const roundTitleAnimation = {
       bounce: 0.4,
     },
   },
+  fadeOut: {
+    opacity: 0, // Fade out
+    transition: {
+      ease: "easeInOut",
+      duration: 0.5, // Duration of the fade-out effect
+      delay: 1,
+    },
+  },
 };
 
 export const subTitleAnimation = {
@@ -35,7 +45,7 @@ export const subTitleAnimation = {
     scale: 0, // Start small
     x: "50%", // Center horizontally
     translateX: "-50%", // Adjust for perfect horizontal centering
-    top: "calc(40% + 5rem)", 
+    top: "calc(40% + 5rem)",
   },
   big: {
     opacity: 1,

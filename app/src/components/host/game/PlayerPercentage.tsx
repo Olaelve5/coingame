@@ -46,6 +46,7 @@ const PlayerPercentage = ({
     playTextAppearAnimation();
   }, []);
 
+  
   useEffect(() => {
     if (testingSignal || startEliminationAnimations) {
       playBaloonPopAnimation();

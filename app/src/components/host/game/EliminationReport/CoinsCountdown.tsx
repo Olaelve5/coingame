@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import styles from "./styles/CoinsCountdown.module.css";
 import { motion } from "framer-motion";
 import { StaggeredText } from "../../StaggeredText";
+import { useMantineTheme } from "@mantine/core";
 
 interface CoinsCountdownProps {
   count: number;
@@ -23,6 +24,7 @@ export default function CoinsCountdown({
   const [countCompleted, setCountCompleted] = useState(false);
   const [fadeInCompleted, setFadeInCompleted] = useState(false);
   const [shouldShrink, setShouldShrink] = useState(false);
+  const theme = useMantineTheme();
 
   const startIntervalMs = 25; // Fast start speed
   const endIntervalMs = 1500; // Slow ending speed
@@ -48,7 +50,7 @@ export default function CoinsCountdown({
   const numberVariants = {
     counting: { scale: 1 },
     finished: {
-      color: "#00b7f9ff",
+      color: theme.colors.blue[5],
       transition: { duration: 0.1, delay: endIntervalMs / 1000 },
     },
   };
