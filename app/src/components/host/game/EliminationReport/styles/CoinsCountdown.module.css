@@ -20,6 +20,15 @@
 
 .count {
   font-size: 6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.digit {
+  display: inline-block;
+  width: 1ch;
+  text-align: center;
 }
 
 .coinIcon {

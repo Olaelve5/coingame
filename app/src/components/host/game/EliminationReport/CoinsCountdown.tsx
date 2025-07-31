@@ -111,7 +111,14 @@ export default function CoinsCountdown({
           variants={numberVariants}
           animate={countCompleted ? "finished" : "counting"}
         >
-          {count}
+          {count
+            .toString()
+            .split("")
+            .map((digit, index) => (
+              <span key={index} className={styles.digit}>
+                {digit}
+              </span>
+            ))}
         </motion.h1>
       </motion.div>
     </motion.div>
