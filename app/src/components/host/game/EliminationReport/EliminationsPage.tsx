@@ -4,21 +4,25 @@ import { useState } from "react";
 import styles from "./styles/EliminationsPage.module.css";
 import StartRoundButton from "./StartRoundButton";
 import { useConnectionStore } from "@/store/connectionStore";
+import PlayedCoinsChart from "./PlayedCoinsChart";
 
 const EliminationsPage = ({
   count,
   setCount,
   START_NUMBER,
+  countdownComplete,
+  setCountdownComplete,
   setShouldAnimateOut,
   initialAnimationFinished,
 }: {
   count: number;
   setCount: (count: number) => void;
   START_NUMBER: number;
+  countdownComplete: boolean;
+  setCountdownComplete: (finished: boolean) => void;
   setShouldAnimateOut: (shouldAnimate: boolean) => void;
   initialAnimationFinished: boolean;
 }) => {
-  const [countdownComplete, setCountdownComplete] = useState(false);
   const { game } = useConnectionStore();
 
   // if (!game) {
@@ -27,7 +31,7 @@ const EliminationsPage = ({
 
   const targetNumber = game?.lastRoundResults.minCoinsPlayed
     ? game.lastRoundResults.minCoinsPlayed + 1
-    : 5;
+    : 29;
 
   return (
     <div className={styles.pageContainer}>
@@ -45,10 +49,13 @@ const EliminationsPage = ({
         />
       )}
       {countdownComplete && (
-        <>
+        <div className={styles.contentContainer}>
+          <div className={styles.statsContainer}>
+            <PlayedCoinsChart />
+          </div>
           <EliminatedPlayers />
           <StartRoundButton setShouldAnimateOut={setShouldAnimateOut} />
-        </>
+        </div>
       )}
     </div>
   );

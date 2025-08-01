@@ -58,7 +58,7 @@ export const subTitleAnimation = {
       type: "spring",
       duration: 0.6,
       bounce: 0.2,
-      delay: 0.5, // Delay before starting the animation
+      delay: 0.25, // Delay before starting the animation
     },
   },
   normal: {

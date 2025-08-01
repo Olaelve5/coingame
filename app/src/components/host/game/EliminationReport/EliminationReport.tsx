@@ -5,6 +5,7 @@ import EliminationsPage from "./EliminationsPage";
 import { useGameplayStore } from "@/store/gameplayStore";
 import { useMantineTheme } from "@mantine/core";
 import CountdownVisual from "@/components/host/game/EliminationReport/CountdownVisual";
+import { useConnectionStore } from "@/store/connectionStore";
 
 const START_NUMBER = 99;
 
@@ -13,10 +14,12 @@ interface EliminationReportProps {
 }
 
 const EliminationReport = ({ handleRoundPreparation }: EliminationReportProps) => {
+  const { game } = useConnectionStore();
   const [initialAnimationFinished, setInitialAnimationFinished] = useState(false);
   const theme = useMantineTheme();
   const [shouldAnimateOut, setShouldAnimateOut] = useState(false);
   const [count, setCount] = useState(START_NUMBER);
+  const [countdownComplete, setCountdownComplete] = useState(false);
   const { startRound } = useGameplayStore();
 
   return (
@@ -34,13 +37,17 @@ const EliminationReport = ({ handleRoundPreparation }: EliminationReportProps) =
       }}
       className={styles.container}
     >
-      <CountdownVisual count={count} maxCount={START_NUMBER} />
+      <CountdownVisual
+        count={count}
+        maxCount={START_NUMBER}
+        countdownComplete={countdownComplete}
+      />
 
       <div className={styles.header}>
         <div className={styles.titleContainer}>
           <h2 className={styles.title}>Elimination Report</h2>
           <h2 className={styles.title} style={{ color: theme.colors.blue[5] }}>
-            1
+            {game?.round || "?"}
           </h2>
         </div>
       </div>
@@ -48,6 +55,8 @@ const EliminationReport = ({ handleRoundPreparation }: EliminationReportProps) =
         count={count}
         setCount={setCount}
         START_NUMBER={START_NUMBER}
+        countdownComplete={countdownComplete}
+        setCountdownComplete={setCountdownComplete}
         setShouldAnimateOut={setShouldAnimateOut}
         initialAnimationFinished={initialAnimationFinished}
       />

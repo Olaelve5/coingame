@@ -5,6 +5,7 @@ import { getColor, getIcon } from "@/utils/iconUtils";
 import { motion } from "framer-motion";
 import { useConnectionStore } from "@/store/connectionStore";
 import { testPlayer } from "@/utils/testPlayerUtils";
+import { StaggeredText } from "../../StaggeredText";
 
 // Correct destructuring
 const EliminatedPlayers = () => {
@@ -30,7 +31,7 @@ const EliminatedPlayers = () => {
     >
       <div className={styles.titleContainer}>
         <IconCoins className={styles.coinsIcon} stroke={2} />
-        <h1>Player Bets</h1>
+        <StaggeredText text="Player Bets" initialDelay={0.4} staggerSpeed={0.02} />
       </div>
       <div className={styles.playersContainer}>
         {displayPlayers.map((player) => {
