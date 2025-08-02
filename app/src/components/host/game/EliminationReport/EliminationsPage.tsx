@@ -1,6 +1,6 @@
 import EliminatedPlayers from "./EliminatedPlayers";
 import CoinsCountdown from "./CoinsCountdown";
-import { useState } from "react";
+import PlayersAliveRing from "./PlayersAliveRing";
 import styles from "./styles/EliminationsPage.module.css";
 import StartRoundButton from "./StartRoundButton";
 import { useConnectionStore } from "@/store/connectionStore";
@@ -52,6 +52,7 @@ const EliminationsPage = ({
         <div className={styles.contentContainer}>
           <div className={styles.statsContainer}>
             <PlayedCoinsChart />
+            <PlayersAliveRing />
           </div>
           <EliminatedPlayers />
           <StartRoundButton setShouldAnimateOut={setShouldAnimateOut} />

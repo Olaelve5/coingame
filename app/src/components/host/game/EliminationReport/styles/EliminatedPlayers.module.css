@@ -1,14 +1,14 @@
 .container {
   display: flex;
   flex-direction: column;
-  align-items: center;
   position: relative;
-  width: 100%;
+  width: 80%;
   height: 100%;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 .titleContainer {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,8 +18,8 @@
 }
 
 .coinsIcon {
-  width: 2rem;
-  height: 2rem;
+  width: 1.8rem;
+  height: 1.8rem;
 }
 
 .playersContainer {
@@ -28,32 +28,56 @@
   align-items: center;
   gap: 1rem;
   width: 100%;
-  background: rgba(34, 45, 50, 1);
+  background: rgb(52, 55, 61);
   padding: 1rem;
   border-radius: 1rem;
-  min-height: 100%;
+  max-height: 100%;
+  min-height: 0;
+  color: white;
+  overflow-y: auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ✅ Webkit scrollbar styling */
+.playersContainer::-webkit-scrollbar {
+  width: 6px; /* Width of scrollbar */
+}
+
+.playersContainer::-webkit-scrollbar-track {
+  background: transparent; /* Track color */
+  border-radius: 4px;
+}
+
+.playersContainer::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3); /* Thumb color */
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.playersContainer::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5); /* Hover color */
 }
 
 .playerContainer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 1.2rem;
+  font-size: 1rem;
   width: 100%;
   padding: 0.5rem;
-  backdrop-filter: blur(2px);
   border-radius: 0.5rem;
 }
 
 .playerIcon {
-  width: 2.2rem;
-  height: 2.2rem;
+  width: 2rem;
+  height: 2rem;
   margin-right: 0.5rem;
 }
 
 .coinIcon {
-  width: 1.8rem;
-  height: 1.8rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  color: var(--secondary-accent);
 }
 
 .playedCoinsContainer {

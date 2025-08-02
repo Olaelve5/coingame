@@ -6,14 +6,27 @@ import { motion } from "framer-motion";
 import { useConnectionStore } from "@/store/connectionStore";
 import { testPlayer } from "@/utils/testPlayerUtils";
 import { StaggeredText } from "../../StaggeredText";
+import { useMantineTheme } from "@mantine/core";
 
 // Correct destructuring
 const EliminatedPlayers = () => {
   const { game } = useConnectionStore();
+  const theme = useMantineTheme();
 
   // Use test player if no real players are passed
   const displayPlayers = !game
-    ? [testPlayer]
+    ? [
+        testPlayer,
+        testPlayer,
+        testPlayer,
+        testPlayer,
+        testPlayer,
+        testPlayer,
+        testPlayer,
+        testPlayer,
+        testPlayer,
+        testPlayer,
+      ]
     : game.players.filter((player) => !player.eliminated && player.playedInRound);
 
   displayPlayers.sort((a, b) => {
@@ -41,8 +54,16 @@ const EliminatedPlayers = () => {
           );
 
           return (
-            <div key={player.id} className={styles.playerContainer} style={isEliminated ? {} : {}}>
-              <FontAwesomeIcon icon={getIcon(player.icon)} className={styles.playerIcon} />
+            <div
+              key={player.id}
+              className={styles.playerContainer}
+              style={isEliminated ? { color: theme.colors.red[6] } : {}}
+            >
+              <FontAwesomeIcon
+                icon={getIcon(player.icon)}
+                color={getColor(player.color)}
+                className={styles.playerIcon}
+              />
               <p>{player.name}</p>
               <div className={styles.playedCoinsContainer}>
                 <IconCoinFilled className={styles.coinIcon} />

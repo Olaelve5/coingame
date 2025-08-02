@@ -4,7 +4,17 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
+  gap: 1.5rem;
+  font-size: 1.2rem;
+}
+
+.ringContainer {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
   font-size: 1.2rem;
 }
 
@@ -14,7 +24,17 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 160px;
+  background: rgb(52, 55, 61);
+  padding: 2rem 0.5rem 1rem 0rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.titleContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
 }
 
 .title {
@@ -33,3 +53,4 @@
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
 }
+

@@ -10,7 +10,7 @@ export // Test player for development
     eliminated: true,
     playedInRound: true,
     icon: "dragon",
-    color: "violet",
+    color: "cyan",
     roundHistory: [
       {
         round: 1,

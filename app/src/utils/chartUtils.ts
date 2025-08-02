@@ -2,12 +2,12 @@ import { Player } from "@/models/Game";
 
 export function getLastRoundChartData(players: Player[], currentRound: number) {
   const chartData = [
-    { intervalLow: 0, intervalHigh: 10, count: 2 },
-    { intervalLow: 10, intervalHigh: 20, count: 16 },
-    { intervalLow: 20, intervalHigh: 30, count: 6 },
-    { intervalLow: 30, intervalHigh: 40, count: 5 },
-    { intervalLow: 40, intervalHigh: 50, count: 1 },
-    { intervalLow: 50, intervalHigh: 60, count: 1 },
+    { intervalLow: 0, intervalHigh: 10, count: 0 },
+    { intervalLow: 10, intervalHigh: 20, count: 0 },
+    { intervalLow: 20, intervalHigh: 30, count: 0 },
+    { intervalLow: 30, intervalHigh: 40, count: 0 },
+    { intervalLow: 40, intervalHigh: 50, count: 0 },
+    { intervalLow: 50, intervalHigh: 60, count: 0 },
     { intervalLow: 60, intervalHigh: 70, count: 0 },
     { intervalLow: 70, intervalHigh: 80, count: 0 },
     { intervalLow: 80, intervalHigh: 90, count: 0 },

@@ -31,4 +31,8 @@ body {
     var(--g2) var(--s) calc(1.73 * var(--s)), var(--g3) var(--s) 0,
     var(--g3) 0 calc(1.73 * var(--s)) rgb(30, 30, 30) !important;
   background-size: calc(2 * var(--s)) calc(3.46 * var(--s)) !important;
+
+  * {
+    box-sizing: border-box;
+  }
 }
