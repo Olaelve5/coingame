@@ -4,7 +4,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1.5rem;
+  gap: 1rem;
   font-size: 1.2rem;
 }
 
@@ -16,6 +16,19 @@
   justify-content: center;
   gap: 1rem;
   font-size: 1.2rem;
+}
+
+.ring {
+  display: flex;
+  background: rgb(52, 55, 61);
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .chartContainer {
@@ -32,15 +45,13 @@
 
 .titleContainer {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start; /* Aligns to text baseline */
   gap: 1rem;
 }
 
 .title {
   width: 100%;
   max-width: 30rem;
-  text-align: center;
   font-size: 1.2rem;
 }
 
@@ -53,4 +64,3 @@
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
 }
-

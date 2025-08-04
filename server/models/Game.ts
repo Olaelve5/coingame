@@ -10,6 +10,7 @@ const GameSchema = new mongoose.Schema({
       connected: Boolean,
       socketId: String,
       eliminated: Boolean,
+      endRank: { type: Number, default: null },
       playedInRound: Boolean,
       icon: String,
       color: String,
@@ -42,13 +43,6 @@ const GameSchema = new mongoose.Schema({
   winner: {
     id: String,
     name: String,
-    coins: Number,
-    roundHistory: [
-      {
-        round: Number,
-        coinsPlayed: Number,
-      },
-    ],
   },
 });
 

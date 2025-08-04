@@ -1,4 +1,4 @@
-import { IconCoins, IconCoinFilled } from "@tabler/icons-react";
+import { IconCoins, IconCoinFilled, IconHash } from "@tabler/icons-react";
 import styles from "./styles/EliminatedPlayers.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getColor, getIcon } from "@/utils/iconUtils";
@@ -14,7 +14,7 @@ const EliminatedPlayers = () => {
   const theme = useMantineTheme();
 
   // Use test player if no real players are passed
-  const displayPlayers = !game
+  let displayPlayers = !game
     ? [
         testPlayer,
         testPlayer,
@@ -35,6 +35,13 @@ const EliminatedPlayers = () => {
     return (aLastRound?.coinsPlayed || 0) - (bLastRound?.coinsPlayed || 0);
   });
 
+  const eliminatedPlayers = game?.players.filter((player) => player.eliminated) || [];
+  eliminatedPlayers.sort((a, b) => {
+    return a.endRank - b.endRank;
+  });
+
+  displayPlayers = [...displayPlayers, ...eliminatedPlayers];
+
   return (
     <motion.div
       initial={{ opacity: 0, y: "100%" }}
@@ -49,25 +56,40 @@ const EliminatedPlayers = () => {
       <div className={styles.playersContainer}>
         {displayPlayers.map((player) => {
           const lastRound = player.roundHistory[player.roundHistory.length - 1];
-          const isEliminated = game?.lastRoundResults?.playersEliminated.some(
+          const isEliminatedInRound = game?.lastRoundResults?.playersEliminated.some(
             (eliminatedPlayer) => eliminatedPlayer.id === player.id
           );
+
+          const isEliminatedBeforeRoun = player.eliminated;
 
           return (
             <div
               key={player.id}
               className={styles.playerContainer}
-              style={isEliminated ? { color: theme.colors.red[6] } : {}}
+              style={
+                isEliminatedInRound
+                  ? { color: theme.colors.red[6] }
+                  : isEliminatedBeforeRoun
+                  ? { color: theme.colors.gray[6], opacity: 0.6 }
+                  : {}
+              }
             >
               <FontAwesomeIcon
                 icon={getIcon(player.icon)}
-                color={getColor(player.color)}
+                color={isEliminatedBeforeRoun ? theme.colors.gray[6] : getColor(player.color)}
                 className={styles.playerIcon}
               />
               <p>{player.name}</p>
               <div className={styles.playedCoinsContainer}>
-                <IconCoinFilled className={styles.coinIcon} />
-                <p>{lastRound?.coinsPlayed ?? 0}</p>
+                {isEliminatedBeforeRoun ? (
+                  <IconHash
+                    className={styles.hashIcon}
+                    style={{ color: theme.colors.gray[6], opacity: 0.6 }}
+                  />
+                ) : (
+                  <IconCoinFilled className={styles.coinIcon} />
+                )}
+                <p>{isEliminatedBeforeRoun ? player.endRank : lastRound.coinsPlayed}</p>
               </div>
             </div>
           );

@@ -20,26 +20,28 @@ const PlayersAliveRing = () => {
         <IconUserX className={styles.chartIcon} size={30} />
         <StaggeredText text="Players Eliminated" initialDelay={0.4} staggerSpeed={0.02} />
       </div>
-      <RingProgress
-        sections={[
-          {
-            value: (totalEliminations / totalPlayers) * 100,
-            color: theme.colors.blue[4],
-          },
-        ]}
-        label={
-          <div style={{ textAlign: "center" }}>
-            <p>
-              {totalEliminations}/{totalPlayers}
-            </p>
-          </div>
-        }
-        size={200}
-        thickness={20}
-        transitionDuration={1000}
-        roundCaps
-        rootColor="rgb(52, 55, 61)"
-      />
+      <div className={styles.ring}>
+        <RingProgress
+          sections={[
+            {
+              value: (totalEliminations / totalPlayers) * 100,
+              color: theme.colors.blue[4],
+            },
+          ]}
+          label={
+            <div style={{ textAlign: "center" }}>
+              <p>
+                {totalEliminations}/{totalPlayers}
+              </p>
+            </div>
+          }
+          size={200}
+          thickness={20}
+          transitionDuration={1000}
+          roundCaps
+          rootColor="rgba(112, 115, 121, 1)"
+        />
+      </div>
     </div>
   );
 };

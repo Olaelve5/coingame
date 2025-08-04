@@ -4,7 +4,7 @@
   position: relative;
   width: 80%;
   height: 100%;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .titleContainer {
@@ -20,6 +20,11 @@
 .coinsIcon {
   width: 1.8rem;
   height: 1.8rem;
+}
+
+.hashIcon {
+  width: 1.6rem;
+  height: 1.6rem;
 }
 
 .playersContainer {

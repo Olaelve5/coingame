@@ -5,6 +5,7 @@ export interface Player {
   connected: boolean;
   socketId: string;
   eliminated: boolean;
+  endRank: number;
   playedInRound: boolean;
   icon: string;
   color: string;
@@ -28,11 +29,6 @@ interface LastRoundResults {
 interface Winner {
   id: string;
   name: string;
-  coins: number;
-  roundHistory: {
-    round: number;
-    coinsPlayed: number;
-  }[];
 }
 
 export interface Game {
