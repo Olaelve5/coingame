@@ -7,7 +7,7 @@
   justify-content: center;
   font-size: 1.5rem;
   position: relative;
-  bottom: 2rem;
+  top: -1rem;
 }
 
 .countdownContainer {
@@ -16,7 +16,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
   z-index: 2;
 }
 
@@ -25,6 +24,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
+  position: relative;
 }
 
 .textContainer {
@@ -40,4 +41,13 @@
 .coinIcon {
   width: 6rem;
   height: 6rem;
+}
+
+.ringProgress {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  pointer-events: none; 
 }
