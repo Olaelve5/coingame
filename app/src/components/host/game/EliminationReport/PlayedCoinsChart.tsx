@@ -12,10 +12,8 @@ const PlayedCoinsChart = () => {
   const [showChart, setShowChart] = useState(false);
   const [showLabels, setShowLabels] = useState(false);
 
-  if (!game) return null;
-
-  const playersAlive = game.players.filter((player) => !player.eliminated);
-  const data = getLastRoundChartData(playersAlive, game.round || 0);
+  const playersAlive = game?.players.filter((player) => !player.eliminated) || [];
+  const data = getLastRoundChartData(playersAlive, game?.round || 0);
 
   useEffect(() => {
     if (showChart) {
@@ -34,15 +32,15 @@ const PlayedCoinsChart = () => {
         <StaggeredText text="Round Distribution" initialDelay={0.4} staggerSpeed={0.02} />
       </div>
       <motion.div
-        initial={{ opacity: 0, scale: 1, y: 0 }}
+        initial={{ opacity: 1, scale: 1, y: 0 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.7, ease: "easeInOut" }}
         className={styles.chartContainer}
         onAnimationComplete={() => setShowChart(true)}
       >
-        {showChart && (
+        {true && (
           <BarChart
-            h={175}
+            h={150}
             data={data}
             dataKey="intervalLow"
             className={styles.chart}

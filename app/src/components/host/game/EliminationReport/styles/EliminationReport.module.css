@@ -2,7 +2,7 @@
   position: absolute;
   width: 100vw;
   height: 100vh;
-  top: 1rem;
+  top: 0.5rem;
   padding-bottom: 1rem;
   align-items: center;
   justify-content: space-between;
@@ -33,7 +33,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  border-bottom: 2px solid rgb(52, 55, 61);
+  /* border-bottom: 2px solid rgb(52, 55, 61); */
 }
 
 .title {

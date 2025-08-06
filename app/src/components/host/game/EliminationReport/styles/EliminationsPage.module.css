@@ -13,7 +13,7 @@
   display: flex;
   justify-items: center;
   width: 100%;
-  max-height: 40rem;
+  max-height: 38rem;
   gap: 15rem;
   padding: 2rem 3rem;
 }
@@ -35,5 +35,11 @@
 @media screen and (max-width: 950px) {
   .contentContainer {
     gap: 4rem;
+  }
+}
+
+@media screen and (min-height: 1000px) {
+  .contentContainer {
+    max-height: 50rem;
   }
 }

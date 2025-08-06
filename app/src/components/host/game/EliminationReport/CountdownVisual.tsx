@@ -19,7 +19,7 @@ const CountdownVisual = ({
     // Input range (progress from 0% to 100%)
     [0, 0.5, 1],
     // Output range (the corresponding colors)
-    ["#61ff8bff", "#5bffcbff", "#51fff3ff"]
+    ["#c36b6bff", "#de73deff", "#83ddefff"]
   );
 
   useEffect(() => {

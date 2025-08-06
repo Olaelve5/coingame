@@ -2,7 +2,6 @@ import EliminatedPlayers from "./EliminatedPlayers";
 import CoinsCountdown from "./CoinsCountdown";
 import PlayersAliveRing from "./PlayersAliveRing";
 import styles from "./styles/EliminationsPage.module.css";
-import StartRoundButton from "./StartRoundButton";
 import { useConnectionStore } from "@/store/connectionStore";
 import PlayedCoinsChart from "./PlayedCoinsChart";
 
@@ -25,15 +24,11 @@ const EliminationsPage = ({
 }) => {
   const { game } = useConnectionStore();
 
-  // if (!game) {
-  //   return <div>Loading...</div>;
-  // }
-
   const targetNumber =
     game?.lastRoundResults.minCoinsPlayed !== undefined
       ? game.lastRoundResults.minCoinsPlayed + 1
       : 0; // Default to 0 if minCoinsPlayed is not set
-      
+
   return (
     <div className={styles.pageContainer}>
       {!countdownComplete && initialAnimationFinished && (
@@ -41,10 +36,9 @@ const EliminationsPage = ({
           count={count}
           setCount={setCount}
           startNumber={START_NUMBER}
-          targetNumber={targetNumber}
+          targetNumber={targetNumber} 
           isRunning={true}
           onComplete={() => {
-            console.log("Countdown complete");
             setCountdownComplete(true);
           }}
         />

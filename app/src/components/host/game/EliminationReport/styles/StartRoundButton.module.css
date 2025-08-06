@@ -17,3 +17,11 @@
   justify-content: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.17);
 }
+
+
+@media screen and (max-height: 770px) {
+  .container {
+    position: absolute;
+    bottom: 2rem;
+  }
+}

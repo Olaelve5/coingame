@@ -26,6 +26,7 @@ export default function TestAnimations() {
             playedInRound: true,
             eliminated: false,
             coins: 0,
+            endRank: 3,
             connected: false,
             socketId: "",
             icon: "dragon",
@@ -36,14 +37,16 @@ export default function TestAnimations() {
         />
       </div>
       <button
-        style={{ position: "absolute", top: "10px", left: "10px" }}
+        style={{ position: "absolute", top: "0px", left: "0px" }}
         onClick={() => {
           setTestingSignal(!testingSignal);
         }}
       >
         End round
       </button>
-      {testingSignal && <EliminationReport />}
+      {testingSignal && <EliminationReport handleRoundPreparation={function (): void {
+        throw new Error("Function not implemented.");
+      } } />}
     </div>
   );
 }

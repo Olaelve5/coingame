@@ -25,7 +25,6 @@ const EliminatedPlayers = () => {
         testPlayer,
         testPlayer,
         testPlayer,
-        testPlayer,
       ]
     : game.players.filter((player) => !player.eliminated && player.playedInRound);
 
@@ -82,10 +81,7 @@ const EliminatedPlayers = () => {
               <p>{player.name}</p>
               <div className={styles.playedCoinsContainer}>
                 {isEliminatedBeforeRoun ? (
-                  <IconNumber
-                    className={styles.hashIcon}
-                    style={{ color: theme.colors.gray[6], opacity: 0.6 }}
-                  />
+                  <IconNumber className={styles.hashIcon} style={{ color: theme.colors.gray[6] }} />
                 ) : (
                   <IconCoinFilled className={styles.coinIcon} />
                 )}

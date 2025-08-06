@@ -38,11 +38,11 @@ const EliminationReport = ({ handleRoundPreparation }: EliminationReportProps) =
       }}
       className={styles.container}
     >
-      <CountdownVisual
+      {/* <CountdownVisual
         count={count}
         maxCount={START_NUMBER}
         countdownComplete={countdownComplete}
-      />
+      /> */}
 
       <div className={styles.header}>
         <div className={styles.titleContainer}>
@@ -61,7 +61,8 @@ const EliminationReport = ({ handleRoundPreparation }: EliminationReportProps) =
         setShouldAnimateOut={setShouldAnimateOut}
         initialAnimationFinished={initialAnimationFinished}
       />
-      <StartRoundButton setShouldAnimateOut={setShouldAnimateOut} />
+
+      {countdownComplete && <StartRoundButton setShouldAnimateOut={setShouldAnimateOut} />}
     </motion.div>
   );
 };

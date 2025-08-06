@@ -35,8 +35,8 @@ const PlayersAliveRing = () => {
               </p>
             </div>
           }
-          size={175}
-          thickness={17}
+          size={150}
+          thickness={15}
           transitionDuration={1000}
           roundCaps
           rootColor="rgba(112, 115, 121, 1)"
