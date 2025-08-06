@@ -1,4 +1,4 @@
-import { IconCoins, IconCoinFilled, IconHash } from "@tabler/icons-react";
+import { IconCoins, IconCoinFilled, IconNumber } from "@tabler/icons-react";
 import styles from "./styles/EliminatedPlayers.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getColor, getIcon } from "@/utils/iconUtils";
@@ -82,7 +82,7 @@ const EliminatedPlayers = () => {
               <p>{player.name}</p>
               <div className={styles.playedCoinsContainer}>
                 {isEliminatedBeforeRoun ? (
-                  <IconHash
+                  <IconNumber
                     className={styles.hashIcon}
                     style={{ color: theme.colors.gray[6], opacity: 0.6 }}
                   />

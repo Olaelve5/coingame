@@ -98,9 +98,7 @@ export default function Timer({
       </motion.div>
       {(startEliminationAnimations || testingSignal) && (
         <div className={styles.particleContainer}>
-          <PlayerIconParticles color="cyan" distance={1.3} />
-          <PlayerIconParticles color="azure" distance={1.9} />
-          <PlayerIconParticles color="violet" distance={1.5} />
+          <PlayerIconParticles color="cyan" distance={1.5} />
         </div>
       )}
     </div>

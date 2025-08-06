@@ -42,7 +42,7 @@ const PlayedCoinsChart = () => {
       >
         {showChart && (
           <BarChart
-            h={200}
+            h={175}
             data={data}
             dataKey="intervalLow"
             className={styles.chart}

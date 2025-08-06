@@ -3,8 +3,8 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: calc(100% - 2rem);
-    bottom: 2rem;
+    height: calc(100% - 1rem);
+    bottom: 1rem;
     background: rgba(200, 254, 255, 0.95);
     z-index: 1;
 }

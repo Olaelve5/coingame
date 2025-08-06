@@ -55,7 +55,6 @@ const EliminationsPage = ({
             <PlayersAliveRing />
           </div>
           <EliminatedPlayers />
-          <StartRoundButton setShouldAnimateOut={setShouldAnimateOut} />
         </div>
       )}
     </div>

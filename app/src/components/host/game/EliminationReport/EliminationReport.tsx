@@ -6,6 +6,7 @@ import { useGameplayStore } from "@/store/gameplayStore";
 import { useMantineTheme } from "@mantine/core";
 import CountdownVisual from "@/components/host/game/EliminationReport/CountdownVisual";
 import { useConnectionStore } from "@/store/connectionStore";
+import StartRoundButton from "./StartRoundButton";
 
 const START_NUMBER = 99;
 
@@ -60,6 +61,7 @@ const EliminationReport = ({ handleRoundPreparation }: EliminationReportProps) =
         setShouldAnimateOut={setShouldAnimateOut}
         initialAnimationFinished={initialAnimationFinished}
       />
+      <StartRoundButton setShouldAnimateOut={setShouldAnimateOut} />
     </motion.div>
   );
 };
