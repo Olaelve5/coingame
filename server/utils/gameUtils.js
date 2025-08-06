@@ -12,6 +12,9 @@ const calculateRoundResults = (game) => {
     };
   });
 
+  // Sort plays by coins played in ascending order
+  currentRoundPlays.sort((a, b) => a.coinsPlayed - b.coinsPlayed);
+
   // Calculate total coins played
   const totalCoinsPlayed = currentRoundPlays.reduce(
     (sum, play) => sum + play.coinsPlayed,
@@ -19,17 +22,29 @@ const calculateRoundResults = (game) => {
   );
 
   // Find minimum coins played
-  const minCoinsPlayed = Math.min(
-    ...currentRoundPlays.map((play) => play.coinsPlayed)
-  );
+  // const minCoinsPlayed = Math.min(
+  //   ...currentRoundPlays.map((play) => play.coinsPlayed)
+  // );
 
-  // Find players who played the minimum amount
-  const playersEliminated = currentRoundPlays
-    .filter((play) => play.coinsPlayed === minCoinsPlayed)
-    .map((play) => ({
-      id: play.playerId,
-      name: play.playerName,
-    }));
+  let prevPlayerBet = 0;
+  let playersEliminated = [];
+
+  for (const play of currentRoundPlays) {
+    if (
+      playersEliminated.length < game.elimsPerRound ||
+      prevPlayerBet === play.coinsPlayed
+    ) {
+      playersEliminated.push({
+        id: play.playerId,
+        name: play.playerName,
+      });
+      prevPlayerBet = play.coinsPlayed;
+    } else {
+      break;
+    }
+  }
+
+  const minCoinsPlayed = prevPlayerBet;
 
   return {
     totalCoinsPlayed,
