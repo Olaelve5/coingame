@@ -29,10 +29,11 @@ const EliminationsPage = ({
   //   return <div>Loading...</div>;
   // }
 
-  const targetNumber = game?.lastRoundResults.minCoinsPlayed
-    ? game.lastRoundResults.minCoinsPlayed + 1
-    : 29;
-
+  const targetNumber =
+    game?.lastRoundResults.minCoinsPlayed !== undefined
+      ? game.lastRoundResults.minCoinsPlayed + 1
+      : 0; // Default to 0 if minCoinsPlayed is not set
+      
   return (
     <div className={styles.pageContainer}>
       {!countdownComplete && initialAnimationFinished && (
