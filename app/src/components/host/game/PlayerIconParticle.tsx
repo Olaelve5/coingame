@@ -34,13 +34,13 @@ export default function PlayerIconParticles({
         let startY = 0;
 
         switch (i) {
-          case 0: 
+          case 0:
             baseY = -60 * distance + yVariation;
             baseX = xVariation;
             startY = -0;
             startX = xVariation * 0.1;
             break;
-          case 1: 
+          case 1:
             baseY = -60 * distance + yVariation;
             baseX = 40 * distance + xVariation;
             startY = -0;
@@ -73,9 +73,7 @@ export default function PlayerIconParticles({
         }
 
         const size = 5 + Math.floor(Math.random() * 5);
-
         const duration = 0.8 + Math.random() * 0.4;
-
         const delay = 0.7 + i * 0.02 + Math.random() * 0.02;
 
         return {
@@ -96,7 +94,8 @@ export default function PlayerIconParticles({
       style={{
         position: "absolute",
         ...position,
-      }}>
+      }}
+    >
       {particles.map((particle, i) => (
         <motion.div
           key={`particle-${i}`}

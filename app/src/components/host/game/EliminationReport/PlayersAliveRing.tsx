@@ -25,7 +25,7 @@ const PlayersAliveRing = () => {
           sections={[
             {
               value: (totalEliminations / totalPlayers) * 100,
-              color: theme.colors.blue[4],
+              color: theme.colors.blue[5],
             },
           ]}
           label={
@@ -35,7 +35,7 @@ const PlayersAliveRing = () => {
               </p>
             </div>
           }
-          size={150}
+          size={160}
           thickness={15}
           transitionDuration={1000}
           roundCaps

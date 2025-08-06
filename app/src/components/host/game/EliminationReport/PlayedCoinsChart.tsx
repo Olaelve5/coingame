@@ -40,14 +40,14 @@ const PlayedCoinsChart = () => {
       >
         {true && (
           <BarChart
-            h={150}
+            h={160}
             data={data}
             dataKey="intervalLow"
             className={styles.chart}
             classNames={{
               axis: showLabels ? styles.axisVisible : styles.axisHidden,
             }}
-            series={[{ name: "count", color: "blue.4" }]}
+            series={[{ name: "count", color: "blue.5" }]}
             tickLine="none"
             gridAxis="none"
             barProps={{
