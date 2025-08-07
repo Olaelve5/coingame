@@ -1,11 +1,13 @@
 import { SegmentedControl } from "@mantine/core";
 import { IconCoinFilled } from "@tabler/icons-react";
 import { useState } from "react";
-import styles from "./styles/FastModeButton.module.css"; 
+import styles from "./styles/FastModeButton.module.css";
 import { useMantineTheme } from "@mantine/core";
+import { useGameSettingsStore } from "@/store/gameSettingsStore";
 
 const CoinAmountButton = () => {
-  const [value, setValue] = useState("medium");
+  const { settings, updateCoinAmount } = useGameSettingsStore();
+  const [value, setValue] = useState(settings.coinAmount);
   const theme = useMantineTheme();
 
   return (
@@ -17,7 +19,10 @@ const CoinAmountButton = () => {
 
       <SegmentedControl
         value={value}
-        onChange={(value) => setValue(value)}
+        onChange={(value) => {
+          setValue(value);
+          updateCoinAmount(value);
+        }}
         data={[
           { label: "Low", value: "low" },
           { label: "Medium", value: "medium" },

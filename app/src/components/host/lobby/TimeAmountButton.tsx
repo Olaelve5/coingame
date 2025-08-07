@@ -3,9 +3,11 @@ import { IconAlarmFilled } from "@tabler/icons-react";
 import { useState } from "react";
 import styles from "./styles/FastModeButton.module.css";
 import { useMantineTheme } from "@mantine/core";
+import { useGameSettingsStore } from "@/store/gameSettingsStore";
 
 const TimeAmountButton = () => {
-  const [value, setValue] = useState("40");
+  const { settings, updateTimeLimit } = useGameSettingsStore();
+  const [value, setValue] = useState(settings.timeLimit.toString());
   const theme = useMantineTheme();
 
   return (
@@ -17,7 +19,10 @@ const TimeAmountButton = () => {
 
       <SegmentedControl
         value={value}
-        onChange={(value) => setValue(value)}
+        onChange={(value) => {
+          setValue(value);
+          updateTimeLimit(parseInt(value));
+        }}
         data={[
           { label: "20 sec", value: "20" },
           { label: "40 sec", value: "40" },

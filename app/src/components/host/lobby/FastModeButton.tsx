@@ -3,9 +3,11 @@ import { IconBoltFilled } from "@tabler/icons-react";
 import { useState } from "react";
 import styles from "./styles/FastModeButton.module.css"; // Assuming you have a CSS module for styling
 import { useMantineTheme } from "@mantine/core";
+import { useGameSettingsStore } from "@/store/gameSettingsStore";
 
 const FastModeButton = () => {
-  const [isFastMode, setIsFastMode] = useState(false);
+  const { settings, updateFastMode } = useGameSettingsStore();
+  const [isFastMode, setIsFastMode] = useState(settings.fastMode);
   const theme = useMantineTheme();
 
   return (
@@ -17,7 +19,10 @@ const FastModeButton = () => {
 
       <SegmentedControl
         value={isFastMode ? "enabled" : "disabled"}
-        onChange={(value) => setIsFastMode(value === "enabled")}
+        onChange={(value) => {
+          setIsFastMode(value === "enabled");
+          updateFastMode(value === "enabled");
+        }}
         data={[
           { label: "Disabled", value: "disabled" },
           { label: "Enabled", value: "enabled" },

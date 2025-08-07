@@ -10,7 +10,6 @@ import ElimsPerRoundSlider from "./ ElimsPerRoundSlider";
 
 const SettingsPopup = () => {
   const [opened, { open, close }] = useDisclosure(false);
-  const theme = useMantineTheme();
 
   return (
     <div className={styles.container}>

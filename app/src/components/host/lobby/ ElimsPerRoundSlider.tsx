@@ -1,11 +1,13 @@
 import { Group, Button } from "@mantine/core";
 import { useState } from "react";
 import styles from "./styles/ElimsPerRoundSlider.module.css";
-import { IconGhost2Filled, IconPlus, IconMinus } from "@tabler/icons-react";
+import { IconGhost2Filled } from "@tabler/icons-react";
 import { useMantineTheme } from "@mantine/core";
+import { useGameSettingsStore } from "@/store/gameSettingsStore";
 
 const ElimsPerRoundSlider = () => {
-  const [value, setValue] = useState(1);
+  const { settings, updateElimsPerRound } = useGameSettingsStore();
+  const [value, setValue] = useState(settings.elimsPerRound);
   const theme = useMantineTheme();
 
   return (
@@ -18,7 +20,10 @@ const ElimsPerRoundSlider = () => {
         <Button
           className={styles.button}
           radius={"md"}
-          onClick={() => setValue((prev) => Math.max(prev - 1, 1))}
+          onClick={() => {
+            setValue((prev) => Math.max(prev - 1, 1));
+            updateElimsPerRound(Math.max(value - 1, 1));
+          }}
         >
           -
         </Button>
@@ -26,7 +31,10 @@ const ElimsPerRoundSlider = () => {
         <Button
           className={styles.button}
           radius={"md"}
-          onClick={() => setValue((prev) => Math.min(prev + 1, 10))}
+          onClick={() => {
+            setValue((prev) => Math.min(prev + 1, 10));
+            updateElimsPerRound(Math.min(value + 1, 10));
+          }}
         >
           +
         </Button>

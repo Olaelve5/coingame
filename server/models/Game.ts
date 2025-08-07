@@ -2,6 +2,12 @@ import mongoose from "mongoose";
 
 const GameSchema = new mongoose.Schema({
   gameCode: { type: String, required: true, unique: true },
+  gameSettings: {
+    initialCoins: { type: Number, default: 100 }, // amount will vary based on the number of players
+    fastMode: { type: Boolean, default: false },
+    roundTimeLimit: { type: Number, default: 40 }, // in seconds - 20, 40 or 60
+    elimsPerRound: { type: Number, default: 1 },
+  },
   players: [
     {
       id: String,
@@ -28,7 +34,6 @@ const GameSchema = new mongoose.Schema({
   },
   round: { type: Number, default: 0 },
   roundStatus: { type: String, default: "preparing" }, // preparing, active, completed, eliminating
-  elimsPerRound: { type: Number, default: 5 },
   lastRoundResults: {
     playersEliminated: [
       {
