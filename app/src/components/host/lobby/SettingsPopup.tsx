@@ -30,7 +30,7 @@ const SettingsPopup = () => {
         title="Options"
         withCloseButton={false}
         size={"lg"}
-        yOffset={"10rem"}
+        centered
         classNames={{
           root: styles.modal,
           title: styles.modalTitle,
@@ -46,7 +46,7 @@ const SettingsPopup = () => {
           timingFunction: "ease",
         }}
         overlayProps={{
-          backgroundOpacity: 0.65,
+          backgroundOpacity: 0.75,
           blur: 5,
         }}
       >

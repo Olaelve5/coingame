@@ -15,11 +15,19 @@ const ElimsPerRoundSlider = () => {
         <h2>Round Eliminations</h2>
       </div>
       <Group wrap="nowrap" className={styles.buttonGroup}>
-        <Button radius={"md"} onClick={() => setValue((prev) => Math.max(prev - 1, 1))}>
+        <Button
+          className={styles.button}
+          radius={"md"}
+          onClick={() => setValue((prev) => Math.max(prev - 1, 1))}
+        >
           -
         </Button>
         <span>{value}</span>
-        <Button radius={"md"} onClick={() => setValue((prev) => Math.min(prev + 1, 10))}>
+        <Button
+          className={styles.button}
+          radius={"md"}
+          onClick={() => setValue((prev) => Math.min(prev + 1, 10))}
+        >
           +
         </Button>
       </Group>

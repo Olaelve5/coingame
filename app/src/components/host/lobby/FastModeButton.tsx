@@ -11,7 +11,7 @@ const FastModeButton = () => {
   return (
     <div className={styles.container}>
       <div className={styles.titleContainer}>
-        <IconBoltFilled size={24} color={theme.colors.cyan[5]} />
+        <IconBoltFilled size={24} color={theme.colors.cyan[4]} />
         <h2>Fast Mode</h2>
       </div>
 

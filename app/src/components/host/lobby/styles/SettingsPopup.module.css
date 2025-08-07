@@ -25,10 +25,10 @@
 
 .modalBody {
   background: rgba(34, 36, 40, 1);
-  padding: 2rem 2rem;
+  padding: 3rem 2rem;
   display: flex;
-  flex-direction: column;
-  gap: 5rem;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .modalHeader {
@@ -50,5 +50,7 @@
 
 .contentRow {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
+  gap: 4rem;
 }

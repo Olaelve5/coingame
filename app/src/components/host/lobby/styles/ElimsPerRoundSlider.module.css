@@ -23,3 +23,7 @@
   padding: 0.25rem;
   color: var(--dark-text);
 }
+
+.button {
+  height: 33px;
+}
