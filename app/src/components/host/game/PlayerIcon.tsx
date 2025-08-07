@@ -2,7 +2,7 @@ import { Player } from "@/models/Game";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getColor, getIcon } from "@/utils/iconUtils";
-import styles from "../styles/PlayersIconGrid.module.css";
+import styles from "./styles/PlayersIconGrid.module.css";
 import { useEffect, useState } from "react";
 import { usePlayerIconAnimations } from "@/utils/animations/playerIconAnimations";
 import PlayerIconParticles from "./PlayerIconParticle";

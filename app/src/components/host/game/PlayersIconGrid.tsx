@@ -1,9 +1,8 @@
-import styles from "../styles/PlayersIconGrid.module.css";
+import styles from "./styles/PlayersIconGrid.module.css";
 import { useConnectionStore } from "@/store/connectionStore";
 import PlayerIcon from "./PlayerIcon";
 import { useEffect, useState, useRef, use } from "react";
 import { Player } from "@/models/Game";
-import { findPossibleEliminations } from "@/utils/eliminationOfPlayersUtils";
 
 interface PlayersIconGridProps {
   startEliminationAnimations?: boolean;

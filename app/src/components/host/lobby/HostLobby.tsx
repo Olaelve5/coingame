@@ -4,20 +4,21 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useConnectionStore } from "@/store/connectionStore";
 import { useGameplayStore } from "@/store/gameplayStore";
-import { IconDeviceGamepad2 } from "@tabler/icons-react";
+import { IconPlayerPlayFilled } from "@tabler/icons-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getIcon, getColor } from "@/utils/iconUtils";
 import { motion } from "framer-motion";
 import QRCode from "./QRCode";
+import SettingsPopup from "./SettingsPopup";
 import styles from "./styles/HostLobby.module.css";
+import { Button } from "@mantine/core";
 
 export default function HostLobby({ gameCode }: { gameCode: string }) {
   const router = useRouter();
   const { game, joinAsHost, cleanup, kickPlayer } = useConnectionStore();
   const { prepareRound } = useGameplayStore();
   const [isExiting, setIsExiting] = useState(false);
-  const [playersAnimationComplete, setPlayersAnimationComplete] =
-    useState(false);
+  const [playersAnimationComplete, setPlayersAnimationComplete] = useState(false);
 
   useEffect(() => {
     const initGame = async () => {
@@ -58,9 +59,7 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
     <div className={styles.container}>
       <motion.div
         animate={
-          isExiting && playersAnimationComplete
-            ? { opacity: 1, x: "-100%" }
-            : { opacity: 1, x: 0 }
+          isExiting && playersAnimationComplete ? { opacity: 1, x: "-100%" } : { opacity: 1, x: 0 }
         }
         transition={{ duration: 0.25, ease: "easeInOut", delay: 0 }}
         onAnimationComplete={() => {
@@ -68,7 +67,8 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
             handleStartGame();
           }
         }}
-        className={styles.sidebar}>
+        className={styles.sidebar}
+      >
         <h1 className={styles.title}>Cashfall.io</h1>
         <div className={styles.joinContainer}>
           <div className={styles.joinSection}>
@@ -82,7 +82,8 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
                 damping: 15,
                 mass: 0.8,
               }}
-              className={styles.gameCode}>
+              className={styles.gameCode}
+            >
               {gameCodeString}
             </motion.h1>
           </div>
@@ -97,31 +98,36 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
                 damping: 15,
                 mass: 0.8,
               }}
-              className={styles.qrCodeContainer}>
+              className={styles.qrCodeContainer}
+            >
               <QRCode gameCode={gameCode} />
             </motion.div>
           </div>
         </div>
+        <SettingsPopup />
       </motion.div>
 
       <div className={styles.rightSection}>
         <motion.div
           animate={{ y: isExiting && playersAnimationComplete ? "-100%" : 0 }}
           transition={{ duration: 0.25, ease: "easeInOut", delay: 0 }}
-          className={styles.playerCountSection}>
+          className={styles.playerCountSection}
+        >
           <div className={styles.playerCount}>
             <h2 className={styles.playerCountNumber}>
               {game?.players.filter((player) => player.connected).length}
             </h2>
             <p className={styles.playerCountText}>players joined</p>
           </div>
-          <button
+          <Button
             className={styles.startGameButton}
+            size="lg"
             onClick={handleStartGameClick}
-            disabled={!game?.players.length || game.players.length < 3}>
+            disabled={!game?.players.length || game.players.length < 3}
+            rightSection={<IconPlayerPlayFilled size={24} />}
+          >
             <p>Start</p>
-            <IconDeviceGamepad2 size={26} />
-          </button>
+          </Button>
         </motion.div>
 
         <ul className={styles.playerGrid}>
@@ -133,11 +139,7 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
                 <motion.li
                   key={player.id}
                   initial={{ scale: 0, rotate: 15 }}
-                  animate={
-                    isExiting
-                      ? { opacity: 0, y: -100 }
-                      : { scale: 1, rotate: 0 }
-                  }
+                  animate={isExiting ? { opacity: 0, y: -100 } : { scale: 1, rotate: 0 }}
                   transition={
                     isExiting
                       ? {
@@ -157,10 +159,9 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
                       setPlayersAnimationComplete(true);
                     }
                   }}
-                  className={styles.playerListItem}>
-                  <div
-                    onClick={() => handleClickPlayer(player)}
-                    className={styles.playerItem}>
+                  className={styles.playerListItem}
+                >
+                  <div onClick={() => handleClickPlayer(player)} className={styles.playerItem}>
                     <FontAwesomeIcon
                       icon={getIcon(player.icon)}
                       style={{ color: getColor(player.color) }}

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Timer from "./Timer";
 import PlayerPercentage from "./PlayerPercentage";
 import PlayersIconGrid from "./PlayersIconGrid";
-import styles from "../styles/HostGame.module.css";
+import styles from "./styles/HostGame.module.css";
 import RoundTitle from "./RoundTitle";
 import EliminationReport from "./EliminationReport/EliminationReport";
 

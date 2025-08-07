@@ -1,7 +1,7 @@
 import { useConnectionStore } from "@/store/connectionStore";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import styles from "../styles/PlayerPercentage.module.css";
+import styles from "./styles/PlayerPercentage.module.css";
 import { usePlayerPercentageAnimation } from "@/utils/animations/playerPercentageAnimations";
 import PlayerIconParticles from "./PlayerIconParticle";
 

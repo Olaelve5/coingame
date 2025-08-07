@@ -3,10 +3,10 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import HostLobby from "@/components/host/HostLobby";
+import HostLobby from "@/components/host/lobby/HostLobby";
 import HostGame from "@/components/host/game/HostGame";
 import { useConnectionStore } from "@/store/connectionStore";
-import WinningPage from "@/components/host/WinningPage";
+import WinningPage from "@/components/host/game/WinningPage";
 
 export default function GamePage() {
   const params = useParams(); // Get URL parameters

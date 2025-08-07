@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useConnectionStore } from "@/store/connectionStore";
 import { roundTitleAnimation, subTitleAnimation } from "@/utils/animationUtils";
-import styles from "../styles/HostGame.module.css";
+import styles from "./styles/HostGame.module.css";
 import { useEffect, useRef, useState } from "react";
 import PlayerIconParticles from "./PlayerIconParticle";
 

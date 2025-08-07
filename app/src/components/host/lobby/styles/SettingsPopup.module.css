@@ -1,0 +1,45 @@
+.container {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.button {
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: transparent;
+  font-family: "Bungee", sans-serif;
+  transition: background-color 0.3s ease;
+  box-sizing: content-box;
+}
+
+.button:hover {
+  background-color: rgba(36, 48, 61, 0.33);
+}
+
+/* Modal styles --------------------------------*/
+
+.modalBody {
+  background: rgb(52, 55, 61);
+}
+
+.modalHeader {
+  background-color: var(--accent);
+  font-family: "Bungee", sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.modalTitle {
+  font-size: 1.4rem;
+}
+
+.modalContent {
+  background: rgb(36, 48, 61);
+}

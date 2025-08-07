@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import styles from "../styles/Timer.module.css";
+import styles from "./styles/Timer.module.css";
 import AnimatedDigit from "@/components/universal/AnimateDigit";
 import { motion } from "framer-motion";
 import { useTimerAnimations } from "@/utils/animations/timerAnimations";

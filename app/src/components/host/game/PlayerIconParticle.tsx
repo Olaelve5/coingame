@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import styles from "../styles/PlayersIconGrid.module.css";
+import styles from "./styles/PlayersIconGrid.module.css";
 import { getColor } from "@/utils/iconUtils";
 import { useMemo } from "react";
 
