@@ -24,7 +24,11 @@
 /* Modal styles --------------------------------*/
 
 .modalBody {
-  background: rgb(52, 55, 61);
+  background: rgba(34, 36, 40, 1);
+  padding: 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 5rem;
 }
 
 .modalHeader {
@@ -42,4 +46,9 @@
 
 .modalContent {
   background: rgb(36, 48, 61);
+}
+
+.contentRow {
+  display: flex;
+  justify-content: space-between;
 }

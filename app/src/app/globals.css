@@ -8,6 +8,8 @@
 
   --accent: rgb(0, 116, 224);
   --secondary-accent: rgb(255, 238, 0);
+
+  --dark-text: rgb(52, 55, 61);
 }
 
 .audiowide-font {

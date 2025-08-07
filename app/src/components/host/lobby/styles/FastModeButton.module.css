@@ -1,0 +1,24 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem;
+  font-size: 1rem;
+}
+
+.titleContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: "Bungee", sans-serif;
+}
+
+.segmentedControlRoot {
+  font-family: "Bungee", sans-serif;
+}
+
+.indicator {
+  background-color: var(--accent);
+}

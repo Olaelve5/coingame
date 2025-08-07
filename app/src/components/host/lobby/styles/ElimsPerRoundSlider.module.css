@@ -1,0 +1,25 @@
+.container {
+  font-family: "Bungee", sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.titleContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-family: "Bungee", sans-serif;
+}
+
+.buttonGroup {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: white;
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+  color: var(--dark-text);
+}

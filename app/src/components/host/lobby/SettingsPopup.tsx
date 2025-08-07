@@ -3,6 +3,10 @@ import { IconSettingsFilled } from "@tabler/icons-react";
 import { Button, Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useMantineTheme } from "@mantine/core";
+import FastModeButton from "./FastModeButton";
+import CoinAmountButton from "./CoinAmountButton";
+import TimeAmountButton from "./TimeAmountButton";
+import ElimsPerRoundSlider from "./ ElimsPerRoundSlider";
 
 const SettingsPopup = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -46,8 +50,13 @@ const SettingsPopup = () => {
           blur: 5,
         }}
       >
-        <div className={styles.content}>
-          <p>Options content goes here.</p>
+        <div className={styles.contentRow}>
+          <CoinAmountButton />
+          <TimeAmountButton />
+        </div>
+        <div className={styles.contentRow}>
+          <ElimsPerRoundSlider />
+          <FastModeButton />
         </div>
       </Modal>
     </div>
