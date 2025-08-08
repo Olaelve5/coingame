@@ -6,8 +6,8 @@ import { useMantineTheme } from "@mantine/core";
 import { useGameSettingsStore } from "@/store/gameSettingsStore";
 
 const TimeAmountButton = () => {
-  const { settings, updateTimeLimit } = useGameSettingsStore();
-  const [value, setValue] = useState(settings.timeLimit.toString());
+  const { gameSettings, updateRoundTimeLimit } = useGameSettingsStore();
+  const [value, setValue] = useState(gameSettings.roundTimeLimit.toString());
   const theme = useMantineTheme();
 
   return (
@@ -21,12 +21,12 @@ const TimeAmountButton = () => {
         value={value}
         onChange={(value) => {
           setValue(value);
-          updateTimeLimit(parseInt(value));
+          updateRoundTimeLimit(parseInt(value));
         }}
         data={[
           { label: "20 sec", value: "20" },
+          { label: "30 sec", value: "30" },
           { label: "40 sec", value: "40" },
-          { label: "60 sec", value: "60" },
         ]}
         classNames={{
           root: styles.segmentedControlRoot,

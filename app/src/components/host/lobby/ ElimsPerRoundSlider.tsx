@@ -6,8 +6,8 @@ import { useMantineTheme } from "@mantine/core";
 import { useGameSettingsStore } from "@/store/gameSettingsStore";
 
 const ElimsPerRoundSlider = () => {
-  const { settings, updateElimsPerRound } = useGameSettingsStore();
-  const [value, setValue] = useState(settings.elimsPerRound);
+  const { gameSettings, updateElimsPerRound } = useGameSettingsStore();
+  const [value, setValue] = useState(gameSettings.elimsPerRound);
   const theme = useMantineTheme();
 
   return (

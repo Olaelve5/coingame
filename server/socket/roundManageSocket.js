@@ -1,16 +1,80 @@
 import { Game } from "../models/Game.ts";
 import { handleRoundEnd, executeEliminations } from "../utils/roundUtils.js";
+import validateGameSettings from "../utils/validateGameSettings.js";
 
 const roundManageSocketHandler = (io, botManager) => {
   // Handle change game status
   io.on("connection", (socket) => {
+    // Start game handler ----------------------------------------------------------------------------------->
+    socket.on("startGame", async (gameCode, gameSettings, callback) => {
+      try {
+        const currentGame = await Game.findOne({ gameCode });
+
+        if (!currentGame || currentGame.status !== "waiting") {
+          if (callback) callback({ error: "Cannot start game" });
+          return;
+        }
+
+        const { valid, errors } = validateGameSettings(
+          gameSettings,
+          currentGame.players.length
+        );
+
+        if (!valid) {
+          console.error("Invalid game settings:", errors);
+          callback({ error: "Invalid game settings", details: errors });
+          return;
+        }
+
+        // Set player initial budget based on the gamesettings
+        // and the number of players
+        let initialCoinsAmount = 100;
+        if (gameSettings.initialCoins) {
+          const initialCoins = {
+            low: Math.max(50, 5 * currentGame.players.length),
+            medium: Math.max(100, 10 * currentGame.players.length),
+            high: Math.max(200, 20 * currentGame.players.length),
+          };
+          initialCoinsAmount = initialCoins[gameSettings.initialCoins];
+        }
+
+        const update = {
+          $set: {
+            status: "playing",
+            round: 1,
+            roundStatus: "preparing",
+            "players.$[].playedInRound": false,
+            "players.$[].coins": initialCoinsAmount,
+            gameSettings: {
+              initialCoins: gameSettings.initialCoins,
+              fastMode: gameSettings.fastMode,
+              roundTimeLimit: gameSettings.roundTimeLimit,
+              elimsPerRound: gameSettings.elimsPerRound,
+            },
+          },
+        };
+
+        const updatedGame = await Game.findOneAndUpdate({ gameCode }, update, {
+          new: true,
+        });
+
+        console.log(`Started game ${gameCode} with settings:`, gameSettings);
+        io.to(gameCode).emit("gameUpdate", updatedGame);
+
+        if (callback) callback({ success: true, game: updatedGame });
+      } catch (error) {
+        console.error("Error starting game:", error);
+        if (callback) callback({ error: "Failed to start game" });
+      }
+    });
+
     // Prepare round handler --------------------------------------------------------------------------------------------->
     socket.on("prepareRound", async (gameCode, callback) => {
       try {
         // First check the current game status
         const currentGame = await Game.findOne({ gameCode });
 
-        if (!currentGame) {
+        if (!currentGame || currentGame.status !== "playing") {
           if (callback) callback({ error: "Game not found" });
           return;
         }
@@ -22,16 +86,6 @@ const roundManageSocketHandler = (io, botManager) => {
             "players.$[].playedInRound": false,
           },
         };
-
-        // For first round (game starting)
-        if (currentGame.status === "waiting") {
-          update.$set.status = "playing";
-          update.$set.round = 1;
-        }
-        // For subsequent rounds
-        else if (currentGame.status === "playing") {
-          update.$inc = { round: 1 };
-        }
 
         const game = await Game.findOneAndUpdate({ gameCode }, update, {
           new: true,
@@ -83,7 +137,9 @@ const roundManageSocketHandler = (io, botManager) => {
             { new: true }
           );
 
-          console.log(`Prepared next round ${nextRoundGame.round} for game ${gameCode}`);
+          console.log(
+            `Prepared next round ${nextRoundGame.round} for game ${gameCode}`
+          );
           io.to(gameCode).emit("gameUpdate", nextRoundGame);
           if (callback) callback({ success: true, game: nextRoundGame });
           return;
@@ -121,6 +177,7 @@ const roundManageSocketHandler = (io, botManager) => {
       }
     });
 
+    // Finalize round plays --------------------------------------------------------------------------------------------->
     socket.on("finalizeRoundPlays", async (gameCode, callback) => {
       try {
         const game = await Game.findOne({ gameCode });

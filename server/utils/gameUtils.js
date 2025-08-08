@@ -21,17 +21,12 @@ const calculateRoundResults = (game) => {
     0
   );
 
-  // Find minimum coins played
-  // const minCoinsPlayed = Math.min(
-  //   ...currentRoundPlays.map((play) => play.coinsPlayed)
-  // );
-
   let prevPlayerBet = 0;
   let playersEliminated = [];
 
   for (const play of currentRoundPlays) {
     if (
-      playersEliminated.length < game.elimsPerRound ||
+      playersEliminated.length < game.gameSettings.elimsPerRound ||
       prevPlayerBet === play.coinsPlayed
     ) {
       playersEliminated.push({

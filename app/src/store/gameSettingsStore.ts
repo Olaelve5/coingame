@@ -1,41 +1,41 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
 interface GameSettings {
-  timeLimit: number;
-  coinAmount: string;
+  roundTimeLimit: number;
+  initialCoins: string;
   fastMode: boolean;
   elimsPerRound: number;
 }
 
 interface GameSettingsStore {
-  settings: GameSettings;
-  updateTimeLimit: (timeLimit: number) => void;
-  updateCoinAmount: (amount: string) => void;
+  gameSettings: GameSettings;
+  updateRoundTimeLimit: (roundTimeLimit: number) => void;
+  updateInitialCoins: (amount: string) => void;
   updateFastMode: (enabled: boolean) => void;
   updateElimsPerRound: (count: number) => void;
 }
 
 export const useGameSettingsStore = create<GameSettingsStore>((set) => ({
-  settings: {
-    timeLimit: 40,
-    coinAmount: 'medium',
+  gameSettings: {
+    roundTimeLimit: 30,
+    initialCoins: "medium",
     fastMode: false,
-    elimsPerRound: 2,
+    elimsPerRound: 1,
   },
-  updateTimeLimit: (timeLimit) =>
+  updateRoundTimeLimit: (roundTimeLimit) =>
     set((state) => ({
-      settings: { ...state.settings, timeLimit }
+      gameSettings: { ...state.gameSettings, roundTimeLimit },
     })),
-  updateCoinAmount: (coinAmount) =>
+  updateInitialCoins: (initialCoins) =>
     set((state) => ({
-      settings: { ...state.settings, coinAmount }
+      gameSettings: { ...state.gameSettings, initialCoins },
     })),
   updateFastMode: (fastMode) =>
     set((state) => ({
-      settings: { ...state.settings, fastMode }
+      gameSettings: { ...state.gameSettings, fastMode },
     })),
   updateElimsPerRound: (elimsPerRound) =>
     set((state) => ({
-      settings: { ...state.settings, elimsPerRound }
+      gameSettings: { ...state.gameSettings, elimsPerRound },
     })),
 }));

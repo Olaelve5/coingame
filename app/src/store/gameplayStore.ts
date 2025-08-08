@@ -3,8 +3,10 @@ import { getSocket } from "@/utils/socket";
 import { Game } from "@/models/Game";
 import getPlayerId from "@/utils/getPlayerId";
 import { useConnectionStore } from "./connectionStore";
+import { useGameSettingsStore } from "./gameSettingsStore";
 
 interface GameplayStore {
+  startGame: (gameCode: string) => Promise<boolean>;
   startRound: () => Promise<boolean>;
   prepareRound: (gameCode: string) => Promise<boolean>;
   endRound: () => Promise<boolean>;
@@ -14,6 +16,30 @@ interface GameplayStore {
 }
 
 export const useGameplayStore = create<GameplayStore>((set, get) => ({
+  // Start
+  startGame: async (gameCode: string): Promise<boolean> => {
+    return new Promise((resolve) => {
+      const socket = getSocket();
+      socket.emit(
+        "startGame",
+        gameCode,
+        useGameSettingsStore.getState().gameSettings,
+        (response: { error?: string; success?: boolean; game?: Game }) => {
+          if (response.error) {
+            console.error("Failed to start game:", response.error);
+            resolve(false);
+          } else if (response.success && response.game) {
+            // ✅ Check for success
+            useConnectionStore.getState().setGame(response.game);
+            resolve(true);
+          } else {
+            console.error("Invalid response from server");
+            resolve(false);
+          }
+        }
+      );
+    });
+  },
   // Function to prepare for the next round
   prepareRound: async (gameCode: string): Promise<boolean> => {
     return new Promise((resolve) => {

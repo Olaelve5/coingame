@@ -15,5 +15,5 @@
     "utils/gameUtils.js",
     "utils/botManager.js",
     "utils/iconUtils.js"
-  ]
+, "utils/validateGameSettings.js"  ]
 }

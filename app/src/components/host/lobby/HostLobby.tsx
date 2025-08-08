@@ -16,7 +16,7 @@ import { Button } from "@mantine/core";
 export default function HostLobby({ gameCode }: { gameCode: string }) {
   const router = useRouter();
   const { game, joinAsHost, cleanup, kickPlayer } = useConnectionStore();
-  const { prepareRound } = useGameplayStore();
+  const { startGame } = useGameplayStore();
   const [isExiting, setIsExiting] = useState(false);
   const [playersAnimationComplete, setPlayersAnimationComplete] = useState(false);
 
@@ -37,7 +37,7 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
   };
 
   const handleStartGame = async () => {
-    const success = await prepareRound(gameCode);
+    const success = await startGame(gameCode);
     if (!success) {
       alert("Failed to start game");
     }

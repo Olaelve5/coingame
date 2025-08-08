@@ -6,8 +6,8 @@ import { useMantineTheme } from "@mantine/core";
 import { useGameSettingsStore } from "@/store/gameSettingsStore";
 
 const CoinAmountButton = () => {
-  const { settings, updateCoinAmount } = useGameSettingsStore();
-  const [value, setValue] = useState(settings.coinAmount);
+  const { gameSettings, updateInitialCoins } = useGameSettingsStore();
+  const [value, setValue] = useState(gameSettings.initialCoins);
   const theme = useMantineTheme();
 
   return (
@@ -21,7 +21,7 @@ const CoinAmountButton = () => {
         value={value}
         onChange={(value) => {
           setValue(value);
-          updateCoinAmount(value);
+          updateInitialCoins(value);
         }}
         data={[
           { label: "Low", value: "low" },

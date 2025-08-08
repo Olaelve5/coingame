@@ -6,8 +6,8 @@ import { useMantineTheme } from "@mantine/core";
 import { useGameSettingsStore } from "@/store/gameSettingsStore";
 
 const FastModeButton = () => {
-  const { settings, updateFastMode } = useGameSettingsStore();
-  const [isFastMode, setIsFastMode] = useState(settings.fastMode);
+  const { gameSettings, updateFastMode } = useGameSettingsStore();
+  const [isFastMode, setIsFastMode] = useState(gameSettings.fastMode);
   const theme = useMantineTheme();
 
   return (

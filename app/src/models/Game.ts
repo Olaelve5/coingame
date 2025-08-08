@@ -30,9 +30,9 @@ export interface Game {
   _id: string;
   gameCode: string;
   gameSettings: {
-    initialCoins: number; // amount will vary based on the number of players
+    initialCoins: string; // low, medium or high
     fastMode: boolean;
-    roundTimeLimit: number; // in seconds - 20, 40 or 60
+    roundTimeLimit: number; // in seconds - 20, 30 or 40
     elimsPerRound: number;
   };
   players: Player[];

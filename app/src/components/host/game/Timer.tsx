@@ -4,9 +4,9 @@ import AnimatedDigit from "@/components/universal/AnimateDigit";
 import { motion } from "framer-motion";
 import { useTimerAnimations } from "@/utils/animations/timerAnimations";
 import PlayerIconParticles from "./PlayerIconParticle";
+import { useConnectionStore } from "@/store/connectionStore";
 
 interface TimerProps {
-  initialTime?: number;
   onTimeUp?: () => void;
   timerRunning: boolean;
   testingSignal?: boolean;
@@ -15,14 +15,14 @@ interface TimerProps {
 }
 
 export default function Timer({
-  initialTime = 20,
   onTimeUp,
   timerRunning = false,
   testingSignal = false,
   startEliminationAnimations = false,
   setTimerEndAnimationFinished,
 }: TimerProps) {
-  const [timeRemaining, setTimeRemaining] = useState(initialTime);
+  const { game } = useConnectionStore();
+  const [timeRemaining, setTimeRemaining] = useState(game?.gameSettings.roundTimeLimit || 40);
   const [startTime, setStartTime] = useState(0);
   const [timeUpTriggered, setTimeUpTriggered] = useState(false);
   const { scope, playAppearAnimation, playBaloonPopAnimation } = useTimerAnimations();
@@ -35,7 +35,7 @@ export default function Timer({
       interval = setInterval(() => {
         const currentTime = Date.now();
         const elapsedTimeSeconds = (currentTime - startTime) / 1000;
-        const newTimeRemaining = Math.max(initialTime - elapsedTimeSeconds, 0);
+        const newTimeRemaining = Math.max(timeRemaining - elapsedTimeSeconds, 0);
 
         setTimeRemaining(newTimeRemaining);
 
@@ -48,14 +48,14 @@ export default function Timer({
     }
 
     return () => clearInterval(interval);
-  }, [timerRunning, startTime, initialTime, onTimeUp]);
+  }, [timerRunning, startTime, timeRemaining, onTimeUp]);
 
   useEffect(() => {
     if (timerRunning) {
-      setTimeRemaining(initialTime);
+      setTimeRemaining(timeRemaining);
       setStartTime(Date.now());
     }
-  }, [timerRunning, initialTime]);
+  }, [timerRunning, timeRemaining]);
 
   // Play the appear animation when the timer is mounted
   useEffect(() => {
