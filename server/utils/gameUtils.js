@@ -23,10 +23,14 @@ const calculateRoundResults = (game) => {
 
   let prevPlayerBet = 0;
   let playersEliminated = [];
+  const eliminationCount = Math.min(
+    activePlayers.length - 1,
+    game.gameSettings.elimsPerRound
+  );
 
   for (const play of currentRoundPlays) {
     if (
-      playersEliminated.length < game.gameSettings.elimsPerRound ||
+      playersEliminated.length < eliminationCount ||
       prevPlayerBet === play.coinsPlayed
     ) {
       playersEliminated.push({
