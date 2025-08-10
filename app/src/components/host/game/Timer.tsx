@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useTimerAnimations } from "@/utils/animations/timerAnimations";
 import PlayerIconParticles from "./PlayerIconParticle";
 import { useConnectionStore } from "@/store/connectionStore";
+import { useMantineTheme } from "@mantine/core";
 
 interface TimerProps {
   onTimeUp?: () => void;
@@ -22,10 +23,18 @@ export default function Timer({
   setTimerEndAnimationFinished,
 }: TimerProps) {
   const { game } = useConnectionStore();
+  const theme = useMantineTheme();
   const [timeRemaining, setTimeRemaining] = useState(game?.gameSettings.roundTimeLimit || 40);
   const [startTime, setStartTime] = useState(0);
+  const [isPulsing, setIsPulsing] = useState(false);
   const [timeUpTriggered, setTimeUpTriggered] = useState(false);
-  const { scope, playAppearAnimation, playBaloonPopAnimation } = useTimerAnimations();
+  const {
+    scope,
+    playAppearAnimation,
+    playBaloonPopAnimation,
+    playPulseAnimation,
+    stopPulseAnimation,
+  } = useTimerAnimations();
 
   // Handle the countdown logic with decisecond precision
   useEffect(() => {
@@ -62,6 +71,25 @@ export default function Timer({
     playAppearAnimation();
   }, []);
 
+  // Effect for starting pulse
+  useEffect(() => {
+    if (timeRemaining <= 5 && !isPulsing && timerRunning) {
+      setIsPulsing(true);
+      playPulseAnimation();
+    } else if (timeRemaining > 5 && isPulsing) {
+      setIsPulsing(false);
+      stopPulseAnimation();
+    }
+  }, [timeRemaining]);
+
+  // Effect for stopping pulse when timer stops
+  useEffect(() => {
+    if (!timerRunning && isPulsing) {
+      setIsPulsing(false);
+      stopPulseAnimation();
+    }
+  }, [timerRunning]);
+
   useEffect(() => {
     if (startEliminationAnimations || testingSignal) {
       playBaloonPopAnimation();
@@ -87,7 +115,12 @@ export default function Timer({
     <div style={{ position: "relative" }}>
       <motion.div ref={scope} style={{ scale: 0.5, opacity: 0 }}>
         <div className={styles.container}>
-          <div className={styles.timer}>
+          <div
+            className={styles.timer}
+            style={{
+              backgroundColor: timeRemaining <= 5 ? theme.colors.red[9] : "var(--accent)",
+            }}
+          >
             <div className={styles.timerText}>
               {timeString.split("").map((digit, index) => (
                 <AnimatedDigit key={`digit-${index}`} value={digit} />
@@ -98,7 +131,7 @@ export default function Timer({
       </motion.div>
       {(startEliminationAnimations || testingSignal) && (
         <div className={styles.particleContainer}>
-          <PlayerIconParticles color="cyan" distance={1.5} />
+          <PlayerIconParticles color={timeRemaining <= 5 ? "red" : "cyan"} distance={1.5} />
         </div>
       )}
     </div>

@@ -1,9 +1,10 @@
-import { motion } from "framer-motion";
+import { color, motion } from "framer-motion";
 import { useConnectionStore } from "@/store/connectionStore";
 import { roundTitleAnimation, subTitleAnimation } from "@/utils/animationUtils";
 import styles from "./styles/HostGame.module.css";
 import { useEffect, useRef, useState } from "react";
 import PlayerIconParticles from "./PlayerIconParticle";
+import { useMantineTheme } from "@mantine/core";
 
 // Define the interface for the props
 interface RoundTitleProps {
@@ -16,6 +17,7 @@ export default function RoundTitle({
   startEliminationAnimations,
 }: RoundTitleProps) {
   const { game } = useConnectionStore();
+  const theme = useMantineTheme();
   const [animationState, setAnimationState] = useState("initial");
   const animationHandled = useRef(false); // Track if animation has been handled, to prevent multiple calls
 
@@ -36,7 +38,8 @@ export default function RoundTitle({
     }
   }, [startEliminationAnimations]);
 
-  const playerCount = game?.players.filter((player) => !player.eliminated).length;
+  const playerCount = game?.players.filter((player) => !player.eliminated).length || 0;
+  const minimumEliminations = Math.min(playerCount - 1, game?.gameSettings.elimsPerRound || 0);
 
   return (
     <div className={styles.roundTitleContainer}>
@@ -54,9 +57,14 @@ export default function RoundTitle({
         <h2>Round</h2>
         <h2 className={styles.number}>{game?.round || 1}</h2>
       </motion.div>
-      <motion.div className={styles.subTitle} animate={animationState} variants={subTitleAnimation}>
+      {/* <motion.div className={styles.subTitle} animate={animationState} variants={subTitleAnimation}>
         <h3 className={styles.playerCount}>{playerCount}</h3>
         <h3>players remaining</h3>
+      </motion.div> */}
+      <motion.div className={styles.subTitle} animate={animationState} variants={subTitleAnimation}>
+        <h3>Minimum</h3>
+        <h3 style={{ color: theme.colors.red[7] }}>{minimumEliminations}</h3>
+        <h3>players will be eliminated</h3>
       </motion.div>
 
       {startEliminationAnimations && (

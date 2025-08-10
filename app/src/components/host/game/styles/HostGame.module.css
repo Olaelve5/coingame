@@ -53,10 +53,6 @@
     opacity: 0;
     display: flex;
     gap: 0.5rem;
-
-    .playerCount {
-        color: var(--accent);
-    }
 }
 
 .buttonContainer {

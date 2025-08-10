@@ -12,6 +12,26 @@ export const useTimerAnimations = () => {
     );
   };
 
+  const playPulseAnimation = () => {
+    // Create a repeating pulse animation
+    animate(
+      scope.current,
+      {
+        scale: [1, 1.1, 1],
+      },
+      {
+        duration: 0.55,
+        repeat: Infinity,
+        ease: "easeInOut",
+      }
+    );
+  };
+
+  const stopPulseAnimation = () => {
+    // Stop the animation and reset
+    animate(scope.current, { scale: 1 }, { duration: 0.2 });
+  };
+
   const playBaloonPopAnimation = async () => {
     const startMagnitude = 0.2;
     const endMagnitude = 1.2;
@@ -20,8 +40,7 @@ export const useTimerAnimations = () => {
 
     for (let i = 0; i < numberOfCycles; i++) {
       const progress = numberOfCycles > 1 ? i / (numberOfCycles - 1) : 1;
-      const currentCycleMagnitude =
-        startMagnitude + (endMagnitude - startMagnitude) * progress;
+      const currentCycleMagnitude = startMagnitude + (endMagnitude - startMagnitude) * progress;
 
       xKeyframes.push(-currentCycleMagnitude);
       xKeyframes.push(currentCycleMagnitude);
@@ -47,5 +66,7 @@ export const useTimerAnimations = () => {
     scope,
     playAppearAnimation,
     playBaloonPopAnimation,
+    playPulseAnimation,
+    stopPulseAnimation,
   };
 };
