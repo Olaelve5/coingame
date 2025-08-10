@@ -6,6 +6,7 @@ import { useTimerAnimations } from "@/utils/animations/timerAnimations";
 import PlayerIconParticles from "./PlayerIconParticle";
 import { useConnectionStore } from "@/store/connectionStore";
 import { useMantineTheme } from "@mantine/core";
+import useSound from "use-sound";
 
 interface TimerProps {
   onTimeUp?: () => void;
@@ -28,6 +29,10 @@ export default function Timer({
   const [startTime, setStartTime] = useState(0);
   const [isPulsing, setIsPulsing] = useState(false);
   const [timeUpTriggered, setTimeUpTriggered] = useState(false);
+  const [tickingSoundPlaying, setTickingSoundPlaying] = useState(false);
+  const [playTickingSound, { stop: stopTickingSound }] = useSound("/sounds/clock-ticking.mp3", {
+    volume: 1,
+  });
   const {
     scope,
     playAppearAnimation,
@@ -76,9 +81,13 @@ export default function Timer({
     if (timeRemaining <= 5 && !isPulsing && timerRunning) {
       setIsPulsing(true);
       playPulseAnimation();
+      playTickingSound();
+      setTickingSoundPlaying(true);
     } else if (timeRemaining > 5 && isPulsing) {
       setIsPulsing(false);
       stopPulseAnimation();
+      stopTickingSound();
+      setTickingSoundPlaying(false);
     }
   }, [timeRemaining]);
 
@@ -87,6 +96,8 @@ export default function Timer({
     if (!timerRunning && isPulsing) {
       setIsPulsing(false);
       stopPulseAnimation();
+      stopTickingSound();
+      setTickingSoundPlaying(false);
     }
   }, [timerRunning]);
 
