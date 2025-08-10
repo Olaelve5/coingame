@@ -94,36 +94,21 @@ const getPlayerRanks = (game, playersEliminated) => {
   // Sort by coins descending (highest coins get better rank)
   playersEliminated.sort((a, b) => b.coins - a.coins);
 
+  let currentRank = aliveCount + 1; // Start from the first elimination rank
   let prevCoins = null;
-  let prevRank = aliveCount;
-  let playersWithPrevRank = 0;
 
-  playersEliminated.forEach((player) => {
-    // New rank
+  playersEliminated.forEach((player, index) => {
+    // If coins are different from previous player, update rank
     if (player.coins !== prevCoins) {
-      console.log(
-        `Player ${player.name} has ${
-          player.coins
-        } coins, previous was ${prevCoins}. Assigning new rank ${
-          prevRank + 1 + playersWithPrevRank
-        }`
-      );
-
-      prevCoins = player.coins;
-      const playerRank = prevRank + 1 + playersWithPrevRank;
-      player.endRank = playerRank;
-      prevRank = playerRank;
-
-      // Same rank
-    } else {
-      console.log(
-        `Player ${player.name} has same coins as previous (${prevCoins}). Assigning rank ${prevRank}`
-      );
-
-      player.endRank = prevRank;
-      // Only count excess players with same amount of coins
-      playersWithPrevRank++;
+      currentRank = aliveCount + 1 + index;
     }
+
+    player.endRank = currentRank;
+    prevCoins = player.coins;
+
+    console.log(
+      `Player ${player.name} (${player.coins} coins) assigned rank ${currentRank}`
+    );
   });
 
   return playersEliminated;
