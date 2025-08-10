@@ -7,6 +7,7 @@
 11. Redesign landing page
 12. Redesign winning page
 13. Sounds
+14. Add more countdown varieties
 
 
 ## ✅ COMPLETED

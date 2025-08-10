@@ -6,6 +6,7 @@ import styles from "./styles/PlayersIconGrid.module.css";
 import { useEffect, useState } from "react";
 import { usePlayerIconAnimations } from "@/utils/animations/playerIconAnimations";
 import PlayerIconParticles from "./PlayerIconParticle";
+import useSound from "use-sound";
 
 interface PlayerIconProps {
   player: Player;
@@ -72,7 +73,7 @@ export default function PlayerIcon({
       style={gridPosition}
       initial={{ scale: 0, rotate: 180 }}
       animate={{ scale: 1, rotate: 0 }}
-      transition={{ delay: index * 0.1, type: "spring", bounce: 0.5 }}
+      transition={{ type: "spring", bounce: 0.5 }}
     >
       <motion.div ref={scope} className={styles.iconContainer}>
         <FontAwesomeIcon icon={getIcon(player.icon)} size="2x" color={getColor(player.color)} />

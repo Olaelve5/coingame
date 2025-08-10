@@ -1,7 +1,7 @@
 import Timer from "./Timer";
 import PlayerPercentage from "./PlayerPercentage";
 import { useState } from "react";
-import styles from "../styles/HostGame.module.css";
+import styles from "./styles/HostGame.module.css";
 import PlayerIcon from "./PlayerIcon";
 import EliminationReport from "./EliminationReport/EliminationReport";
 

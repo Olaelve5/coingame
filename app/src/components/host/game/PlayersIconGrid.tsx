@@ -3,6 +3,7 @@ import { useConnectionStore } from "@/store/connectionStore";
 import PlayerIcon from "./PlayerIcon";
 import { useEffect, useState, useRef, use } from "react";
 import { Player } from "@/models/Game";
+import useSound from "use-sound";
 
 interface PlayersIconGridProps {
   startEliminationAnimations?: boolean;
@@ -14,10 +15,10 @@ export default function PlayersIconGrid({
   setPlayerAnimationsFinished,
 }: PlayersIconGridProps) {
   const { game } = useConnectionStore();
-
   const [completedExitAnimations, setCompletedExitAnimations] = useState<Set<string>>(new Set());
   const [allPlayersAnimatedOut, setAllPlayersAnimatedOut] = useState(false);
   const playersToAnimateOutRef = useRef<Player[]>([]);
+  const [playPopUpSound] = useSound("/sounds/pop-up.mp3", { volume: 1 });
 
   const players =
     game?.players.filter((player) => !player.eliminated && player.playedInRound) || [];
@@ -81,6 +82,7 @@ export default function PlayersIconGrid({
       if (index < shuffledPositions.length) {
         newPositions[player.id] = shuffledPositions[index];
         positionedPlayersRef.current.add(player.id);
+        playPopUpSound();
       } else {
         console.warn("More players than available positions");
         newPositions[player.id] = {
@@ -88,6 +90,7 @@ export default function PlayersIconGrid({
           col: Math.floor(Math.random() * columns),
         };
         positionedPlayersRef.current.add(player.id);
+        playPopUpSound();
       }
     });
 
