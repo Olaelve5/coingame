@@ -40,3 +40,28 @@ body {
     box-sizing: border-box;
   }
 }
+
+/* ✅ Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 6px; /* Make scrollbar thinner */
+  height: 6px; /* For horizontal scrollbars */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* Make track invisible */
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 116, 224, 0.4); /* Semi-transparent accent color */
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 116, 224, 0.6); /* More opaque accent on hover */
+}
+
+/* ✅ Firefox scrollbar styles */
+* {
+  scrollbar-width: thin; /* Make scrollbar thin */
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent; /* thumb color, track color */
+}

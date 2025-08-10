@@ -4,11 +4,16 @@ import styles from "./styles/ElimsPerRoundSlider.module.css";
 import { IconGhost2Filled } from "@tabler/icons-react";
 import { useMantineTheme } from "@mantine/core";
 import { useGameSettingsStore } from "@/store/gameSettingsStore";
+import { useConnectionStore } from "@/store/connectionStore";
 
 const ElimsPerRoundSlider = () => {
+  const { game } = useConnectionStore();
   const { gameSettings, updateElimsPerRound } = useGameSettingsStore();
   const [value, setValue] = useState(gameSettings.elimsPerRound);
   const theme = useMantineTheme();
+
+  const activePlayers = game?.players.filter((player) => player.connected) || [];
+  const maxElims = Math.max(activePlayers.length - 2, 1);
 
   return (
     <div className={styles.container}>
@@ -19,6 +24,7 @@ const ElimsPerRoundSlider = () => {
       <Group wrap="nowrap" className={styles.buttonGroup}>
         <Button
           className={styles.button}
+          disabled={value <= 1}
           radius={"md"}
           onClick={() => {
             setValue((prev) => Math.max(prev - 1, 1));
@@ -30,10 +36,11 @@ const ElimsPerRoundSlider = () => {
         <span>{value}</span>
         <Button
           className={styles.button}
+          disabled={value >= maxElims}
           radius={"md"}
           onClick={() => {
-            setValue((prev) => Math.min(prev + 1, 10));
-            updateElimsPerRound(Math.min(value + 1, 10));
+            setValue((prev) => Math.min(prev + 1, maxElims));
+            updateElimsPerRound(Math.min(value + 1, maxElims));
           }}
         >
           +

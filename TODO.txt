@@ -1,3 +1,0 @@
-1. Order of starting game - error should come before animations starting (in lobby).
-2. Calculations of end rank is wrong - two players can get rank 21?? - and the players who bet the most but still get eliminated should be placed 
-above the ones who bet less, regardless of the amount of coins left. 

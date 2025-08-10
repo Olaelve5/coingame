@@ -4,7 +4,6 @@
   width: 100%;
   overflow-x: hidden;
   height: 100dvh;
-  
 }
 
 .sidebar {
@@ -13,7 +12,12 @@
   background-color: var(--accent);
   padding: 1rem 2rem;
   gap: 2rem;
-  position: relative;
+  position: fixed;
+  height: 100%;
+  width: 320px;
+  left: 0;
+  top: 0;
+  z-index: 10;
 }
 
 .title {
@@ -56,6 +60,7 @@
   flex-direction: column;
   width: 100%;
   gap: 1rem;
+  margin-left: 320px; /* Adjust based on sidebar width */
 }
 
 .playerCountSection {

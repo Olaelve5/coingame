@@ -26,4 +26,10 @@
 
 .button {
   height: 33px;
+
+  &:disabled {
+    opacity: 0.35;
+    background: rgba(0, 82, 159, 1);
+    cursor: not-allowed;
+  }
 }
