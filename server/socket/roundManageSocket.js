@@ -40,7 +40,6 @@ const roundManageSocketHandler = (io, botManager) => {
 
         const update = {
           $set: {
-            status: "playing",
             round: 1,
             roundStatus: "preparing",
             "players.$[].playedInRound": false,
@@ -65,6 +64,22 @@ const roundManageSocketHandler = (io, botManager) => {
       } catch (error) {
         console.error("Error starting game:", error);
         if (callback) callback({ error: "Failed to start game" });
+      }
+    });
+
+    socket.on("beginGameplay", async (gameCode, callback) => {
+      try {
+        const updatedGame = await Game.findOneAndUpdate(
+          { gameCode },
+          { $set: { status: "playing" } },
+          { new: true }
+        );
+
+        io.to(gameCode).emit("gameUpdate", updatedGame);
+        if (callback) callback({ success: true, game: updatedGame });
+      } catch (error) {
+        console.error("Error beginning gameplay:", error);
+        if (callback) callback({ error: "Failed to begin gameplay" });
       }
     });
 

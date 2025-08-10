@@ -1,5 +1,3 @@
-// components/GameRoom.tsx
-"use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useConnectionStore } from "@/store/connectionStore";
@@ -16,9 +14,10 @@ import { Button } from "@mantine/core";
 export default function HostLobby({ gameCode }: { gameCode: string }) {
   const router = useRouter();
   const { game, joinAsHost, cleanup, kickPlayer } = useConnectionStore();
-  const { startGame } = useGameplayStore();
+  const { startGame, beginGameplay } = useGameplayStore();
   const [isExiting, setIsExiting] = useState(false);
   const [playersAnimationComplete, setPlayersAnimationComplete] = useState(false);
+  const [isStartingGame, setIsStartingGame] = useState(false);
 
   useEffect(() => {
     const initGame = async () => {
@@ -32,14 +31,22 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
     return () => cleanup();
   }, [gameCode, joinAsHost, router, cleanup]);
 
-  const handleStartGameClick = () => {
-    setIsExiting(true);
+  const validateAndPrepareGame = async () => {
+    setIsStartingGame(true);
+    const success = await startGame(gameCode);
+    setIsStartingGame(false);
+
+    if (success) {
+      setIsExiting(true); // Start animations if successful
+    } else {
+      alert("Failed to start game");
+    }
   };
 
   const handleStartGame = async () => {
-    const success = await startGame(gameCode);
+    const success = await beginGameplay(gameCode);
     if (!success) {
-      alert("Failed to start game");
+      alert("Failed to begin gameplay");
     }
   };
 
@@ -121,8 +128,9 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
           </div>
           <Button
             className={styles.startGameButton}
+            loading={isStartingGame}
             size="lg"
-            onClick={handleStartGameClick}
+            onClick={validateAndPrepareGame}
             disabled={!game?.players.length || game.players.length < 3}
             rightSection={<IconPlayerPlayFilled size={24} />}
           >

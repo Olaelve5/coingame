@@ -7,6 +7,7 @@ import { useGameSettingsStore } from "./gameSettingsStore";
 
 interface GameplayStore {
   startGame: (gameCode: string) => Promise<boolean>;
+  beginGameplay: (gameCode: string) => Promise<boolean>;
   startRound: () => Promise<boolean>;
   prepareRound: (gameCode: string) => Promise<boolean>;
   endRound: () => Promise<boolean>;
@@ -40,6 +41,25 @@ export const useGameplayStore = create<GameplayStore>((set, get) => ({
       );
     });
   },
+
+  beginGameplay: async (gameCode: string): Promise<boolean> => {
+    return new Promise((resolve) => {
+      const socket = getSocket();
+      socket.emit("beginGameplay", gameCode, (response: { error?: string; game?: Game }) => {
+        if (response.error) {
+          console.error("Failed to begin gameplay:", response.error);
+          resolve(false);
+        } else {
+          // Update game state if provided
+          if (response.game) {
+            useConnectionStore.getState().setGame(response.game);
+          }
+          resolve(true);
+        }
+      });
+    });
+  },
+
   // Function to prepare for the next round
   prepareRound: async (gameCode: string): Promise<boolean> => {
     return new Promise((resolve) => {
