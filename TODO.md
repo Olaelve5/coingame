@@ -9,7 +9,6 @@
 13. Sounds
 14. Add more countdown varieties
 15. Volume settings
-16. Add safety fallback for timer sound (max length? or multiple stop points)
 
 
 ## ✅ COMPLETED
@@ -21,3 +20,4 @@
 above the ones who bet less, regardless of the amount of coins left.
 7. Add something that shows how many will be eliminated each round 
 5. Timer visuals when timer approaching 0
+16. Add safety fallback for timer sound (max length? or multiple stop points)

@@ -1,9 +1,10 @@
 import styles from "./styles/PlayersIconGrid.module.css";
 import { useConnectionStore } from "@/store/connectionStore";
 import PlayerIcon from "./PlayerIcon";
-import { useEffect, useState, useRef, use } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Player } from "@/models/Game";
 import useSound from "use-sound";
+import { useSoundStore } from "@/store/soundStore";
 
 interface PlayersIconGridProps {
   startEliminationAnimations?: boolean;
@@ -15,10 +16,11 @@ export default function PlayersIconGrid({
   setPlayerAnimationsFinished,
 }: PlayersIconGridProps) {
   const { game } = useConnectionStore();
+  const { getCalculatedEffectsVolume } = useSoundStore();
   const [completedExitAnimations, setCompletedExitAnimations] = useState<Set<string>>(new Set());
   const [allPlayersAnimatedOut, setAllPlayersAnimatedOut] = useState(false);
   const playersToAnimateOutRef = useRef<Player[]>([]);
-  const [playPopUpSound] = useSound("/sounds/pop-up.mp3", { volume: 1 });
+  const [playPopUpSound] = useSound("/sounds/pop-up.mp3", { volume: getCalculatedEffectsVolume() });
 
   const players =
     game?.players.filter((player) => !player.eliminated && player.playedInRound) || [];

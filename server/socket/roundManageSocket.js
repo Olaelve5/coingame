@@ -44,6 +44,7 @@ const roundManageSocketHandler = (io, botManager) => {
             roundStatus: "preparing",
             "players.$[].playedInRound": false,
             "players.$[].coins": initialCoinsAmount,
+            initialBudget: initialCoinsAmount,
             gameSettings: {
               initialCoins: gameSettings.initialCoins,
               fastMode: gameSettings.fastMode,

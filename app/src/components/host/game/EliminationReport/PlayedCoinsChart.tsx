@@ -13,7 +13,7 @@ const PlayedCoinsChart = () => {
   const [showLabels, setShowLabels] = useState(false);
 
   const playersAlive = game?.players.filter((player) => !player.eliminated) || [];
-  const data = getLastRoundChartData(playersAlive, game?.round || 0);
+  const data = getLastRoundChartData(playersAlive, game?.round || 0, game?.initialBudget || 100);
 
   useEffect(() => {
     if (showChart) {
@@ -40,9 +40,8 @@ const PlayedCoinsChart = () => {
       >
         {true && (
           <BarChart
-            h={160}
             data={data}
-            dataKey="intervalLow"
+            dataKey="label"
             className={styles.chart}
             classNames={{
               axis: showLabels ? styles.axisVisible : styles.axisHidden,

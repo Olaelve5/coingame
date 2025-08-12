@@ -34,6 +34,7 @@ const GameSchema = new mongoose.Schema({
   },
   round: { type: Number, default: 0 },
   roundStatus: { type: String, default: "preparing" }, // preparing, active, completed, eliminating
+  initialBudget: { type: Number, default: 0 },
   lastRoundResults: {
     playersEliminated: [
       {

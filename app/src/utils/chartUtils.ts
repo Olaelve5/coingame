@@ -1,31 +1,32 @@
 import { Player } from "@/models/Game";
 
-export function getLastRoundChartData(players: Player[], currentRound: number) {
-  const chartData = [
-    { intervalLow: 0, intervalHigh: 10, count: 0 },
-    { intervalLow: 10, intervalHigh: 20, count: 0 },
-    { intervalLow: 20, intervalHigh: 30, count: 0 },
-    { intervalLow: 30, intervalHigh: 40, count: 0 },
-    { intervalLow: 40, intervalHigh: 50, count: 0 },
-    { intervalLow: 50, intervalHigh: 60, count: 0 },
-    { intervalLow: 60, intervalHigh: 70, count: 0 },
-    { intervalLow: 70, intervalHigh: 80, count: 0 },
-    { intervalLow: 80, intervalHigh: 90, count: 0 },
-    { intervalLow: 90, intervalHigh: 100, count: 0 },
-  ];
+// chartUtils.ts
+export function getLastRoundChartData(
+  players: Player[],
+  currentRound: number,
+  initialCoinsAmount: number
+) {
+  // Create dynamic intervals based on initial budget
+  const intervalSize = Math.ceil(initialCoinsAmount / 1.5 / 10);
+  const chartData: any = [];
+
+  for (let i = 0; i < 10; i++) {
+    const low = i * intervalSize;
+    const high = Math.min((i + 1) * intervalSize, initialCoinsAmount);
+    chartData.push({
+      intervalLow: low,
+      intervalHigh: high,
+      count: 0,
+      label: i === 9 ? `${low}+` : low,
+    });
+  }
 
   players.forEach((player) => {
-    if (player.roundHistory.length > 0) {
-      const lastRoundData = player.roundHistory.find((round) => round.round === currentRound);
-
-      if (lastRoundData) {
-        const coinsPlayed = lastRoundData.coinsPlayed;
-        const intervalIndex = Math.floor(coinsPlayed / 10);
-
-        if (intervalIndex >= 0 && intervalIndex < chartData.length) {
-          chartData[intervalIndex].count++;
-        }
-      }
+    const lastRoundData = player.roundHistory.find((round) => round.round === currentRound);
+    if (lastRoundData) {
+      const coinsPlayed = lastRoundData.coinsPlayed;
+      const intervalIndex = Math.min(Math.floor(coinsPlayed / intervalSize), 9);
+      chartData[intervalIndex].count++;
     }
   });
 
