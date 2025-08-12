@@ -8,6 +8,8 @@
 12. Redesign winning page
 13. Sounds
 14. Add more countdown varieties
+15. Volume settings
+16. Add safety fallback for timer sound (max length? or multiple stop points)
 
 
 ## ✅ COMPLETED

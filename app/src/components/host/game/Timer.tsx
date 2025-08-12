@@ -7,6 +7,7 @@ import PlayerIconParticles from "./PlayerIconParticle";
 import { useConnectionStore } from "@/store/connectionStore";
 import { useMantineTheme } from "@mantine/core";
 import useSound from "use-sound";
+import { useSoundStore } from "@/store/soundStore";
 
 interface TimerProps {
   onTimeUp?: () => void;
@@ -24,6 +25,7 @@ export default function Timer({
   setTimerEndAnimationFinished,
 }: TimerProps) {
   const { game } = useConnectionStore();
+  const { getCalculatedEffectsVolume } = useSoundStore();
   const theme = useMantineTheme();
   const [timeRemaining, setTimeRemaining] = useState(game?.gameSettings.roundTimeLimit || 40);
   const [startTime, setStartTime] = useState(0);
@@ -31,7 +33,11 @@ export default function Timer({
   const [timeUpTriggered, setTimeUpTriggered] = useState(false);
   const [tickingSoundPlaying, setTickingSoundPlaying] = useState(false);
   const [playTickingSound, { stop: stopTickingSound }] = useSound("/sounds/clock-ticking.mp3", {
-    volume: 1,
+    volume: getCalculatedEffectsVolume(),
+    timeout: 6000, // Fallback stop after 6 seconds
+    onEnd: () => {
+      setTickingSoundPlaying(false);
+    },
   });
   const {
     scope,

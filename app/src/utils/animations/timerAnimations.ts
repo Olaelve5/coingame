@@ -20,7 +20,7 @@ export const useTimerAnimations = () => {
         scale: [1, 1.1, 1],
       },
       {
-        duration: 0.55,
+        duration: 0.5,
         repeat: Infinity,
         ease: "easeInOut",
       }

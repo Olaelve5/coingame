@@ -62,9 +62,9 @@ export default function RoundTitle({
         <h3>players remaining</h3>
       </motion.div> */}
       <motion.div className={styles.subTitle} animate={animationState} variants={subTitleAnimation}>
-        <h3>Minimum</h3>
+        <h3>Eliminating at least</h3>
         <h3 style={{ color: theme.colors.red[7] }}>{minimumEliminations}</h3>
-        <h3>players will be eliminated</h3>
+        <h3>players</h3>
       </motion.div>
 
       {startEliminationAnimations && (
