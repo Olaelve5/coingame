@@ -1,34 +1,9 @@
 .container {
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
-  height: 100vh;
-}
-
-.titleContainer {
-  font-family: "Bungee";
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.title {
-  font-size: 2rem;
-}
-
-.winnerText {
-  font-size: 4rem;
-  color: var(--secondary-accent);
-}
-
-.winnerContainer {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-}
-
-.winnerIcon {
-  font-size: 3.5rem;
+  gap: 6rem;
+  font-family: "Bungee", sans-serif;
+  padding: 3rem;
+  width: 100%;
 }

@@ -53,6 +53,19 @@ export const executeEliminations = async (gameCode) => {
     },
   }));
 
+  if (isGameOver && winner) {
+    updateOperations.push({
+      updateOne: {
+        filter: { gameCode, "players.id": winner.id },
+        update: {
+          $set: {
+            "players.$.endRank": 1,
+          },
+        },
+      },
+    });
+  }
+
   // Apply all updates in one go
   await Game.bulkWrite(updateOperations);
 

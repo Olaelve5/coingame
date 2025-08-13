@@ -1,0 +1,41 @@
+.container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  font-family: "Bungee", sans-serif;
+  gap: 1.5rem;
+
+  h1 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+}
+
+.podiumContainer {
+  display: flex;
+  font-family: "Bungee", sans-serif;
+  align-items: flex-end;
+}
+
+.standContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.stand {
+  width: 145px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform-origin: bottom;
+  border-radius: 5px;
+  margin: 5px;
+  font-size: 2rem;
+}
+
+.icon {
+  font-size: 2.5rem;
+}

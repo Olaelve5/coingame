@@ -32,3 +32,20 @@ export function getLastRoundChartData(
 
   return chartData;
 }
+
+export function getPlayerRoundsData(player: Player, roundCount: number) {
+  if (!player || !player.roundHistory) {
+    console.log("Invalid player or round history");
+    console.log(player);
+    return {};
+  }
+
+  let data: { [key: number]: number } = {};
+
+  for (let i = 1; i <= roundCount; i++) {
+    const roundData = player.roundHistory.find((round) => round.round === i);
+    data[i] = roundData ? roundData.coinsPlayed : 0;
+  }
+
+  return data;
+}
