@@ -23,6 +23,7 @@ const PlayedCoinsChart = () => {
 
       return () => clearTimeout(timeout);
     }
+    console.log("Chart data:", data);
   }, [showChart]);
 
   return (
@@ -40,6 +41,7 @@ const PlayedCoinsChart = () => {
       >
         {true && (
           <BarChart
+            h={160}
             data={data}
             dataKey="label"
             className={styles.chart}
@@ -53,7 +55,7 @@ const PlayedCoinsChart = () => {
               radius: 5,
               isAnimationActive: true,
               dataKey: "count",
-              animationDuration: 600,
+              animationDuration: 1000,
             }}
           />
         )}

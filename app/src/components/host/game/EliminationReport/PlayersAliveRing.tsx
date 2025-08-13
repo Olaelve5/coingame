@@ -4,21 +4,46 @@ import { useMantineTheme } from "@mantine/core";
 import styles from "./styles/RoundStats.module.css";
 import { IconUserX } from "@tabler/icons-react";
 import { useConnectionStore } from "@/store/connectionStore";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
 const PlayersAliveRing = () => {
   const theme = useMantineTheme();
   const { game } = useConnectionStore();
+  const [totalEliminations, setTotalEliminations] = useState(0);
+  const [showLabel, setShowLabel] = useState(false);
 
   const newEliminations = game?.lastRoundResults?.playersEliminated.length || 0;
   const oldEliminationCount = game?.players.filter((player) => player.eliminated).length || 0;
-  const totalPlayers = game?.players.length || 0; // Default to 0 if no players are available
+  const totalPlayers = game?.players.length || 0;
 
-  const totalEliminations = newEliminations + oldEliminationCount;
+  useEffect(() => {
+    setShowLabel(false);
+
+    const timer1 = setTimeout(() => {
+      setTotalEliminations(newEliminations + oldEliminationCount);
+    }, 500);
+
+    const timer2 = setTimeout(() => {
+      setShowLabel(true);
+    }, 1500);
+
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+    };
+  }, [newEliminations, oldEliminationCount]);
+
   return (
-    <div className={styles.ringContainer}>
+    <motion.div
+      initial={{ opacity: 1, y: 0 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.4, duration: 0.5, ease: "easeInOut" }}
+      className={styles.ringContainer}
+    >
       <div className={styles.titleContainer}>
         <IconUserX className={styles.chartIcon} size={30} />
-        <StaggeredText text="Players Eliminated" initialDelay={0.4} staggerSpeed={0.02} />
+        <StaggeredText text="Players Eliminated" initialDelay={1.4} staggerSpeed={0.02} />
       </div>
       <div className={styles.ring}>
         <RingProgress
@@ -29,11 +54,16 @@ const PlayersAliveRing = () => {
             },
           ]}
           label={
-            <div style={{ textAlign: "center" }}>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: showLabel ? 1 : 0 }}
+              transition={{ duration: 0.5 }}
+              style={{ textAlign: "center" }}
+            >
               <p>
                 {totalEliminations}/{totalPlayers}
               </p>
-            </div>
+            </motion.div>
           }
           size={160}
           thickness={15}
@@ -42,7 +72,7 @@ const PlayersAliveRing = () => {
           rootColor="rgba(112, 115, 121, 1)"
         />
       </div>
-    </div>
+    </motion.div>
   );
 };
 

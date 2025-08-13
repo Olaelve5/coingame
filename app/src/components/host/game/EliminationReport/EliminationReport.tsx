@@ -20,7 +20,7 @@ const EliminationReport = ({ handleRoundPreparation }: EliminationReportProps) =
   const theme = useMantineTheme();
   const [shouldAnimateOut, setShouldAnimateOut] = useState(false);
   const [count, setCount] = useState(START_NUMBER);
-  const [countdownComplete, setCountdownComplete] = useState(game?.gameSettings.fastMode || false);
+  const [countdownComplete, setCountdownComplete] = useState<boolean>(game?.gameSettings.fastMode || false);
   const { startRound } = useGameplayStore();
 
   return (

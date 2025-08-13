@@ -43,9 +43,9 @@ const EliminatedPlayers = () => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: "100%" }}
-      animate={{ opacity: 1, y: "0%" }}
-      transition={{ duration: 0.5, ease: "easeInOut" }}
+      initial={{ opacity: 1, x: 0 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.5, ease: "easeInOut", delay: 0.6 }}
       className={styles.container}
     >
       <div className={styles.titleContainer}>
@@ -53,7 +53,7 @@ const EliminatedPlayers = () => {
         <StaggeredText text="Player Bets" initialDelay={0.4} staggerSpeed={0.02} />
       </div>
       <div className={styles.playersContainer}>
-        {displayPlayers.map((player) => {
+        {displayPlayers.map((player, index) => {
           const lastRound = player.roundHistory[player.roundHistory.length - 1];
           const isEliminatedInRound = game?.lastRoundResults?.playersEliminated.some(
             (eliminatedPlayer) => eliminatedPlayer.id === player.id
@@ -62,32 +62,35 @@ const EliminatedPlayers = () => {
           const isEliminatedBeforeRoun = player.eliminated;
 
           return (
-            <div
+            <motion.div
               key={player.id}
               className={styles.playerContainer}
+              initial={{ opacity: 0, y: 0, scale: 0.75 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.5, type: "spring", delay: 0.6 + index * 0.12 }}
               style={
                 isEliminatedInRound
                   ? { color: theme.colors.red[6] }
                   : isEliminatedBeforeRoun
-                  ? { color: theme.colors.gray[6], opacity: 0.6 }
+                  ? { color: theme.colors.gray[7], opacity: 0.6 }
                   : {}
               }
             >
               <FontAwesomeIcon
                 icon={getIcon(player.icon)}
-                color={isEliminatedBeforeRoun ? theme.colors.gray[6] : getColor(player.color)}
+                color={isEliminatedBeforeRoun ? theme.colors.gray[7] : getColor(player.color)}
                 className={styles.playerIcon}
               />
               <p>{player.name}</p>
               <div className={styles.playedCoinsContainer}>
                 {isEliminatedBeforeRoun ? (
-                  <IconNumber className={styles.hashIcon} style={{ color: theme.colors.gray[6] }} />
+                  <IconNumber className={styles.hashIcon} style={{ color: theme.colors.gray[7] }} />
                 ) : (
                   <IconCoinFilled className={styles.coinIcon} />
                 )}
                 <p>{isEliminatedBeforeRoun ? player.endRank : lastRound.coinsPlayed}</p>
               </div>
-            </div>
+            </motion.div>
           );
         })}
       </div>
