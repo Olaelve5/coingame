@@ -22,9 +22,16 @@ const RoundHistoryGraph = ({ player }: { player: Player }) => {
 
   return (
     <div className={styles.container}>
-      <h2>Round History</h2>
+      <div className={styles.titleContainer}>
+        <h2>Round History</h2>
+        <div className={styles.coinsLeftContainer}>
+          <h2 className={styles.coinsLeft}>{player.coins}</h2>
+          <h2>coins left</h2>
+        </div>
+      </div>
       <LineChart
-        h={200}
+        h={250}
+        w={"100%"}
         data={data}
         curveType="natural"
         type="gradient"

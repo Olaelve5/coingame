@@ -34,13 +34,13 @@
   border-radius: 8px;
 
   &[data-active] {
-    background-color: rgba(53, 60, 64, 1);
+    background-color: rgba(47, 58, 68, 1);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.21);
   }
 }
 
 .control:hover {
-  background-color: rgba(53, 60, 64, 1);
+  background-color: rgba(47, 58, 68, 1);
 }
 
 .item {
@@ -49,11 +49,12 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  transition: background-color 0.05s ease, transform 0.3s ease;
+  transition: background-color 0.05s ease, transform 0.3s ease, margin 0.3s ease;
 
   &[data-active] {
-    background-color: rgba(41, 46, 50, 1);
+    background-color: rgba(42, 51, 59, 1);
     transform: scale(1.05);
+    margin: 0.5rem 0;
   }
 }
 
@@ -80,11 +81,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1rem 0;
 }
 
 .panelContent {
   display: flex;
   justify-content: center;
   width: 100%;
+  padding: 1rem 0 1rem 0;
 }

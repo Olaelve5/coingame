@@ -43,9 +43,7 @@ const PlayersAccordion = () => {
         className={styles.accordion}
         classNames={styles}
         radius="md"
-        style={{
-          backgroundColor: theme.colors.gray[9],
-        }}
+        transitionDuration={200}
       >
         {players.map((player) => (
           <Accordion.Item key={player.id} value={player.name}>
