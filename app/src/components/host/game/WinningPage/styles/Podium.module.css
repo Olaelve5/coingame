@@ -15,6 +15,22 @@
   display: flex;
   font-family: "Bungee", sans-serif;
   align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 1.5rem;
+  width: 500px;
+  gap: 0.8rem;
+  position: relative;
+}
+
+.podiumContainer::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px; /* ✅ Add border radius */
 }
 
 .standContainer {
@@ -32,7 +48,6 @@
   align-items: center;
   transform-origin: bottom;
   border-radius: 5px;
-  margin: 5px;
   font-size: 2rem;
 }
 

@@ -21,6 +21,15 @@ const calculateRoundResults = (game) => {
     0
   );
 
+  const averageCoinsPlayed = Math.round(
+    totalCoinsPlayed / currentRoundPlays.length
+  );
+
+  const averageCoinsLeft = Math.round(
+    activePlayers.reduce((sum, player) => sum + player.coins, 0) /
+      activePlayers.length
+  );
+
   let prevPlayerBet = 0;
   let playersEliminated = [];
   const eliminationCount = Math.min(
@@ -43,13 +52,15 @@ const calculateRoundResults = (game) => {
     }
   }
 
-  const minCoinsPlayed = prevPlayerBet;
+  const safeCoinsAmount = prevPlayerBet + 1;
 
   return {
     totalCoinsPlayed,
     playersEliminated,
     round: game.round,
-    minCoinsPlayed,
+    safeCoinsAmount,
+    averageCoinsLeft,
+    averageCoinsPlayed,
   };
 };
 

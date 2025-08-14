@@ -35,22 +35,33 @@ const GameSchema = new mongoose.Schema({
   round: { type: Number, default: 0 },
   roundStatus: { type: String, default: "preparing" }, // preparing, active, completed, eliminating
   initialBudget: { type: Number, default: 0 },
-  lastRoundResults: {
-    playersEliminated: [
-      {
-        id: String,
-        name: String,
-      },
-    ],
-    totalCoinsPlayed: Number,
-    round: Number,
-    minCoinsPlayed: Number,
-  },
+  rounds: [
+    {
+      playersEliminated: [
+        {
+          id: String,
+          name: String,
+        },
+      ],
+      round: Number,
+      totalCoinsPlayed: Number,
+      averageCoinsPlayed: Number,
+      averageCoinsLeft: Number,
+      safeCoinsAmount: Number,
+    },
+  ],
   status: { type: String, default: "waiting" }, // waiting, playing, finished
   winner: {
     id: String,
     name: String,
   },
 });
+
+GameSchema.virtual("lastRoundResults").get(function () {
+  // Return the last round from the rounds array
+  return this.rounds.length > 0 ? this.rounds[this.rounds.length - 1] : null;
+});
+
+GameSchema.set("toJSON", { virtuals: true });
 
 export const Game = mongoose.models.Game || mongoose.model("Game", GameSchema);

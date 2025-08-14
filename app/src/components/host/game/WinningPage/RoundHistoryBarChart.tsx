@@ -1,11 +1,11 @@
-import { CompositeChart } from "@mantine/charts";
+import { BarChart } from "@mantine/charts";
 import styles from "./styles/RoundHistoryGraph.module.css";
 import { useMantineTheme } from "@mantine/core";
 import { Player } from "@/models/Game";
 import { getRoundChartsData } from "@/utils/chartUtils";
 import { useConnectionStore } from "@/store/connectionStore";
 
-const RoundHistoryGraph = ({ player }: { player: Player }) => {
+const RoundHistoryBarChart = ({ player }: { player: Player }) => {
   const { game } = useConnectionStore();
   const dataObject = game ? getRoundChartsData(game, player) : {};
   const data = Object.values(dataObject);
@@ -20,21 +20,17 @@ const RoundHistoryGraph = ({ player }: { player: Player }) => {
           <h2>coins left</h2>
         </div>
       </div>
-      <CompositeChart
+      <BarChart
         h={250}
-        w={"100%"}
+        w={600}
         data={data}
-        curveType="monotone"
-        maxBarWidth={20}
         series={[
-          { name: "averageCoins", label: "Average", color: "orange.5", type: "area" },
-          { name: "playerCoins", label: "Player Coins", color: "blue.5", type: "area" },
-          { name: "playerBet", label: "Player Bet", color: "pink.5", type: "bar" },
+          { name: "playerCoins", label: "Player Coins", color: "blue.5" },
+          { name: "averageCoins", label: "Average", color: "yellow.5" },
+          { name: "safeCoins", label: "Safe Amount", color: "green.5" },
         ]}
         dataKey="round"
-        dotProps={{ r: 0, strokeWidth: 2, stroke: "#fff" }}
         gridAxis="none"
-        strokeWidth={4}
         yAxisProps={{ domain: [0, game?.initialBudget || 100] }}
         className={styles.chart}
         style={{
@@ -45,4 +41,4 @@ const RoundHistoryGraph = ({ player }: { player: Player }) => {
   );
 };
 
-export default RoundHistoryGraph;
+export default RoundHistoryBarChart;

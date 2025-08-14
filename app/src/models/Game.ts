@@ -14,16 +14,20 @@ export interface Player {
     coinsPlayed: number;
   }[];
 }
+
 interface PlayerMention {
   id: string;
   name: string;
 }
 
+
 interface LastRoundResults {
   playersEliminated: PlayerMention[];
-  totalCoinsPlayed: number;
   round: number;
-  minCoinsPlayed: number;
+  totalCoinsPlayed: number;
+  averageCoinsPlayed: number;
+  averageCoinsLeft: number;
+  safeCoinsAmount: number;
 }
 
 export interface Game {
@@ -40,6 +44,7 @@ export interface Game {
   round: number;
   roundStatus: "preparing" | "completed" | "active" | "eliminating";
   lastRoundResults: LastRoundResults;
+  rounds: LastRoundResults[];
   initialBudget: number;
   status: "waiting" | "playing" | "finished";
   winner?: PlayerMention; // Optional since it's only present when game is finished

@@ -53,8 +53,8 @@
 
   &[data-active] {
     background-color: rgba(42, 51, 59, 1);
-    transform: scale(1.05);
-    margin: 0.5rem 0;
+    transform: scale(1.1);
+    margin: 1rem 0;
   }
 }
 

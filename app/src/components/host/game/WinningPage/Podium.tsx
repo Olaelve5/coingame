@@ -64,8 +64,8 @@ const Podium = () => {
             className={styles.stand}
             style={{
               height: "100px",
-              backgroundColor: theme.colors.orange[7],
-              border: `3px solid ${theme.colors.orange[7]}`,
+              backgroundColor: theme.colors.orange[8],
+              border: `3px solid ${theme.colors.orange[8]}`,
             }}
           >
             3

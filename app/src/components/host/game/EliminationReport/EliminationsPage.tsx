@@ -25,9 +25,9 @@ const EliminationsPage = ({
   const { game } = useConnectionStore();
 
   const targetNumber =
-    game?.lastRoundResults.minCoinsPlayed !== undefined
-      ? game.lastRoundResults.minCoinsPlayed + 1
-      : 0; // Default to 0 if minCoinsPlayed is not set
+    game?.lastRoundResults.safeCoinsAmount !== undefined
+      ? game.lastRoundResults.safeCoinsAmount
+      : 0;
 
   return (
     <div className={styles.pageContainer}>
@@ -36,7 +36,7 @@ const EliminationsPage = ({
           count={count}
           setCount={setCount}
           startNumber={START_NUMBER}
-          targetNumber={targetNumber} 
+          targetNumber={targetNumber}
           isRunning={true}
           onComplete={() => {
             setCountdownComplete(true);

@@ -14,7 +14,9 @@ export const handleRoundEnd = async (gameCode) => {
     {
       $set: {
         roundStatus: "eliminating", // Show elimination report
-        lastRoundResults: roundResults,
+      },
+      $push: {
+        rounds: roundResults,
       },
     },
     { new: true }
