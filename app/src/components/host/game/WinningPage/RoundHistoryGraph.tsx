@@ -4,7 +4,6 @@ import { useMantineTheme } from "@mantine/core";
 import { Player } from "@/models/Game";
 import { getRoundChartsData } from "@/utils/chartUtils";
 import { useConnectionStore } from "@/store/connectionStore";
-import { useState } from "react";
 import GraphCheckboxes from "./GraphCheckboxes";
 
 interface GraphCheckboxesProps {
@@ -28,17 +27,22 @@ const RoundHistoryGraph = ({
   const theme = useMantineTheme();
 
   const allSeries = [
-    { name: "averageCoins", label: "Average Budget", color: "orange.5", type: "area" as const },
+    {
+      name: "averageCoins",
+      label: "Average Budget",
+      color: "rgba(255, 0, 144, 0.7)",
+      type: "area" as const,
+    },
     {
       name: "playerCoins",
       label: "Player Budget",
-      color: "blue.5",
+      color: "rgba(0, 132, 255, 0.7)",
       type: "area" as const,
     },
     {
       name: "playerBet",
       label: "Player Bet",
-      color: showPlayerBets ? "teal.5" : "transparent",
+      color: showPlayerBets ? "yellow.5" : "transparent",
       type: "bar" as const,
     },
   ];
@@ -54,14 +58,14 @@ const RoundHistoryGraph = ({
   return (
     <div className={styles.container}>
       <div className={styles.titleContainer}>
-        <h2>Round Progression</h2>
+        <h2>Budget Timeline</h2>
         <div className={styles.coinsLeftContainer}>
           <h2 className={styles.coinsLeft}>{player.coins}</h2>
           <h2>coins left</h2>
         </div>
       </div>
       <CompositeChart
-        h={300}
+        h={280}
         w={"100%"}
         data={data}
         curveType="monotone"
@@ -70,11 +74,12 @@ const RoundHistoryGraph = ({
         withLegend
         legendProps={{
           verticalAlign: "top",
-          height: 25,
+          height: 35,
         }}
         dataKey="round"
         gridAxis="none"
         strokeWidth={2}
+        withDots={false}
         yAxisProps={{ domain: [0, game?.initialBudget || 100] }}
         xAxisProps={{ padding: { left: -20, right: -20 } }}
         className={styles.chart}

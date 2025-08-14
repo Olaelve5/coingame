@@ -13,13 +13,13 @@ function GraphCheckboxes({ showPlayerBets, showAverageCoins, setShowPlayerBets, 
       <Checkbox
         checked={showPlayerBets}
         label="Show Player Bets"
-        color="teal.5"
+        color="yellow.6"
         onChange={(event) => setShowPlayerBets(event.currentTarget.checked)}
       />
       <Checkbox
         checked={showAverageCoins}
         label="Show Average Budget"
-        color={"orange.5"}
+        color={"red.5"}
         onChange={(event) => setShowAverageCoins(event.currentTarget.checked)}
       />
     </div>

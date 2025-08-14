@@ -29,7 +29,7 @@ const Podium = () => {
           <div
             className={styles.stand}
             style={{
-              height: "175px",
+              height: "150px",
               backgroundColor: theme.colors.blue[7],
               border: `3px solid ${theme.colors.blue[7]}`,
             }}
@@ -46,7 +46,7 @@ const Podium = () => {
           <div
             className={styles.stand}
             style={{
-              height: "250px",
+              height: "225px",
               backgroundColor: theme.colors.yellow[7],
               border: `3px solid ${theme.colors.yellow[7]}`,
             }}
@@ -63,7 +63,7 @@ const Podium = () => {
           <div
             className={styles.stand}
             style={{
-              height: "100px",
+              height: "75px",
               backgroundColor: theme.colors.orange[8],
               border: `3px solid ${theme.colors.orange[8]}`,
             }}
