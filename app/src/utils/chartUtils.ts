@@ -43,35 +43,47 @@ export function getRoundChartsData(game: Game, player: Player) {
     };
   } = {};
 
-  data[0] = {
-    round: 0,
-    playerCoins: game.initialBudget,
+  let playerCoinsRemaining = game.initialBudget;
+
+  // Round 1: Initial state
+  data[1] = {
+    round: 1,
+    playerCoins: playerCoinsRemaining,
     averageCoins: game.initialBudget,
-    playerBet: 0,
   };
 
-  // Build data from game rounds
-  for (const round of game.rounds) {
-    data[round.round] = {
-      round: round.round,
-      averageCoins: round.averageCoinsLeft,
-    };
-  }
+  // ✅ Find the last round the player participated in
+  const playerLastRound = Math.max(...player.roundHistory.map((r) => r.round), 0);
 
-  let totalCoinsPlayed = 0;
+  // ✅ Add bets and calculate remaining coins for each round
+  for (let roundNum = 1; roundNum <= game.round; roundNum++) {
+    // Ensure we have data for this round
+    if (!data[roundNum]) {
+      data[roundNum] = {
+        round: roundNum,
+        // ✅ Only show player coins if they're still in the game
+        playerCoins: roundNum <= playerLastRound ? playerCoinsRemaining : undefined,
+        averageCoins: game.initialBudget,
+      };
+    }
 
-  for (const roundHistory of player.roundHistory) {
-    if (data[roundHistory.round]) {
-      totalCoinsPlayed += roundHistory.coinsPlayed;
-      data[roundHistory.round].playerCoins = game.initialBudget - totalCoinsPlayed;
-      data[roundHistory.round - 1].playerBet = roundHistory.coinsPlayed;
-    } else {
-      // Handle case where player has round data but game doesn't
-      data[roundHistory.round] = {
-        round: roundHistory.round,
-        playerCoins: roundHistory.coinsPlayed,
-        averageCoins: 0,
-        playerBet: roundHistory.coinsPlayed,
+    const playerBet = player.roundHistory.find((r) => r.round === roundNum);
+
+    // ✅ Add player's bet for this round (only if they played)
+    if (playerBet) {
+      data[roundNum].playerBet = playerBet.coinsPlayed;
+      playerCoinsRemaining -= playerBet.coinsPlayed;
+    }
+
+    // Set up next round with remaining coins
+    const nextRound = roundNum + 1;
+    if (nextRound <= game.round + 1) {
+      const gameRoundData = game.rounds.find((r) => r.round === roundNum);
+      data[nextRound] = {
+        round: nextRound,
+        // ✅ Only show player coins if they played in the current round
+        playerCoins: playerBet ? playerCoinsRemaining : undefined,
+        averageCoins: gameRoundData?.averageCoinsLeft || game.initialBudget,
       };
     }
   }

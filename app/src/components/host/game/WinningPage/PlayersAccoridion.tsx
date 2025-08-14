@@ -4,6 +4,7 @@ import RoundHistoryGraph from "./RoundHistoryGraph";
 import { getIcon, getColor } from "@/utils/iconUtils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./styles/PlayersAccordion.module.css";
+import { useState } from "react";
 import {
   IconNumber,
   IconLaurelWreath2,
@@ -16,6 +17,8 @@ const PlayersAccordion = () => {
   const { game } = useConnectionStore();
   const theme = useMantineTheme();
   const players = game?.players.filter((player) => player.endRank != null) || [];
+  const [showPlayerBets, setShowPlayerBets] = useState(true);
+  const [showAverageCoins, setShowAverageCoins] = useState(false);
 
   players.sort((a, b) => a.endRank - b.endRank);
 
@@ -68,7 +71,13 @@ const PlayersAccordion = () => {
               </div>
             </Accordion.Control>
             <Accordion.Panel classNames={{ content: styles.panelContent }}>
-              <RoundHistoryGraph player={player} />
+              <RoundHistoryGraph
+                player={player}
+                showPlayerBets={showPlayerBets}
+                showAverageCoins={showAverageCoins}
+                setShowPlayerBets={setShowPlayerBets}
+                setShowAverageCoins={setShowAverageCoins}
+              />
             </Accordion.Panel>
           </Accordion.Item>
         ))}
