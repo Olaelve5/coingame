@@ -44,6 +44,7 @@ export function getRoundChartsData(game: Game, player: Player) {
   } = {};
 
   let playerCoinsRemaining = game.initialBudget;
+  let playerEliminated = false;
 
   // Round 1: Initial state
   data[1] = {
@@ -61,8 +62,7 @@ export function getRoundChartsData(game: Game, player: Player) {
     if (!data[roundNum]) {
       data[roundNum] = {
         round: roundNum,
-        // ✅ Only show player coins if they're still in the game
-        playerCoins: roundNum <= playerLastRound ? playerCoinsRemaining : undefined,
+        playerCoins: playerEliminated ? 0 : playerCoinsRemaining,
         averageCoins: game.initialBudget,
       };
     }
@@ -73,6 +73,10 @@ export function getRoundChartsData(game: Game, player: Player) {
     if (playerBet) {
       data[roundNum].playerBet = playerBet.coinsPlayed;
       playerCoinsRemaining -= playerBet.coinsPlayed;
+    } else if (roundNum > 1) {
+      // ✅ Player didn't play this round - they're eliminated
+      playerEliminated = true;
+      data[roundNum].playerCoins = 0;
     }
 
     // Set up next round with remaining coins
@@ -81,8 +85,8 @@ export function getRoundChartsData(game: Game, player: Player) {
       const gameRoundData = game.rounds.find((r) => r.round === roundNum);
       data[nextRound] = {
         round: nextRound,
-        // ✅ Only show player coins if they played in the current round
-        playerCoins: playerBet ? playerCoinsRemaining : undefined,
+        // ✅ Show 0 if eliminated, otherwise show remaining coins
+        playerCoins: playerEliminated ? 0 : playerCoinsRemaining,
         averageCoins: gameRoundData?.averageCoinsLeft || game.initialBudget,
       };
     }

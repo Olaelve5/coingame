@@ -7,6 +7,8 @@
   min-height: 300px;
   gap: 1rem;
   padding: 0rem 1rem;
+  position: relative;
+  overflow: hidden;
 }
 
 .chart {

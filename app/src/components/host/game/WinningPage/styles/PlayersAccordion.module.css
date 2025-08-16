@@ -34,13 +34,15 @@
   border-radius: 8px;
 
   &[data-active] {
-    background-color: rgba(47, 58, 68, 1);
+    background-color: rgba(47, 58, 68, 0.47);
+    backdrop-filter: blur(5px);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.21);
   }
 }
 
 .control:hover {
-  background-color: rgba(47, 58, 68, 1);
+  background-color: rgba(47, 58, 68, 0.47);
+  backdrop-filter: blur(5px);
 }
 
 .item {
@@ -52,7 +54,8 @@
   transition: background-color 0.05s ease, transform 0.3s ease, margin 0.3s ease;
 
   &[data-active] {
-    background-color: rgba(42, 51, 59, 1);
+    background-color: rgba(47, 58, 68, 0.47);
+    backdrop-filter: blur(5px);
     transform: scale(1.1);
     margin: 1rem 0;
   }

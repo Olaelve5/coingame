@@ -20,7 +20,10 @@
   width: 500px;
   gap: 0.8rem;
   position: relative;
+  overflow: hidden;
 }
+
+
 
 .standContainer {
   display: flex;

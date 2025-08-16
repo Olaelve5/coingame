@@ -69,7 +69,7 @@ const RoundHistoryGraph = ({
         w={"100%"}
         data={data}
         curveType="monotone"
-        maxBarWidth={25}
+        maxBarWidth={20}
         series={visibleSeries}
         withLegend
         legendProps={{
