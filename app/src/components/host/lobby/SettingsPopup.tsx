@@ -30,6 +30,7 @@ const SettingsPopup = () => {
         withCloseButton={false}
         size={"lg"}
         centered
+        lockScroll={false}
         classNames={{
           root: styles.modal,
           title: styles.modalTitle,

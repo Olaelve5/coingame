@@ -6,4 +6,14 @@
   font-family: "Bungee", sans-serif;
   padding: 3rem;
   width: 100%;
+  min-height: 100vh;
+  position: relative;
+}
+
+.accordionContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  width: 100%;
+  align-items: center;
 }

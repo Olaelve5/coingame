@@ -38,7 +38,7 @@ const PlayersAccordion = () => {
 
   return (
     <div className={styles.container}>
-      <h1>Full player list</h1>
+      <h1>Final Rankings</h1>
       <Accordion
         disableChevronRotation
         variant="filled"

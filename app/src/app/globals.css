@@ -20,10 +20,16 @@
   font-family: var(--font-bungee);
 }
 
+html {
+  overflow-y: scroll; /* ✅ Always reserve space for vertical scrollbar */
+}
+
 body {
   color: var(--foreground) !important;
   font-family: Mono, Helvetica, sans-serif;
   --s: 25px; /* control the size */
+  min-height: 100vh;
+  overflow-x: hidden;
 
   background-color: rgba(34, 36, 40, 1) !important;
 
