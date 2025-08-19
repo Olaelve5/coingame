@@ -29,7 +29,7 @@ const PlayerAward: React.FC<PlayerAward> = ({ award }) => {
       case "cliffhanger":
         return <IconTargetArrow color={theme.colors.orange[5]} size={26} />;
       case "steady_hand":
-        return <IconScale color={theme.colors.blue[5]} size={26} />;
+        return <IconScale color={theme.colors.blue[4]} size={26} />;
     }
   };
 

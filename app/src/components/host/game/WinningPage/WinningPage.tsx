@@ -5,6 +5,7 @@ import Podium from "./Podium";
 import NewGameButton from "./NavigationButtons";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import AwardsSection from "./AwardsSection";
 
 export default function WinningPage() {
   const { game } = useConnectionStore();
@@ -23,6 +24,7 @@ export default function WinningPage() {
           className={styles.accordionContainer}
         >
           <PlayersAccordion />
+          <AwardsSection />
           {/* <NewGameButton /> */}
         </motion.div>
       )}

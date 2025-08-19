@@ -13,19 +13,21 @@ import {
   faPizzaSlice,
 } from "@fortawesome/free-solid-svg-icons";
 
+import { DEFAULT_THEME } from "@mantine/core";
+
 export const colors = {
-  red: "#FF0000",        // hsl(0, 100%, 50%)
-  orangeRed: "#FF6000",  // hsl(30, 100%, 50%)
-  yellow: "#FFFF00",     // hsl(60, 100%, 50%)
-  chartreuse: "#80FF00", // hsl(90, 100%, 50%)
-  green: "#00FF00",      // hsl(120, 100%, 50%)
-  springGreen: "#00FF80", // hsl(150, 100%, 50%)
-  cyan: "#00FFFF",       // hsl(180, 100%, 50%)
-  azure: "#0080FF",      // hsl(210, 100%, 50%)
-  violet: "#8000FF",     // hsl(270, 100%, 50%)
-  magenta: "#FF00FF",    // hsl(300, 100%, 50%)
-  rose: "#FF0080",       // hsl(330, 100%, 50%)
-  white: "#FFFFFF",      // White
+  red: DEFAULT_THEME.colors.red[5], // hsl(0, 100%, 50%)
+  orangeRed: DEFAULT_THEME.colors.orange[5], // hsl(30, 100%, 50%)
+  yellow: DEFAULT_THEME.colors.yellow[5], // hsl(60, 100%, 50%)
+  chartreuse: DEFAULT_THEME.colors.lime[5], // hsl(90, 100%, 50%)
+  green: DEFAULT_THEME.colors.green[5], // hsl(120, 100%, 50%)
+  springGreen: DEFAULT_THEME.colors.teal[5], // hsl(150, 100%, 50%)
+  cyan: DEFAULT_THEME.colors.cyan[5], // hsl(180, 100%, 50%)
+  azure: DEFAULT_THEME.colors.indigo[5], // hsl(210, 100%, 50%)
+  violet: DEFAULT_THEME.colors.violet[5], // hsl(270, 100%, 50%)
+  magenta: DEFAULT_THEME.colors.grape[5], // hsl(300, 100%, 50%)
+  rose: DEFAULT_THEME.colors.pink[5], // hsl(330, 100%, 50%)
+  white: "#FFFFFF", // White
 };
 
 export const icons = {
@@ -45,15 +47,13 @@ export const icons = {
 
 export const getRandomIconKey = () => {
   const iconNames = Object.keys(icons);
-  const randomIconName =
-    iconNames[Math.floor(Math.random() * iconNames.length)];
+  const randomIconName = iconNames[Math.floor(Math.random() * iconNames.length)];
   return randomIconName;
 };
 
 export const getRandomColorKey = () => {
   const colorNames = Object.keys(colors);
-  const randomColorName =
-    colorNames[Math.floor(Math.random() * colorNames.length)];
+  const randomColorName = colorNames[Math.floor(Math.random() * colorNames.length)];
   return randomColorName;
 };
 
