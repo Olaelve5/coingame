@@ -171,6 +171,7 @@ const roundManageSocketHandler = (io, botManager) => {
           {
             $set: {
               roundStatus: "active",
+              roundStartedAt: new Date(),
             },
           },
           { new: true }

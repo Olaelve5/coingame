@@ -9,9 +9,12 @@ export interface Player {
   playedInRound: boolean;
   icon: string;
   color: string;
+  awards: Award[];
   roundHistory: {
     round: number;
     coinsPlayed: number;
+    timeSpent: number; // in milliseconds
+    closeCall: boolean; // true if the player was close to elimination
   }[];
 }
 
@@ -20,7 +23,6 @@ interface PlayerMention {
   name: string;
 }
 
-
 interface LastRoundResults {
   playersEliminated: PlayerMention[];
   round: number;
@@ -28,6 +30,13 @@ interface LastRoundResults {
   averageCoinsPlayed: number;
   averageCoinsLeft: number;
   safeCoinsAmount: number;
+}
+
+export type AwardID = "mastermind" | "quick_draw" | "high_roller" | "cliffhanger" | "steady_hand";
+
+export interface Award {
+  id: AwardID;
+  insight: string;
 }
 
 export interface Game {

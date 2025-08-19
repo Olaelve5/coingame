@@ -12,6 +12,7 @@ import {
   IconLaurelWreath3,
 } from "@tabler/icons-react";
 import { useMantineTheme } from "@mantine/core";
+import PlayerAward from "./PlayerAward";
 
 const PlayersAccordion = () => {
   const { game } = useConnectionStore();
@@ -48,38 +49,47 @@ const PlayersAccordion = () => {
         radius="md"
         transitionDuration={200}
       >
-        {players.map((player) => (
-          <Accordion.Item key={player.id} value={player.name}>
-            <Accordion.Control
-              icon={
-                <FontAwesomeIcon
-                  icon={getIcon(player.icon)}
-                  color={getColor(player.color)}
-                  className={styles.playerIcon}
-                />
-              }
-              chevron={
-                <div className={styles.chevron}>
-                  {getRankIcon(player.endRank)}
-                  {player.endRank > 3 ? <span>{player.endRank}</span> : null}
+        {players.map((player, index) => (
+          <div key={player.id} className={styles.playerContainer}>
+            <Accordion.Item value={player.name}>
+              <Accordion.Control
+                icon={
+                  <FontAwesomeIcon
+                    icon={getIcon(player.icon)}
+                    color={getColor(player.color)}
+                    className={styles.playerIcon}
+                  />
+                }
+                chevron={
+                  <div className={styles.chevron}>
+                    {getRankIcon(player.endRank)}
+                    {player.endRank > 3 ? <span>{player.endRank}</span> : null}
+                  </div>
+                }
+                className={styles.accordionControl}
+              >
+                <div className={styles.playerRow}>
+                  <h2 style={{ color: getPlayerColor(player.endRank) }}>{player.name}</h2>
                 </div>
-              }
-              className={styles.accordionControl}
-            >
-              <div className={styles.playerRow}>
-                <h2 style={{ color: getPlayerColor(player.endRank) }}>{player.name}</h2>
-              </div>
-            </Accordion.Control>
-            <Accordion.Panel classNames={{ content: styles.panelContent }}>
-              <RoundHistoryGraph
-                player={player}
-                showPlayerBets={showPlayerBets}
-                showAverageCoins={showAverageCoins}
-                setShowPlayerBets={setShowPlayerBets}
-                setShowAverageCoins={setShowAverageCoins}
-              />
-            </Accordion.Panel>
-          </Accordion.Item>
+                {player.awards.length > 0 && (
+                  <div className={styles.achievementContainer}>
+                    {player.awards.map((award) => (
+                      <PlayerAward key={award.id} award={award} />
+                    ))}
+                  </div>
+                )}
+              </Accordion.Control>
+              <Accordion.Panel classNames={{ content: styles.panelContent }}>
+                <RoundHistoryGraph
+                  player={player}
+                  showPlayerBets={showPlayerBets}
+                  showAverageCoins={showAverageCoins}
+                  setShowPlayerBets={setShowPlayerBets}
+                  setShowAverageCoins={setShowAverageCoins}
+                />
+              </Accordion.Panel>
+            </Accordion.Item>
+          </div>
         ))}
       </Accordion>
     </div>

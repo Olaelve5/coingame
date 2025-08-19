@@ -54,6 +54,8 @@ const calculateRoundResults = (game) => {
 
   const safeCoinsAmount = prevPlayerBet + 1;
 
+  const wasFinalRound = activePlayers.length - playersEliminated.length <= 1;
+
   return {
     totalCoinsPlayed,
     playersEliminated,
@@ -61,6 +63,7 @@ const calculateRoundResults = (game) => {
     safeCoinsAmount,
     averageCoinsLeft,
     averageCoinsPlayed,
+    wasFinalRound,
   };
 };
 

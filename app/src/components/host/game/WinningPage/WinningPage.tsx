@@ -23,7 +23,7 @@ export default function WinningPage() {
           className={styles.accordionContainer}
         >
           <PlayersAccordion />
-          <NewGameButton />
+          {/* <NewGameButton /> */}
         </motion.div>
       )}
     </div>

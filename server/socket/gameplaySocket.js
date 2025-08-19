@@ -19,7 +19,9 @@ const validatePlayCoins = async (gameCode, playerId, coins) => {
   return currentGame;
 };
 
-const updatePlayerCoins = async (gameCode, playerId, coins, currentRound) => {
+const updatePlayerCoins = async (gameCode, playerId, coins, currentGame) => {
+  const timeSpent = Date.now() - currentGame.roundStartedAt;
+
   return Game.findOneAndUpdate(
     {
       gameCode,
@@ -30,7 +32,8 @@ const updatePlayerCoins = async (gameCode, playerId, coins, currentRound) => {
       $set: { "players.$.playedInRound": true },
       $push: {
         "players.$.roundHistory": {
-          round: currentRound,
+          round: currentGame.round,
+          timeSpent,
           coinsPlayed: coins,
         },
       },
@@ -87,7 +90,7 @@ const gameplaySocketHandler = (io) => {
           gameCode,
           playerId,
           coins,
-          currentGame.round
+          currentGame
         );
 
         if (!updatedGame) {

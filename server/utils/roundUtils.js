@@ -1,5 +1,6 @@
 import { Game } from "../models/Game.ts";
 import { calculateRoundResults } from "../utils/gameUtils.js";
+import { getAllAwards } from "./awardUtils.js";
 
 export const handleRoundEnd = async (gameCode) => {
   console.log(`Ending round for game ${gameCode}`);
@@ -8,12 +9,32 @@ export const handleRoundEnd = async (gameCode) => {
 
   const roundResults = calculateRoundResults(game);
 
-  // Store results but dont update game status yet
-  return Game.findOneAndUpdate(
+  if (roundResults.wasFinalRound) {
+    // ✅ Final round: Store results and execute eliminations immediately
+    await Game.findOneAndUpdate(
+      { gameCode },
+      {
+        $set: {
+          lastRoundResults: roundResults,
+        },
+        $push: {
+          rounds: roundResults,
+        },
+      },
+      { new: true }
+    );
+
+    console.log("Final round detected, executing eliminations");
+    return executeEliminations(gameCode);
+  }
+
+  // ✅ Regular round: Store results and set eliminating status
+  const updatedGame = await Game.findOneAndUpdate(
     { gameCode },
     {
       $set: {
-        roundStatus: "eliminating", // Show elimination report
+        roundStatus: "eliminating",
+        lastRoundResults: roundResults,
       },
       $push: {
         rounds: roundResults,
@@ -21,6 +42,8 @@ export const handleRoundEnd = async (gameCode) => {
     },
     { new: true }
   );
+
+  return updatedGame;
 };
 
 export const executeEliminations = async (gameCode) => {
@@ -72,6 +95,26 @@ export const executeEliminations = async (gameCode) => {
   await Game.bulkWrite(updateOperations);
 
   if (isGameOver) {
+    const awards = getAllAwards(game);
+
+    const awardUpdates = awards.map((awardObject) => ({
+      updateOne: {
+        filter: { gameCode, "players.id": awardObject.playerID },
+        update: {
+          $push: {
+            "players.$.awards": {
+              id: awardObject.awardID,
+              insight: awardObject.insight,
+            },
+          },
+        },
+      },
+    }));
+
+    if (awardUpdates.length > 0) {
+      await Game.bulkWrite(awardUpdates);
+    }
+
     return Game.findOneAndUpdate(
       { gameCode },
       {

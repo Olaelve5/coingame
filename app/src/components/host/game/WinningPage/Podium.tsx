@@ -52,7 +52,7 @@ const Podium = ({ setPodiumAnimationFinished }: PodiumProps) => {
       }}
       className={styles.container}
     >
-      <h1>The champions</h1>
+      <h1>Our champions</h1>
       <div className={styles.podiumContainer}>
         <div className={styles.standContainer}>
           <motion.div

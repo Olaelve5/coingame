@@ -46,6 +46,14 @@
   backdrop-filter: blur(5px);
 }
 
+.playerContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
 .item {
   color: #fff;
   display: flex;
@@ -92,4 +100,21 @@
   justify-content: center;
   width: 100%;
   padding: 1rem 0 1rem 0;
+}
+
+.achievementContainer {
+  position: absolute;
+  left: calc(100% + 0.5rem);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 0.2rem;
+  pointer-events: auto; 
+  z-index: 10; 
+}
+
+/* ✅ Prevent hover on control when hovering awards */
+.control:has(.achievementContainer:hover) {
+  background-color: transparent !important;
+  backdrop-filter: none !important;
 }

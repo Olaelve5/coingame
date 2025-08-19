@@ -23,10 +23,10 @@ class BotManager {
     // Find bots that still need to play
     const botsToPlay = game.players.filter(
       (player) =>
-        this.isBot(player.id) && // Is this a bot?
-        !player.eliminated && // Is the bot still in the game?
-        !player.playedInRound && // Has the bot not played yet?
-        !this.botPlaying.has(player.id) // Is the bot not currently in the process of playing?
+        this.isBot(player.id) && 
+        !player.eliminated && 
+        !player.playedInRound && 
+        !this.botPlaying.has(player.id) 
     );
 
     if (botsToPlay.length === 0) return; // No bots need to play
@@ -140,6 +140,9 @@ class BotManager {
         return;
       }
 
+      const timeSpent =
+        Date.now() - new Date(currentGame.roundStartedAt).getTime();
+
       // Update player coins directly
       const updatedGame = await Game.findOneAndUpdate(
         {
@@ -153,6 +156,7 @@ class BotManager {
             "players.$.roundHistory": {
               round: currentGame.round,
               coinsPlayed: coins,
+              timeSpent,
             },
           },
         },

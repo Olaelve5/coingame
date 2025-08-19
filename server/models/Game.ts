@@ -20,10 +20,31 @@ const GameSchema = new mongoose.Schema({
       playedInRound: Boolean,
       icon: String,
       color: String,
+      awards: [
+        {
+          id: {
+            type: String,
+            enum: [
+              "mastermind",
+              "quick_draw",
+              "high_roller",
+              "cliffhanger",
+              "steady_hand",
+            ],
+            required: true,
+          },
+          insight: {
+            type: String,
+            required: true,
+          },
+        },
+      ],
       roundHistory: [
         {
           round: Number,
           coinsPlayed: Number,
+          timeSpent: Number, // in milliseconds
+          closeCall: Boolean, // true if the player was close to elimination
         },
       ],
     },
@@ -33,6 +54,7 @@ const GameSchema = new mongoose.Schema({
     socketId: { type: String, required: true },
   },
   round: { type: Number, default: 0 },
+  roundStartedAt: { type: Date, default: null },
   roundStatus: { type: String, default: "preparing" }, // preparing, active, completed, eliminating
   initialBudget: { type: Number, default: 0 },
   rounds: [
