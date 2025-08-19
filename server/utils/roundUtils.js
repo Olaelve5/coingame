@@ -9,8 +9,33 @@ export const handleRoundEnd = async (gameCode) => {
 
   const roundResults = calculateRoundResults(game);
 
+  // Add close call to players
+  if (
+    roundResults.playersWithCloseCall &&
+    roundResults.playersWithCloseCall.length > 0
+  ) {
+    const closeCallPlayerIds = roundResults.playersWithCloseCall.map(
+      (p) => p.id
+    );
+
+    await Game.updateOne(
+      { gameCode },
+      {
+        $set: {
+          "players.$[player].roundHistory.$[round].closeCall": true,
+        },
+      },
+      {
+        arrayFilters: [
+          { "player.id": { $in: closeCallPlayerIds } },
+          { "round.round": game.round },
+        ],
+      }
+    );
+  }
+
   if (roundResults.wasFinalRound) {
-    // ✅ Final round: Store results and execute eliminations immediately
+    // Final round: Store results and execute eliminations immediately
     await Game.findOneAndUpdate(
       { gameCode },
       {
@@ -28,7 +53,7 @@ export const handleRoundEnd = async (gameCode) => {
     return executeEliminations(gameCode);
   }
 
-  // ✅ Regular round: Store results and set eliminating status
+  // Regular round: Store results and set eliminating status
   const updatedGame = await Game.findOneAndUpdate(
     { gameCode },
     {
@@ -95,7 +120,8 @@ export const executeEliminations = async (gameCode) => {
   await Game.bulkWrite(updateOperations);
 
   if (isGameOver) {
-    const awards = getAllAwards(game);
+    const freshGame = await Game.findOne({ gameCode });
+    const awards = getAllAwards(freshGame);
 
     const awardUpdates = awards.map((awardObject) => ({
       updateOne: {

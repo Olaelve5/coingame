@@ -32,6 +32,7 @@ const calculateRoundResults = (game) => {
 
   let prevPlayerBet = 0;
   let playersEliminated = [];
+  let playersWithCloseCall = [];
   const eliminationCount = Math.min(
     activePlayers.length - 1,
     game.gameSettings.elimsPerRound
@@ -47,6 +48,12 @@ const calculateRoundResults = (game) => {
         name: play.playerName,
       });
       prevPlayerBet = play.coinsPlayed;
+    } else if (playersWithCloseCall.length < 2) {
+      // Add the next 2 players to the close calls list
+      playersWithCloseCall.push({
+        id: play.playerId,
+        name: play.playerName,
+      });
     } else {
       break;
     }
@@ -59,6 +66,7 @@ const calculateRoundResults = (game) => {
   return {
     totalCoinsPlayed,
     playersEliminated,
+    playersWithCloseCall,
     round: game.round,
     safeCoinsAmount,
     averageCoinsLeft,
