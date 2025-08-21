@@ -4,7 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMantineTheme } from "@mantine/core";
 import { useConnectionStore } from "@/store/connectionStore";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import podiumTitles from "@/data/podiumTitles.json";
 
 interface PodiumProps {
   setPodiumAnimationFinished?: (finished: boolean) => void;
@@ -14,13 +15,18 @@ const Podium = ({ setPodiumAnimationFinished }: PodiumProps) => {
   const theme = useMantineTheme();
   const { game } = useConnectionStore();
   const [animationsFinished, setAnimationsFinished] = useState(false);
+  const [title, setTitle] = useState("Our Champions");
+
+  useEffect(() => {
+    setTitle(podiumTitles.titles[Math.floor(Math.random() * podiumTitles.titles.length)]);
+  }, []);
 
   if (!game) return null;
 
   const podium = {
-    firstPlace: game.players.find((player) => player.endRank === 1),
-    secondPlace: game.players.find((player) => player.endRank === 2),
-    thirdPlace: game.players.find((player) => player.endRank === 3),
+    firstPlace: game.players.filter((player) => player.endRank === 1),
+    secondPlace: game.players.filter((player) => player.endRank === 2),
+    thirdPlace: game.players.filter((player) => player.endRank === 3),
   };
 
   const handleEndOfAnimations = () => {
@@ -52,20 +58,25 @@ const Podium = ({ setPodiumAnimationFinished }: PodiumProps) => {
       }}
       className={styles.container}
     >
-      <h1>Our champions</h1>
+      <h1>{title}</h1>
       <div className={styles.podiumContainer}>
         <div className={styles.standContainer}>
-          <motion.div
-            initial={{ scale: 0, rotate: 90 }}
-            animate={{ scale: 1, rotate: 0 }}
-            transition={{ duration: 0.5, type: "spring", bounce: 0.3, delay: 5 }}
-          >
-            <FontAwesomeIcon
-              icon={getIcon(podium.secondPlace?.icon || "dragon")}
-              color={getColor(podium.secondPlace?.color || "cyan")}
-              className={styles.icon}
-            />
-          </motion.div>
+          <div className={styles.standIconContainer}>
+            {podium.secondPlace.map((player, index) => (
+              <motion.div
+                key={player.id}
+                initial={{ scale: 0, rotate: 90 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ duration: 0.5, type: "spring", bounce: 0.3, delay: 5 + index * 0.5 }}
+              >
+                <FontAwesomeIcon
+                  icon={getIcon(player.icon)}
+                  color={getColor(player.color)}
+                  className={styles.icon}
+                />
+              </motion.div>
+            ))}
+          </div>
           <motion.div
             className={styles.stand}
             style={{
@@ -86,17 +97,22 @@ const Podium = ({ setPodiumAnimationFinished }: PodiumProps) => {
           </motion.div>
         </div>
         <div className={styles.standContainer}>
-          <motion.div
-            initial={{ scale: 0, rotate: 90 }}
-            animate={{ scale: 1, rotate: 0 }}
-            transition={{ duration: 0.5, type: "spring", bounce: 0.3, delay: 8 }}
-          >
-            <FontAwesomeIcon
-              icon={getIcon(podium.firstPlace?.icon || "dragon")}
-              color={getColor(podium.firstPlace?.color || "cyan")}
-              className={styles.icon}
-            />
-          </motion.div>
+          <div className={styles.standIconContainer}>
+            {podium.firstPlace.map((player, index) => (
+              <motion.div
+                key={player.id}
+                initial={{ scale: 0, rotate: 90 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ duration: 0.5, type: "spring", bounce: 0.3, delay: 8 + index * 0.5 }}
+              >
+                <FontAwesomeIcon
+                  icon={getIcon(player.icon || "dragon")}
+                  color={getColor(player.color || "cyan")}
+                  className={styles.icon}
+                />
+              </motion.div>
+            ))}
+          </div>
           <motion.div
             className={styles.stand}
             style={{
@@ -118,17 +134,27 @@ const Podium = ({ setPodiumAnimationFinished }: PodiumProps) => {
           </motion.div>
         </div>
         <div className={styles.standContainer}>
-          <motion.div
-            initial={{ scale: 0, rotate: 90 }}
-            animate={{ scale: 1, rotate: 0 }}
-            transition={{ duration: 0.5, type: "spring", bounce: 0.3, delay: 2.2 }}
-          >
-            <FontAwesomeIcon
-              icon={getIcon(podium.thirdPlace?.icon || "dragon")}
-              color={getColor(podium.thirdPlace?.color || "cyan")}
-              className={styles.icon}
-            />
-          </motion.div>
+          <div className={styles.standIconContainer}>
+            {podium.thirdPlace.map((player, index) => (
+              <motion.div
+                key={player.id}
+                initial={{ scale: 0, rotate: 90 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{
+                  duration: 0.5,
+                  type: "spring",
+                  bounce: 0.3,
+                  delay: 2.2 + index * 0.5,
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={getIcon(player.icon)}
+                  color={getColor(player.color)}
+                  className={styles.icon}
+                />
+              </motion.div>
+            ))}
+          </div>
           <motion.div
             className={styles.stand}
             style={{

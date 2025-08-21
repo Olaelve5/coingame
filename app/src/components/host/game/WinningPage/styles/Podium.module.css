@@ -9,6 +9,8 @@
     font-size: 1.5rem;
     margin-bottom: 1rem;
   }
+
+  min-height: 400px;
 }
 
 .podiumContainer {
@@ -29,6 +31,14 @@
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+}
+
+.standIconContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  max-width: 110px;
 }
 
 .stand {

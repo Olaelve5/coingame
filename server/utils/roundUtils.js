@@ -2,6 +2,7 @@ import { Game } from "../models/Game.ts";
 import { calculateRoundResults } from "../utils/gameUtils.js";
 import { getAllAwards } from "./awardUtils.js";
 
+
 export const handleRoundEnd = async (gameCode) => {
   console.log(`Ending round for game ${gameCode}`);
   const game = await Game.findOne({ gameCode });
@@ -89,7 +90,6 @@ export const executeEliminations = async (gameCode) => {
   );
 
   const isGameOver = remainingPlayers.length <= 1;
-  const winner = isGameOver ? remainingPlayers[0] : null;
 
   const updateOperations = playersWithRanks.map((player) => ({
     updateOne: {
@@ -103,10 +103,10 @@ export const executeEliminations = async (gameCode) => {
     },
   }));
 
-  if (isGameOver && winner) {
+  if (isGameOver && remainingPlayers.length === 1) {
     updateOperations.push({
       updateOne: {
-        filter: { gameCode, "players.id": winner.id },
+        filter: { gameCode, "players.id": remainingPlayers[0].id },
         update: {
           $set: {
             "players.$.endRank": 1,
@@ -146,12 +146,6 @@ export const executeEliminations = async (gameCode) => {
       {
         $set: {
           status: "finished",
-          winner: {
-            id: winner.id,
-            name: winner.name,
-            coins: winner.coins,
-            roundHistory: winner.roundHistory,
-          },
         },
       },
       { new: true }
@@ -175,20 +169,32 @@ const getPlayerRanks = (game, playersEliminated) => {
     prevEliminatedPlayers.length -
     playersEliminated.length;
 
-  // Sort by coins descending (highest coins get better rank)
-  playersEliminated.sort((a, b) => b.coins - a.coins);
+  // Sort by coins betted descending, then by total coins
+  playersEliminated.sort((a, b) => {
+    const lastBetDiff =
+      b.roundHistory[b.roundHistory.length - 1].coinsPlayed -
+      a.roundHistory[a.roundHistory.length - 1].coinsPlayed;
+
+    const totalCoinsDiff = b.coins - a.coins;
+
+    return lastBetDiff || totalCoinsDiff;
+  });
 
   let currentRank = aliveCount + 1; // Start from the first elimination rank
+  let prevBet = null;
   let prevCoins = null;
 
   playersEliminated.forEach((player, index) => {
+    const playerBet = player.roundHistory[player.roundHistory.length - 1].coinsPlayed;
+
     // If coins are different from previous player, update rank
-    if (player.coins !== prevCoins) {
+    if (playerBet !== prevBet || player.coins !== prevCoins) {
       currentRank = aliveCount + 1 + index;
     }
 
     player.endRank = currentRank;
     prevCoins = player.coins;
+    prevBet = playerBet;
 
     console.log(
       `Player ${player.name} (${player.coins} coins) assigned rank ${currentRank}`

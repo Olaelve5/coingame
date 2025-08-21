@@ -73,10 +73,6 @@ const GameSchema = new mongoose.Schema({
     },
   ],
   status: { type: String, default: "waiting" }, // waiting, playing, finished
-  winner: {
-    id: String,
-    name: String,
-  },
 });
 
 GameSchema.virtual("lastRoundResults").get(function () {

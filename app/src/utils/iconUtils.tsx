@@ -16,17 +16,17 @@ import {
 import { DEFAULT_THEME } from "@mantine/core";
 
 export const colors = {
-  red: DEFAULT_THEME.colors.red[5], // hsl(0, 100%, 50%)
-  orangeRed: DEFAULT_THEME.colors.orange[5], // hsl(30, 100%, 50%)
-  yellow: DEFAULT_THEME.colors.yellow[5], // hsl(60, 100%, 50%)
-  chartreuse: DEFAULT_THEME.colors.lime[5], // hsl(90, 100%, 50%)
-  green: DEFAULT_THEME.colors.green[5], // hsl(120, 100%, 50%)
-  springGreen: DEFAULT_THEME.colors.teal[5], // hsl(150, 100%, 50%)
-  cyan: DEFAULT_THEME.colors.cyan[5], // hsl(180, 100%, 50%)
-  azure: DEFAULT_THEME.colors.indigo[5], // hsl(210, 100%, 50%)
-  violet: DEFAULT_THEME.colors.violet[5], // hsl(270, 100%, 50%)
-  magenta: DEFAULT_THEME.colors.grape[5], // hsl(300, 100%, 50%)
-  rose: DEFAULT_THEME.colors.pink[5], // hsl(330, 100%, 50%)
+  red: DEFAULT_THEME.colors.red[6], // hsl(0, 100%, 60%)
+  orangeRed: DEFAULT_THEME.colors.orange[6], // hsl(30, 100%, 60%)
+  yellow: DEFAULT_THEME.colors.yellow[6], // hsl(60, 100%, 60%)
+  chartreuse: DEFAULT_THEME.colors.lime[6], // hsl(90, 100%, 60%)
+  green: DEFAULT_THEME.colors.green[6], // hsl(120, 100%, 60%)
+  springGreen: DEFAULT_THEME.colors.teal[6], // hsl(160, 100%, 60%)
+  cyan: DEFAULT_THEME.colors.cyan[6], // hsl(180, 100%, 60%)
+  azure: DEFAULT_THEME.colors.indigo[6], // hsl(210, 100%, 60%)
+  violet: DEFAULT_THEME.colors.violet[6], // hsl(270, 100%, 60%)
+  magenta: DEFAULT_THEME.colors.grape[6], // hsl(300, 100%, 60%)
+  rose: DEFAULT_THEME.colors.pink[6], // hsl(330, 100%, 60%)
   white: "#FFFFFF", // White
 };
 

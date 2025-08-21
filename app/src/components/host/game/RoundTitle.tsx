@@ -40,6 +40,7 @@ export default function RoundTitle({
 
   const playerCount = game?.players.filter((player) => !player.eliminated).length || 0;
   const minimumEliminations = Math.min(playerCount - 1, game?.gameSettings.elimsPerRound || 0);
+  const isFinalRound = (game?.gameSettings.elimsPerRound || 0) >= playerCount;
 
   return (
     <div className={styles.roundTitleContainer}>
@@ -54,18 +55,27 @@ export default function RoundTitle({
         }}
         className={styles.title}
       >
-        <h2>Round</h2>
-        <h2 className={styles.number}>{game?.round || 1}</h2>
+        {isFinalRound ? (
+          <h2 style={{ color: theme.colors.red[7] }}>Final Round</h2>
+        ) : (
+          <>
+            <h2>Round</h2>
+            <h2 className={styles.number}>{game?.round || 1}</h2>
+          </>
+        )}
       </motion.div>
-      {/* <motion.div className={styles.subTitle} animate={animationState} variants={subTitleAnimation}>
-        <h3 className={styles.playerCount}>{playerCount}</h3>
-        <h3>players remaining</h3>
-      </motion.div> */}
-      <motion.div className={styles.subTitle} animate={animationState} variants={subTitleAnimation}>
-        <h3>Eliminating at least</h3>
-        <h3 style={{ color: theme.colors.red[7] }}>{minimumEliminations}</h3>
-        <h3>players</h3>
-      </motion.div>
+
+      {!isFinalRound && (
+        <motion.div
+          className={styles.subTitle}
+          animate={animationState}
+          variants={subTitleAnimation}
+        >
+          <h3>Eliminating at least</h3>
+          <h3 style={{ color: theme.colors.red[7] }}>{minimumEliminations}</h3>
+          <h3>players</h3>
+        </motion.div>
+      )}
 
       {startEliminationAnimations && (
         <div className={styles.particleContainer}>

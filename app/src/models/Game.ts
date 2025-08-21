@@ -56,5 +56,4 @@ export interface Game {
   rounds: LastRoundResults[];
   initialBudget: number;
   status: "waiting" | "playing" | "finished";
-  winner?: PlayerMention; // Optional since it's only present when game is finished
 }
