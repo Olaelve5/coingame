@@ -6,7 +6,7 @@ import { useMantineTheme } from "@mantine/core";
 import FastModeButton from "./FastModeButton";
 import CoinAmountButton from "./CoinAmountButton";
 import TimeAmountButton from "./TimeAmountButton";
-import ElimsPerRoundSlider from "./ ElimsPerRoundSlider";
+import ElimsPerRoundSlider from "./ElimsPerRoundSelect";
 
 const SettingsPopup = () => {
   const [opened, { open, close }] = useDisclosure(false);

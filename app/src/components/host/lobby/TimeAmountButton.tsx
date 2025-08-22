@@ -4,11 +4,17 @@ import { useState } from "react";
 import styles from "./styles/FastModeButton.module.css";
 import { useMantineTheme } from "@mantine/core";
 import { useGameSettingsStore } from "@/store/gameSettingsStore";
+import { useSoundStore } from "@/store/soundStore";
+import useSound from "use-sound";
 
 const TimeAmountButton = () => {
   const { gameSettings, updateRoundTimeLimit } = useGameSettingsStore();
   const [value, setValue] = useState(gameSettings.roundTimeLimit.toString());
   const theme = useMantineTheme();
+  const { getCalculatedEffectsVolume } = useSoundStore();
+  const [playClickSound] = useSound("/sounds/click_2.mp3", {
+    volume: getCalculatedEffectsVolume(),
+  });
 
   return (
     <div className={styles.container}>
@@ -22,6 +28,7 @@ const TimeAmountButton = () => {
         onChange={(value) => {
           setValue(value);
           updateRoundTimeLimit(parseInt(value));
+          playClickSound();
         }}
         data={[
           { label: "20 sec", value: "20" },

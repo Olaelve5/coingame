@@ -10,6 +10,8 @@ import QRCode from "./QRCode";
 import SettingsPopup from "./SettingsPopup";
 import styles from "./styles/HostLobby.module.css";
 import { Button } from "@mantine/core";
+import { useSoundStore } from "@/store/soundStore";
+import useSound from "use-sound";
 
 export default function HostLobby({ gameCode }: { gameCode: string }) {
   const router = useRouter();
@@ -18,6 +20,13 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
   const [isExiting, setIsExiting] = useState(false);
   const [playersAnimationComplete, setPlayersAnimationComplete] = useState(false);
   const [isStartingGame, setIsStartingGame] = useState(false);
+  const { getCalculatedEffectsVolume } = useSoundStore();
+  const [playClickSound] = useSound("/sounds/click_3.mp3", {
+    volume: getCalculatedEffectsVolume(),
+  });
+  const [playKickSound] = useSound("/sounds/click_kick.mp3", {
+    volume: getCalculatedEffectsVolume(),
+  });
 
   useEffect(() => {
     const initGame = async () => {
@@ -38,6 +47,7 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
 
     if (success) {
       setIsExiting(true); // Start animations if successful
+      playClickSound();
     } else {
       alert("Failed to start game");
     }
@@ -56,6 +66,8 @@ export default function HostLobby({ gameCode }: { gameCode: string }) {
 
     if (!playerKicked) {
       alert("Failed to disconnect player");
+    } else {
+      playKickSound();
     }
   };
 

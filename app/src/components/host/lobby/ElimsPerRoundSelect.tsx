@@ -5,12 +5,18 @@ import { IconGhost2Filled } from "@tabler/icons-react";
 import { useMantineTheme } from "@mantine/core";
 import { useGameSettingsStore } from "@/store/gameSettingsStore";
 import { useConnectionStore } from "@/store/connectionStore";
+import { useSoundStore } from "@/store/soundStore";
+import useSound from "use-sound";
 
-const ElimsPerRoundSlider = () => {
+const ElimsPerRoundSelect = () => {
   const { game } = useConnectionStore();
   const { gameSettings, updateElimsPerRound } = useGameSettingsStore();
   const [value, setValue] = useState(gameSettings.elimsPerRound);
   const theme = useMantineTheme();
+  const { getCalculatedEffectsVolume } = useSoundStore();
+  const [playClickSound] = useSound("/sounds/click_1.mp3", {
+    volume: getCalculatedEffectsVolume(),
+  });
 
   const activePlayers = game?.players.filter((player) => player.connected) || [];
   const maxElims = Math.max(activePlayers.length - 2, 1);
@@ -29,6 +35,7 @@ const ElimsPerRoundSlider = () => {
           onClick={() => {
             setValue((prev) => Math.max(prev - 1, 1));
             updateElimsPerRound(Math.max(value - 1, 1));
+            playClickSound();
           }}
         >
           -
@@ -41,6 +48,7 @@ const ElimsPerRoundSlider = () => {
           onClick={() => {
             setValue((prev) => Math.min(prev + 1, maxElims));
             updateElimsPerRound(Math.min(value + 1, maxElims));
+            playClickSound();
           }}
         >
           +
@@ -50,4 +58,4 @@ const ElimsPerRoundSlider = () => {
   );
 };
 
-export default ElimsPerRoundSlider;
+export default ElimsPerRoundSelect;
