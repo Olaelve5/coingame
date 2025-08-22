@@ -8,6 +8,8 @@ import PlayersIconGrid from "./PlayersIconGrid";
 import styles from "./styles/HostGame.module.css";
 import RoundTitle from "./RoundTitle";
 import EliminationReport from "./EliminationReport/EliminationReport";
+import useSound from "use-sound";
+import { useSoundStore } from "@/store/soundStore";
 
 const HostGame = ({ gameCode }: { gameCode: string }) => {
   const { game, joinAsHost, cleanup } = useConnectionStore();
@@ -18,6 +20,11 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
   const [playerAnimationsFinished, setPlayerAnimationsFinished] = useState(false);
   const [startEliminationAnimations, setStartEliminationAnimations] = useState(false);
   const [timerEndAnimationFinished, setTimerEndAnimationFinished] = useState(false);
+  const { getCalculatedEffectsVolume } = useSoundStore();
+  const [playSong, { stop: stopSong }] = useSound("/sounds/songs/video_game.wav", {
+    volume: getCalculatedEffectsVolume(),
+    timeOut: 40000, // Fallback stop after 40 seconds
+  });
 
   useEffect(() => {
     const initGame = async () => {
@@ -37,6 +44,7 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
       setTimeout(() => {
         startRound();
         setTimerRunning(true);
+        playSong();
       }, 2000); // Delay before starting the round
     } else {
       console.log("Round already active, skipping startRound call");
@@ -47,6 +55,7 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
     if (!game) return;
     setTimerRunning(false);
     const startElimination = await finalizeRoundPlays();
+    stopSong();
 
     if (!startElimination) {
       console.error("Failed to finalize round plays");

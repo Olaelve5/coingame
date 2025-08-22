@@ -1,14 +1,13 @@
 ## 🔍 TODO
 
-3. Dynamic sizing of played coins chart based on the player's budget (or played coins range) + dynamic height(?)
 4. Smooth animations for elimination report page
-9. Handle a tie
 10. Redesign player view
 11. Redesign landing page
 12. Redesign winning page
 13. Sounds
 14. Add more countdown varieties
 15. Volume settings
+17. Redesign coins countdown
 
 
 ## ✅ COMPLETED
@@ -21,3 +20,5 @@ above the ones who bet less, regardless of the amount of coins left.
 7. Add something that shows how many will be eliminated each round 
 5. Timer visuals when timer approaching 0
 16. Add safety fallback for timer sound (max length? or multiple stop points)
+3. Dynamic sizing of played coins chart based on the player's budget (or played coins range) + dynamic height(?)
+9. Handle a tie
