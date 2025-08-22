@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getColor, getIcon } from "@/utils/iconUtils";
 import { motion } from "framer-motion";
 import { useConnectionStore } from "@/store/connectionStore";
-import { testPlayer } from "@/utils/testPlayerUtils";
 import { StaggeredText } from "../../StaggeredText";
 import { useMantineTheme } from "@mantine/core";
 
@@ -14,19 +13,8 @@ const EliminatedPlayers = () => {
   const theme = useMantineTheme();
 
   // Use test player if no real players are passed
-  let displayPlayers = !game
-    ? [
-        testPlayer,
-        testPlayer,
-        testPlayer,
-        testPlayer,
-        testPlayer,
-        testPlayer,
-        testPlayer,
-        testPlayer,
-        testPlayer,
-      ]
-    : game.players.filter((player) => !player.eliminated && player.playedInRound);
+  let displayPlayers =
+    game?.players.filter((player) => !player.eliminated && player.playedInRound) || [];
 
   displayPlayers.sort((a, b) => {
     const aLastRound = a.roundHistory[a.roundHistory.length - 1];

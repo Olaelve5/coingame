@@ -5,6 +5,10 @@ export const usePlayerPercentageAnimation = () => {
   const [textScope, textAnimate] = useAnimate();
 
   const playAppearAnimation = async () => {
+    if (!scope.current) {
+      console.warn("Animation target is not available.");
+      return;
+    }
     await animate(scope.current, { scale: 0.5, opacity: 0 }, { duration: 0 });
     await animate(
       scope.current,
@@ -14,6 +18,11 @@ export const usePlayerPercentageAnimation = () => {
   };
 
   const playBaloonPopAnimation = async () => {
+    if (!scope.current) {
+      console.warn("Animation target is not available.");
+      return;
+    }
+
     // Second part of the animation: scale down
     await animate(
       scope.current,
@@ -28,12 +37,13 @@ export const usePlayerPercentageAnimation = () => {
   };
 
   const playTextAppearAnimation = async () => {
+    if (!textScope.current) {
+      console.warn("Animation target is not available.");
+      return;
+    }
+
     // Set initial state
-    await textAnimate(
-      textScope.current,
-      { scale: 0, opacity: 0 },
-      { duration: 0 }
-    );
+    await textAnimate(textScope.current, { scale: 0, opacity: 0 }, { duration: 0 });
 
     await textAnimate(
       textScope.current,
@@ -48,6 +58,11 @@ export const usePlayerPercentageAnimation = () => {
   };
 
   const playTextExitAnimation = async () => {
+    if (!textScope.current) {
+      console.warn("Animation target is not available.");
+      return;
+    }
+
     await textAnimate(
       textScope.current,
       {

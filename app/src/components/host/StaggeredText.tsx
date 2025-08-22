@@ -21,11 +21,6 @@ export const StaggeredText = ({
         staggerChildren: staggerSpeed ?? 0.02, // Stagger Speed
         delayChildren: initialDelay ?? 0, // Initial Delay
       },
-      onComplete: () => {
-        if (typeof onAnimationComplete === "function") {
-          onAnimationComplete();
-        }
-      },
     },
   };
 
@@ -36,7 +31,16 @@ export const StaggeredText = ({
   };
 
   return (
-    <motion.h3 variants={container} initial="hidden" animate="show">
+    <motion.h3
+      variants={container}
+      initial="hidden"
+      animate="show"
+      onAnimationComplete={() => {
+        if (typeof onAnimationComplete === "function") {
+          onAnimationComplete();
+        }
+      }}
+    >
       {text.split("").map((char, index) => (
         <motion.span
           key={index}
