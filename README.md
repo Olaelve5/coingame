@@ -10,7 +10,7 @@ This project is a [Next.js](https://nextjs.org/) application. To get it running 
 
 1.  **Clone the repository:**
     ```bash
-    git clone <repository-url>
+    git clone https://github.com/Olaelve5/coingame.git
     ```
 2.  **Navigate to the project directory and install dependencies for both the app and the server:**
     ```bash
