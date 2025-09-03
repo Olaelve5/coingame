@@ -73,5 +73,8 @@ This project is built with the following technologies:
 -----
 
 ## 📸 Screenshots
+<img width="1440" height="777" alt="Skjermbilde 2025-09-03 kl  15 10 59" src="https://github.com/user-attachments/assets/79124032-b3c0-470a-9cc5-7638eb00e003" />
+<img width="1440" height="776" alt="Skjermbilde 2025-09-03 kl  15 11 27" src="https://github.com/user-attachments/assets/6f821cb8-67a0-4234-b6f0-f9b9ce918190" />
+<img width="1431" height="777" alt="Skjermbilde 2025-09-03 kl  15 16 38" src="https://github.com/user-attachments/assets/e1c74489-bd99-469a-a8b3-345a9e1002cc" />
 
-*Coming soon...*
+
