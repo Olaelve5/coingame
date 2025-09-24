@@ -76,8 +76,16 @@
   width: 100%;
 }
 
+.playerIconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 0rem;
+}
+
 .playerIcon {
   font-size: 1.7rem;
+  text-align: center;
 }
 
 .chevron {

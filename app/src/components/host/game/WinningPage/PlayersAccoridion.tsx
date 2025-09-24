@@ -54,11 +54,13 @@ const PlayersAccordion = () => {
             <Accordion.Item value={player.name}>
               <Accordion.Control
                 icon={
-                  <FontAwesomeIcon
-                    icon={getIcon(player.icon)}
-                    color={getColor(player.color)}
-                    className={styles.playerIcon}
-                  />
+                  <div className={styles.playerIconContainer}>
+                    <FontAwesomeIcon
+                      icon={getIcon(player.icon)}
+                      color={getColor(player.color)}
+                      className={styles.playerIcon}
+                    />
+                  </div>
                 }
                 chevron={
                   <div className={styles.chevron}>
