@@ -2,9 +2,7 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  gap: 6rem;
   font-family: "Bungee", sans-serif;
-  padding: 3rem;
   width: 100%;
   min-height: 100vh;
   position: relative;

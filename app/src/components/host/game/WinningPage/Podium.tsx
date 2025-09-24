@@ -9,9 +9,10 @@ import podiumTitles from "@/data/podiumTitles.json";
 
 interface PodiumProps {
   setPodiumAnimationFinished?: (finished: boolean) => void;
+  shouldAnimateUp?: boolean;
 }
 
-const Podium = ({ setPodiumAnimationFinished }: PodiumProps) => {
+const Podium = ({ setPodiumAnimationFinished, shouldAnimateUp }: PodiumProps) => {
   const theme = useMantineTheme();
   const { game } = useConnectionStore();
   const [animationsFinished, setAnimationsFinished] = useState(false);
@@ -42,19 +43,12 @@ const Podium = ({ setPodiumAnimationFinished }: PodiumProps) => {
 
   return (
     <motion.div
-      layout
-      initial={{ opacity: 0, top: "50vh", y: "-50%" }}
+      initial={{ opacity: 0 }}
       animate={{
         opacity: 1,
-        top: animationsFinished ? "5rem" : "50vh",
-        y: animationsFinished ? 0 : "-50%",
-        position: animationsFinished ? "absolute" : "fixed",
       }}
       transition={{
         opacity: { duration: 0.5, delay: 0.5 },
-        top: { duration: 0.5, ease: "easeInOut" },
-        y: { duration: 0.5, ease: "easeInOut" },
-        layout: { duration: 0.5, ease: "easeInOut" },
       }}
       className={styles.container}
     >
