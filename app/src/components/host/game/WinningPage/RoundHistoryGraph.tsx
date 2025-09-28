@@ -30,14 +30,14 @@ const RoundHistoryGraph = ({
     {
       name: "averageCoins",
       label: "Average Budget",
-      color: "rgba(255, 0, 144, 0.7)",
-      type: "area" as const,
+      color: "rgba(255, 0, 144, 0.6)",
+      type: "line" as const,
     },
     {
       name: "playerCoins",
       label: "Player Budget",
-      color: "rgba(0, 132, 255, 0.7)",
-      type: "area" as const,
+      color: "rgba(0, 132, 255, 0.6)",
+      type: "line" as const,
     },
     {
       name: "playerBet",

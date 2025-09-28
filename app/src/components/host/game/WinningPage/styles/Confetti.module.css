@@ -27,6 +27,7 @@
     transform: translateY(105vh) translateX(0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
     opacity: 1;
   }
+
   80% {
     opacity: 0.5;
   }

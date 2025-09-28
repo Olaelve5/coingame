@@ -2,31 +2,37 @@ import { useConnectionStore } from "@/store/connectionStore";
 import styles from "./styles/WinningPage.module.css";
 import PlayersAccordion from "./PlayersAccoridion";
 import Podium from "./Podium";
-import NewGameButton from "./NavigationButtons";
 import Confetti from "@/components/host/game/WinningPage/Confetti";
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import AwardsSection from "./AwardsSection";
-import ShowFullResultButton from "./ShowFullResultButton";
+import PodiumButtons from "./PodiumButtons";
 
 export default function WinningPage() {
   const { game } = useConnectionStore();
   const [animateConfetti, setAnimateConfetti] = useState(false);
-  const [showFullList, setShowFullList] = useState(false);
+  const [podiumAnimationFinished, setPodiumAnimationFinished] = useState(false);
   const { scrollYProgress } = useScroll();
   const [showPage, setShowPage] = useState(false);
 
-  const handleShowFullResults = () => {
-    setShowFullList(true);
-  };
-
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (showFullList && latest < 0.01) {
+    if (podiumAnimationFinished && latest < 0.02) {
       setAnimateConfetti(true);
     } else {
       setAnimateConfetti(false);
     }
   });
+
+  useEffect(() => {
+    if (podiumAnimationFinished) {
+      setAnimateConfetti(true);
+      // Remove body no-scroll
+      document.body.style.overflow = "auto";
+    } else {
+      // Set body no-scroll
+      document.body.style.overflow = "hidden";
+    }
+  }, [podiumAnimationFinished]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -43,18 +49,10 @@ export default function WinningPage() {
   return (
     <div className={styles.container}>
       <Confetti animateConfetti={animateConfetti} />
-      <Podium setPodiumAnimationFinished={setAnimateConfetti} shouldAnimateUp={showFullList} />
-      {!showFullList && animateConfetti && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, ease: "easeInOut" }}
-          style={{ position: "absolute", bottom: "8rem" }}
-        >
-          <ShowFullResultButton onClick={handleShowFullResults} />
-        </motion.div>
-      )}
-
+      <div className={styles.podiumSection}>
+        <Podium setPodiumAnimationFinished={setPodiumAnimationFinished} />
+        <PodiumButtons showButtons={podiumAnimationFinished} />
+      </div>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -63,7 +61,6 @@ export default function WinningPage() {
       >
         <PlayersAccordion />
         <AwardsSection />
-        {/* <NewGameButton /> */}
       </motion.div>
     </div>
   );

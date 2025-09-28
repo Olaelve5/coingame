@@ -20,14 +20,9 @@
   font-family: var(--font-bungee);
 }
 
-html {
-  overflow-y: scroll; /* ✅ Always reserve space for vertical scrollbar */
-}
-
 body {
   color: var(--foreground) !important;
   font-family: Mono, Helvetica, sans-serif;
-  --s: 25px; /* control the size */
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
@@ -58,16 +53,13 @@ body::before {
 
 /* ✅ Custom scrollbar styles */
 ::-webkit-scrollbar {
-  width: 6px; /* Make scrollbar thinner */
-  height: 6px; /* For horizontal scrollbars */
-}
-
-::-webkit-scrollbar-track {
-  background: transparent; /* Make track invisible */
+  width: 4px; /* Make scrollbar thinner */
+  height: 4px; /* For horizontal scrollbars */
+  display: none; /* Hide scrollbar by default */
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 116, 224, 0.4); /* Semi-transparent accent color */
+  background: rgba(0, 116, 224, 1); /* Semi-transparent accent color */
   border-radius: 3px;
 }
 

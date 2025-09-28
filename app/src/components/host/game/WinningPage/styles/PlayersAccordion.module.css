@@ -4,7 +4,8 @@
   align-items: center;
   width: 100%;
   gap: 1rem;
-  
+  min-width: 900px;
+
   h1 {
     font-size: 1.3rem;
     width: 100%;
