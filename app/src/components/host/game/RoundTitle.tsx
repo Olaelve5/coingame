@@ -9,13 +9,10 @@ import { useMantineTheme } from "@mantine/core";
 // Define the interface for the props
 interface RoundTitleProps {
   handleRoundStart: () => void;
-  startEliminationAnimations: boolean;
+  prepareForNextRound: boolean;
 }
 
-export default function RoundTitle({
-  handleRoundStart,
-  startEliminationAnimations,
-}: RoundTitleProps) {
+export default function RoundTitle({ handleRoundStart, prepareForNextRound }: RoundTitleProps) {
   const { game } = useConnectionStore();
   const theme = useMantineTheme();
   const [animationState, setAnimationState] = useState("initial");
@@ -33,10 +30,10 @@ export default function RoundTitle({
   }, []);
 
   useEffect(() => {
-    if (startEliminationAnimations) {
-      setAnimationState("fadeOut");
-    }
-  }, [startEliminationAnimations]);
+    // if (prepareForNextRound) {
+    //   setAnimationState("fadeOut");
+    // }
+  }, [prepareForNextRound]);
 
   const playerCount = game?.players.filter((player) => !player.eliminated).length || 0;
   const minimumEliminations = Math.min(playerCount - 1, game?.gameSettings.elimsPerRound || 0);
@@ -77,7 +74,7 @@ export default function RoundTitle({
         </motion.div>
       )}
 
-      {startEliminationAnimations && (
+      {prepareForNextRound && (
         <div className={styles.particleContainer}>
           <PlayerIconParticles color="yellow" distance={1.5} />
         </div>

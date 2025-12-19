@@ -4,9 +4,9 @@ import { motion } from "framer-motion";
 import EliminationsPage from "./EliminationsPage";
 import { useGameplayStore } from "@/store/gameplayStore";
 import { useMantineTheme } from "@mantine/core";
-import CountdownVisual from "@/components/host/game/EliminationReport/CountdownVisual";
 import { useConnectionStore } from "@/store/connectionStore";
 import StartRoundButton from "./StartRoundButton";
+import CoinsCountdown from "./CoinsCountdown";
 
 const START_NUMBER = 99;
 
@@ -16,43 +16,29 @@ interface EliminationReportProps {
 
 const EliminationReport = ({ handleRoundPreparation }: EliminationReportProps) => {
   const { game } = useConnectionStore();
-  const [initialAnimationFinished, setInitialAnimationFinished] = useState(false);
   const theme = useMantineTheme();
   const [shouldAnimateOut, setShouldAnimateOut] = useState(false);
   const [count, setCount] = useState(START_NUMBER);
-  const [countdownComplete, setCountdownComplete] = useState<boolean>(game?.gameSettings.fastMode || false);
-  const { startRound } = useGameplayStore();
+  const [countdownComplete, setCountdownComplete] = useState<boolean>(
+    game?.gameSettings.fastMode || false
+  );
 
   return (
-    <motion.div
-      initial={{ y: "100%" }}
-      animate={shouldAnimateOut ? { y: "100%" } : { y: 0 }}
-      transition={{ duration: 0.8, type: "spring", bounce: 0.15 }}
-      onAnimationComplete={() => {
-        if (shouldAnimateOut) {
-          handleRoundPreparation();
-          startRound();
-          return;
-        }
-        setInitialAnimationFinished(true);
-      }}
-      className={styles.container}
-    >
-      {/* <CountdownVisual
+    <div className={styles.container}>
+      <CoinsCountdown
         count={count}
-        maxCount={START_NUMBER}
-        countdownComplete={countdownComplete}
-      /> */}
-
-      <div className={styles.header}>
-        <div className={styles.titleContainer}>
-          <h2 className={styles.title}>Elimination Report</h2>
-          <h2 className={styles.title} style={{ color: theme.colors.blue[5] }}>
-            {game?.round || "?"}
-          </h2>
-        </div>
-      </div>
-      <EliminationsPage
+        setCount={setCount}
+        startNumber={START_NUMBER}
+        targetNumber={
+          game?.lastRoundResults.safeCoinsAmount !== undefined
+            ? game.lastRoundResults.safeCoinsAmount
+            : 0
+        }
+        onComplete={() => {
+          setCountdownComplete(true);
+        }}
+      />
+      {/* <EliminationsPage
         count={count}
         setCount={setCount}
         START_NUMBER={START_NUMBER}
@@ -60,10 +46,10 @@ const EliminationReport = ({ handleRoundPreparation }: EliminationReportProps) =
         setCountdownComplete={setCountdownComplete}
         setShouldAnimateOut={setShouldAnimateOut}
         initialAnimationFinished={initialAnimationFinished}
-      />
+      /> */}
 
-      {countdownComplete && <StartRoundButton setShouldAnimateOut={setShouldAnimateOut} />}
-    </motion.div>
+      {countdownComplete && <StartRoundButton />}
+    </div>
   );
 };
 

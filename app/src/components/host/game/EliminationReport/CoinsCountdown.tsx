@@ -1,9 +1,9 @@
 import { useEffect, useState, useCallback } from "react";
 import styles from "./styles/CoinsCountdown.module.css";
 import { motion } from "framer-motion";
-import { StaggeredText } from "../../StaggeredText";
 import { useMantineTheme } from "@mantine/core";
-import { RingProgress } from "@mantine/core";
+import { Progress } from "@mantine/core";
+import { on } from "events";
 
 interface CoinsCountdownProps {
   count: number;
@@ -53,19 +53,8 @@ export default function CoinsCountdown({
   const numberVariants = {
     counting: { scale: 1 },
     finished: {
-      color: theme.colors.green[5],
-      transition: { duration: 0.1, delay: endIntervalMs / 1000 },
-    },
-  };
-
-  const containerVariants = {
-    big: {
-      opacity: 1,
-      transition: { duration: 0.5, ease: "easeInOut" },
-    },
-    normal: {
-      opacity: 0,
-      transition: { duration: 0.5, ease: "easeInOut" },
+      color: theme.colors.teal[5],
+      transition: { duration: 0.05, delay: endIntervalMs / 1000 },
     },
   };
 
@@ -79,7 +68,7 @@ export default function CoinsCountdown({
 
         // Trigger onComplete callback after a delay
         setTimeout(() => {
-          setShouldShrink(true);
+          onComplete && onComplete();
         }, 3500);
       }
       return;
@@ -97,27 +86,17 @@ export default function CoinsCountdown({
 
   return (
     <motion.div
-      variants={containerVariants}
-      animate={shouldShrink ? "normal" : "big"}
-      onAnimationComplete={(definition) => {
-        if (definition === "normal") {
-          setCountCompleted(true);
-          onComplete?.();
-        }
-      }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1.5 }}
+      onAnimationComplete={() => setFadeInCompleted(true)}
       className={styles.container}
     >
       <div className={styles.textContainer}>
-        <StaggeredText text="Safety Threshold" />
+        <h1>Safety Threshold</h1>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, scale: 1, y: 0 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-        onAnimationComplete={() => setFadeInCompleted(true)}
-        className={styles.countdownContainer}
-      >
+      <div className={styles.countdownContainer}>
         <motion.h1
           className={styles.count}
           variants={numberVariants}
@@ -131,17 +110,16 @@ export default function CoinsCountdown({
                 {digit}
               </span>
             ))}
-          {/* <RingProgress
-            size={350}
-            thickness={35}
-            sections={[{ value: (count / startNumber) * 100, color: theme.colors.orange[7] }]}
-            className={styles.ringProgress}
-            transitionDuration={currentInterval}
-            roundCaps
-            rootColor="rgba(217, 200, 150, 1)"
-          /> */}
         </motion.h1>
-      </motion.div>
+        <Progress
+          size="xl"
+          radius="sm"
+          value={(count / startNumber) * 100}
+          color={theme.colors.pink[7]}
+          className={styles.progressBar}
+          transitionDuration={currentInterval}
+        />
+      </div>
     </motion.div>
   );
 }

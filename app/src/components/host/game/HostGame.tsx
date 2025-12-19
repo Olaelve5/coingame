@@ -90,7 +90,7 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
         <>
           <RoundTitle
             handleRoundStart={handleRoundStart}
-            startEliminationAnimations={playerAnimationsFinished}
+            prepareForNextRound={playerAnimationsFinished}
           />
           {titleAnimationFinished && (
             <>
