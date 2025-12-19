@@ -13,7 +13,7 @@ interface SoundStore {
 
 export const useSoundStore = create<SoundStore>((set, get) => ({
   masterVolume: 0.5,
-  musicVolume: 1,
+  musicVolume: 0,
   effectsVolume: 1,
   setMasterVolume: (volume: number) => set({ masterVolume: volume }),
   setMusicVolume: (volume: number) => set({ musicVolume: volume }),

@@ -20,6 +20,7 @@ interface PlayerIconProps {
         gridColumn?: number;
       }
     | undefined;
+  skipEntryAnimation?: boolean;
   onAnimationComplete?: (playerId: string) => void;
 }
 
@@ -29,6 +30,7 @@ export default function PlayerIcon({
   gridPosition,
   shouldAnimateOut = false,
   testingSignal,
+  skipEntryAnimation = false,
   animationDelay = 0,
   onAnimationComplete,
 }: PlayerIconProps) {
@@ -71,7 +73,7 @@ export default function PlayerIcon({
       layout
       className={styles.playerIcon}
       style={gridPosition}
-      initial={{ scale: 0, rotate: 180 }}
+      initial={skipEntryAnimation ? { scale: 1, rotate: 0 } : { scale: 0, rotate: 180 }}
       animate={{ scale: 1, rotate: 0 }}
       transition={{ type: "spring", bounce: 0.5 }}
     >
