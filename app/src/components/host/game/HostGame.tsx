@@ -44,7 +44,7 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
       setTimeout(() => {
         startRound();
         setTimerRunning(true);
-        playSong();
+        // playSong();
       }, 2000); // Delay before starting the round
     } else {
       console.log("Round already active, skipping startRound call");
@@ -55,7 +55,7 @@ const HostGame = ({ gameCode }: { gameCode: string }) => {
     if (!game) return;
     setTimerRunning(false);
     const startElimination = await finalizeRoundPlays();
-    stopSong();
+    // stopSong();
 
     if (!startElimination) {
       console.error("Failed to finalize round plays");

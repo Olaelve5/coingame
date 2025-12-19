@@ -7,12 +7,14 @@ interface PlayerIconParticlesProps {
   color: string;
   position?: { top?: string; left?: string };
   distance?: number;
+  initialDelay?: number;
 }
 
 export default function PlayerIconParticles({
   color,
   position = {},
   distance = 1,
+  initialDelay = 0.7,
 }: PlayerIconParticlesProps) {
   const particleColor = getColor(color);
 
@@ -74,7 +76,7 @@ export default function PlayerIconParticles({
 
         const size = 5 + Math.floor(Math.random() * 5);
         const duration = 0.8 + Math.random() * 0.4;
-        const delay = 0.7 + i * 0.02 + Math.random() * 0.02;
+        const delay = initialDelay + i * 0.02 + Math.random() * 0.02;
 
         return {
           trajectory: {

@@ -6,7 +6,6 @@ import styles from "./styles/PlayersIconGrid.module.css";
 import { useEffect, useState } from "react";
 import { usePlayerIconAnimations } from "@/utils/animations/playerIconAnimations";
 import PlayerIconParticles from "./PlayerIconParticle";
-import useSound from "use-sound";
 
 interface PlayerIconProps {
   player: Player;
@@ -22,6 +21,7 @@ interface PlayerIconProps {
     | undefined;
   skipEntryAnimation?: boolean;
   onAnimationComplete?: (playerId: string) => void;
+  skipRotateAnimation?: boolean;
 }
 
 export default function PlayerIcon({
@@ -31,6 +31,7 @@ export default function PlayerIcon({
   shouldAnimateOut = false,
   testingSignal,
   skipEntryAnimation = false,
+  skipRotateAnimation = false,
   animationDelay = 0,
   onAnimationComplete,
 }: PlayerIconProps) {
@@ -40,8 +41,8 @@ export default function PlayerIcon({
   useEffect(() => {
     // Set up interval for random animation
     const interval = setInterval(() => {
-      // 1 in 10 chance
-      if (Math.random() < 0.08) {
+      // 1 in 10 chance ish
+      if (!skipRotateAnimation && Math.random() < 0.08) {
         playRotateAnimation();
       }
     }, 1500);
