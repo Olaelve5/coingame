@@ -2,9 +2,12 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  width: 80%;
+  width: 50%;
+  max-width: 40rem;
+  min-width: 20rem;
   height: 100%;
   gap: 1rem;
+  top: 2rem;
 }
 
 .titleContainer {
@@ -14,17 +17,8 @@
   justify-content: center;
   width: 100%;
   gap: 1rem;
-  font-size: 1.2rem;
-}
-
-.coinsIcon {
-  width: 1.8rem;
-  height: 1.8rem;
-}
-
-.hashIcon {
-  width: 1.6rem;
-  height: 1.6rem;
+  font-size: 1.8rem;
+  color: white;
 }
 
 .playersContainer {
@@ -32,14 +26,20 @@
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  width: 100%;
-  background: rgb(52, 55, 61);
-  padding: 1rem;
-  border-radius: 1rem;
-  min-height: 30rem;
+  padding: 1rem 0rem;
   color: white;
   overflow-y: auto;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.relegationLine {
+  width: 100%;
+  height: 0;
+  background-color: transparent;
+
+  --line: 3px;
+
+  border-top: var(--line) dashed rgba(223, 21, 21, 0.5);
+  box-shadow: none;
 }
 
 /* ✅ Webkit scrollbar styling */
@@ -66,21 +66,21 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 1rem;
+  font-size: 1.4rem;
   width: 100%;
   padding: 0.5rem;
   border-radius: 0.5rem;
 }
 
 .playerIcon {
-  width: 1.8rem;
-  height: 1.8rem;
+  width: 2rem;
+  height: 2rem;
   margin-right: 0.5rem;
 }
 
 .coinIcon {
-  width: 1.6rem;
-  height: 1.6rem;
+  width: 1.8rem;
+  height: 1.8rem;
   color: var(--secondary-accent);
 }
 
