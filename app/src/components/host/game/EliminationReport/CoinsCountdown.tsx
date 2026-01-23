@@ -58,6 +58,19 @@ export default function CoinsCountdown({
     },
   };
 
+  const [progressColorReady, setProgressColorReady] = useState(false);
+  const progressColorDelayMs = endIntervalMs;
+
+  useEffect(() => {
+    if (!countCompleted) {
+      setProgressColorReady(false);
+      return;
+    }
+
+    const id = window.setTimeout(() => setProgressColorReady(true), progressColorDelayMs);
+    return () => window.clearTimeout(id);
+  }, [countCompleted]);
+
   useEffect(() => {
     if (!fadeInCompleted || !isRunning) return;
 
@@ -113,9 +126,10 @@ export default function CoinsCountdown({
         </motion.h1>
         <Progress
           size="xl"
-          radius="sm"
+          radius="md"
+          striped
           value={(count / startNumber) * 100}
-          color={theme.colors.pink[7]}
+          color={progressColorReady ? theme.colors.teal[5] : theme.colors.red[7]}
           className={styles.progressBar}
           transitionDuration={currentInterval}
         />
